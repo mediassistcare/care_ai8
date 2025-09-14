@@ -1,0 +1,29 @@
+{
+  "case_category": {},
+  "registration": {},
+  "vitals": {},
+  "follow_up_questions": {},
+  "complaints": {},
+  "complaint_analysis": {},
+  "diagnosis": {},
+  "session_id": "2025-09-14T20:19:04.126608",
+  "username": "p123",
+  "user_type": "panelist_doctor",
+  "preferred_language": "english",
+  "step_completed": 0,
+  "created_at": "2025-09-14T20:19:04.126608",
+  "data_timestamps": {},
+  "llm_timestamps": {},
+  "user_profile": {
+    "login_history": [
+      "2025-09-14T20:19:04.126608"
+    ],
+    "last_updated": "2025-09-14T20:19:04.126608",
+    "login_count": 1,
+    "username": "p123",
+    "user_type": "panelist_doctor",
+    "preferred_language": "english",
+    "session_id": "b1bbd66b-38b1-4d2c-a2b8-14a8b78f7403",
+    "created_at": "2025-09-14T20:19:04.126608"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "case_category": {},
+  "registration": {},
+  "vitals": {},
+  "follow_up_questions": {},
+  "complaints": {},
+  "complaint_analysis": {},
+  "diagnosis": {},
+  "session_id": "2025-09-14T22:06:46.819640",
+  "username": "ppp",
+  "user_type": "panelist_doctor",
+  "preferred_language": "english",
+  "step_completed": 0,
+  "created_at": "2025-09-14T22:06:46.819640",
+  "data_timestamps": {},
+  "llm_timestamps": {},
+  "user_profile": {
+    "login_history": [
+      "2025-09-14T22:06:46.821660"
+    ],
+    "last_updated": "2025-09-14T22:06:46.822662",
+    "login_count": 1,
+    "username": "ppp",
+    "user_type": "panelist_doctor",
+    "preferred_language": "english",
+    "session_id": "9a97b3b3-ced1-4a5e-bc22-515a66e037ca",
+    "created_at": "2025-09-14T22:06:46.822662"
+  }
+}

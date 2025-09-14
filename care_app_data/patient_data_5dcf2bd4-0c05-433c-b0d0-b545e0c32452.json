@@ -1,0 +1,440 @@
+{
+  "session_id": "2025-09-14T19:56:10.716024",
+  "step_completed": 7,
+  "created_at": "2025-09-14T19:56:10.716024",
+  "data_timestamps": {},
+  "llm_timestamps": {},
+  "user_profile": {
+    "login_history": [
+      "2025-09-14T19:56:10.732181"
+    ],
+    "last_updated": "2025-09-14T19:56:10.733181",
+    "login_count": 1,
+    "username": "mo111",
+    "user_type": "medical_operator",
+    "preferred_language": "english",
+    "session_id": "5dcf2bd4-0c05-433c-b0d0-b545e0c32452",
+    "created_at": "2025-09-14T19:56:10.732181"
+  },
+  "session_info": {
+    "session_id": "5dcf2bd4-0c05-433c-b0d0-b545e0c32452",
+    "username": "mo111",
+    "created_at": "2025-09-14T19:56:10.716024",
+    "last_updated": "2025-09-14T19:58:42.230508",
+    "user_type": "medical_operator",
+    "preferred_language": "english",
+    "highest_step_completed": 7
+  },
+  "step1": {
+    "step_name": "Case Category Selection",
+    "form_data": {
+      "case_category": "illness"
+    },
+    "ai_generated_data": {},
+    "files_uploaded": {},
+    "timestamp": "2025-09-14T19:56:14.016110",
+    "data_source": "user_input",
+    "step_completed": true
+  },
+  "step2": {
+    "step_name": "Patient Registration",
+    "form_data": {
+      "full_name": "Savani Monika Dignesbhai",
+      "date_of_birth": "1995-04-04",
+      "gender": "female",
+      "address": "227/228, KRUSHNA NAGAR, COUSWAY ROAD,, NEAR MULTI-PURPAJ HALL,, KATARGAM, Surat City, Suraj Gujarat - 395004",
+      "diabetes": "no",
+      "hypertension": "no",
+      "asthma": "no",
+      "heart_disease": "no",
+      "family_history": "none",
+      "other_medical_reports": "no"
+    },
+    "ai_generated_data": {
+      "aadhaar_extraction": {
+        "aadhaar_number": "2888 6761 6316",
+        "address": "227/228, KRUSHNA NAGAR, COUSWAY ROAD,, NEAR MULTI-PURPAJ HALL,, KATARGAM, Surat City, Suraj Gujarat - 395004",
+        "date_of_birth": "04/04/1995",
+        "extracted_from": "both sides",
+        "extraction_confidence": "high",
+        "full_name": "Savani Monika Dignesbhai",
+        "gender": "FEMALE"
+      }
+    },
+    "files_uploaded": {
+      "aadhar_combined": {
+        "filename": "aadhaar.jpg",
+        "upload_timestamp": "2025-09-14T19:56:48.041517",
+        "field_name": "aadhar_combined",
+        "content_type": "image/jpeg"
+      }
+    },
+    "timestamp": "2025-09-14T19:56:48.045671",
+    "data_source": "user_input_and_extraction",
+    "step_completed": true
+  },
+  "step3": {
+    "step_name": "Vital Signs & Medical Photos",
+    "form_data": {
+      "temperature": "101",
+      "temperature_unit": "celsius",
+      "oxygen_saturation": "80",
+      "glucose_timing": "random",
+      "lung_congestion": "none",
+      "water_in_lungs": "none",
+      "ecg_available": "no"
+    },
+    "ai_generated_data": {},
+    "files_uploaded": {},
+    "custom_medical_images": [],
+    "timestamp": "2025-09-14T19:56:58.010559",
+    "data_source": "user_input_and_analysis",
+    "step_completed": true
+  },
+  "step4": {
+    "step_name": "Medical Records & Contact Information",
+    "form_data": {},
+    "ai_generated_data": {
+      "generated_questions": "[{\"abnormal_finding\":\"Body Temperature: 101.0 \u00b0C (ELEVATED - Normal: 36.1-37.2 \u00b0C)\",\"medical_concern\":\"hyperthermia or febrile illness\",\"priority\":\"critical\",\"question\":\"Your body temperature is 101.0 \u00b0C, which indicates a fever. Are you experiencing chills, sweating, or any signs of infection such as sore throat or body aches?\"},{\"abnormal_finding\":\"Oxygen Saturation: 80.0 % (LOW - Normal: 95-100 %)\",\"medical_concern\":\"hypoxemia\",\"priority\":\"critical\",\"question\":\"Your oxygen saturation is 80.0%, which is significantly below normal. Are you experiencing shortness of breath, dizziness, or chest discomfort?\"}]"
+    },
+    "files_uploaded": {},
+    "timestamp": "2025-09-14T19:57:05.743959",
+    "data_source": "user_input_and_analysis",
+    "step_completed": true
+  },
+  "step5": {
+    "step_name": "Complaints & Symptoms",
+    "form_data": {
+      "complaint_text": "fever"
+    },
+    "ai_generated_data": {},
+    "files_uploaded": {},
+    "timestamp": "2025-09-14T19:57:09.091441",
+    "data_source": "user_input_and_ai_analysis",
+    "step_completed": true
+  },
+  "step6": {
+    "step_name": "Analysis & Diagnosis",
+    "form_data": {
+      "assessment_completed": true,
+      "clinical_summary_saved": true,
+      "final_completion_timestamp": "2025-09-14T19:57:26.324732"
+    },
+    "ai_generated_data": {
+      "clinical_summary": "Clinical Summary\n\nPatient Information:\n- Name: Savani Monika Dignesbhai\n- Gender: Female\n- Age: Not documented\n\nVital Signs:\n- Temperature: 101\u00b0C (febrile; abnormal; indicates fever)\n- Oxygen Saturation: 80% (hypoxemia; below normal range of approximately 95-100%)\n- Lung Congestion: None documented\n\nPresenting Complaints:\n- Chief Complaint: Fever\n\nClinical Findings:\n- Fever of 101\u00b0C noted on examination\n- Oxygen saturation significantly reduced at 80%\n- No evidence of lung congestion observed during clinical assessment\n\nAssessment Summary:\n- The patient presents with a febrile state accompanied by hypoxemia. No lung congestion detected on clinical examination. Additional clinical details are not documented.",
+      "summary_generated_at": "2025-09-14T19:57:26.324732",
+      "assessment_completed": true,
+      "final_review_status": "completed",
+      "questions_skipped": true,
+      "questions_answered": 0,
+      "original_questions": [
+        {
+          "category": "onset",
+          "options": [
+            "Yesterday or earlier today",
+            "A few days ago",
+            "More than a week ago",
+            "I'm not sure"
+          ],
+          "question": "When did you first notice that you felt hot or sweaty all over?",
+          "relevance": "Understanding when the fever started helps determine if it's an ongoing or recent issue.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "frequency",
+          "options": [
+            "Once in a while",
+            "Several times a day",
+            "All day long",
+            "Rarely"
+          ],
+          "question": "How often do you experience feeling feverish or having a temperature?",
+          "relevance": "Knowing how frequently the symptom occurs helps assess how persistent or intermittent the fever is.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "severity",
+          "options": [
+            "Very strong, hard to ignore",
+            "Moderate, noticeable but manageable",
+            "Mild, just a little warm",
+            "Not feeling feverish at all"
+          ],
+          "question": "Right now, how intense or strong do you feel the fever or hot sensation in your body?",
+          "relevance": "Assessing current severity helps determine how serious the fever feels to the patient.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "relieving",
+          "options": [
+            "Yes, resting helps",
+            "No, it doesn't make a difference",
+            "I haven't tried resting",
+            "Other"
+          ],
+          "question": "When you have a fever, do you find that resting or staying in a cool place helps you feel better?",
+          "relevance": "Understanding what makes fever symptoms better can guide comfort measures.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "aggravating",
+          "options": [
+            "Physical activity",
+            "Being in a warm room",
+            "Stress or tiredness",
+            "I haven't noticed anything specific"
+          ],
+          "question": "What tends to make your fever or hot feeling worse\u2014such as activity, certain environments, or other factors?",
+          "relevance": "Identifying triggers or factors that worsen the fever helps in managing it.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "characteristics",
+          "options": [
+            "Yes, I feel chills and cold sweats",
+            "No, I mainly feel hot",
+            "Sometimes I feel both",
+            "I'm not sure"
+          ],
+          "question": "Do you notice any chills, sweating, or feeling very cold when you have a fever?",
+          "relevance": "Patients often experience chills or sweating with fever, which are key observable signs.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "characteristics",
+          "options": [
+            "Yes, I have headaches and body aches",
+            "No, just feeling hot",
+            "Sometimes I feel tired",
+            "Other"
+          ],
+          "question": "Has your fever been accompanied by other symptoms like headache, body aches, or tiredness?",
+          "relevance": "Associated symptoms can help identify the cause of the fever and its impact on daily life.",
+          "type": "multiple_choice"
+        }
+      ],
+      "analysis_metadata": {
+        "total_questions_generated": 7,
+        "questions_answered": 0,
+        "questions_skipped": true,
+        "completion_timestamp": "2025-09-14T14:27:23.447Z"
+      },
+      "total_questions_generated": 7,
+      "total_questions_answered": 0,
+      "completion_rate": 0.0,
+      "completed_at": "2025-09-14T19:57:23.459865",
+      "session_data": {
+        "questions_generated_from": {
+          "step3_vitals": true,
+          "step4_followups": true,
+          "step5_symptoms": true
+        },
+        "priority_distribution": {
+          "step5_priority": 0.8,
+          "step3_step4_priority": 0.2
+        }
+      }
+    },
+    "files_uploaded": {},
+    "timestamp": "2025-09-14T19:57:26.340122",
+    "data_source": "ai_analysis",
+    "step_completed": true
+  },
+  "step7": {
+    "step_name": "ICD11 Code Generation & Analysis",
+    "form_data": {
+      "icd_generation_completed": true,
+      "codes_generated": 5,
+      "patient_email": "hhh@gmail.com",
+      "patient_phone": "7878787878",
+      "referring_doctor_id": "8",
+      "referring_doctor_name": "Kavita Agarwal",
+      "referring_doctor_phone": "8888888888",
+      "referring_doctor_email": "kavita.agarwal@healthcare.com",
+      "referring_doctor_details": {
+        "id": 8,
+        "first_name": "Kavita",
+        "last_name": "Agarwal",
+        "phone_number": "8888888888",
+        "email_address": "kavita.agarwal@healthcare.com",
+        "area_of_expertise": "Pulmonology"
+      },
+      "contact_info_completed": true,
+      "contact_info_timestamp": "2025-09-14T19:57:57.535933",
+      "clinical_summary_edited": "Patient Clinical Summary\nPatient Information:\n- Name: Savani Monika Dignesbhai\n- Age: Not documented\n- Gender: Female\nVital Signs:\n- Temperature: 101\u00b0C (febrile; abnormal; indicates fever)\n- Oxygen Saturation: 80% (hypoxemia; below normal range of approximately 95-100%)\n- Blood Glucose: Not documented\n- Other vitals: Not documented\nPresenting Complaints:\n- Chief Complaint: Fever\n- Symptom Analysis:\n- Fever: Present, noted at 101\u00b0C\n- Additional Symptoms:\n- Lung Congestion: None documented\n- Impact on daily activities: Not documented\nClinical Findings:\n- Fever of 101\u00b0C noted on examination\n- Oxygen saturation significantly reduced at 80%\n- No evidence of lung congestion observed during clinical assessment\nDetailed Symptom Assessment:\n- Onset:\n- Fever: Not documented\n- Characteristics:\n- Fever: Elevated temperature at 101\u00b0C\n- Severity:\n- Fever: Moderate to high (febrile state)\n- Relieving Factors:\n- Not documented\n- Aggravating Factors:\n- Not documented\n- Temporal Pattern:\n- Not documented\n- Associated Symptoms:\n- Not documented\n- Functional Impact:\n- Not documented\nAssessment Summary:\n- The patient presents with a febrile state accompanied by hypoxemia. No lung congestion detected on clinical examination. Additional clinical details are not documented.",
+      "completion_timestamp": "2025-09-14T19:58:36.931440",
+      "session_duration": 0,
+      "final_codes_count": 2,
+      "total_eliminations": 3,
+      "total_lab_tests": 5,
+      "step_status": "differential_questioning_completed_with_lab_tests",
+      "expert_review_submitted": true,
+      "submission_timestamp": "2025-09-14T14:28:42.213Z",
+      "completion_status": "submitted_for_expert_review",
+      "total_icd_codes": 2,
+      "differential_questions_answered": 3
+    },
+    "ai_generated_data": {
+      "clinical_summary": "Patient Clinical Summary\nPatient Information:\n- Name: Savani Monika Dignesbhai\n- Age: Not documented\n- Gender: Female\nVital Signs:\n- Temperature: 101\u00b0C (febrile; abnormal; indicates fever)\n- Oxygen Saturation: 80% (hypoxemia; below normal range of approximately 95-100%)\n- Blood Glucose: Not documented\n- Other vitals: Not documented\nPresenting Complaints:\n- Chief Complaint: Fever\n- Symptom Analysis:\n- Fever: Present, noted at 101\u00b0C\n- Additional Symptoms:\n- Lung Congestion: None documented\n- Impact on daily activities: Not documented\nClinical Findings:\n- Fever of 101\u00b0C noted on examination\n- Oxygen saturation significantly reduced at 80%\n- No evidence of lung congestion observed during clinical assessment\nDetailed Symptom Assessment:\n- Onset:\n- Fever: Not documented\n- Characteristics:\n- Fever: Elevated temperature at 101\u00b0C\n- Severity:\n- Fever: Moderate to high (febrile state)\n- Relieving Factors:\n- Not documented\n- Aggravating Factors:\n- Not documented\n- Temporal Pattern:\n- Not documented\n- Associated Symptoms:\n- Not documented\n- Functional Impact:\n- Not documented\nAssessment Summary:\n- The patient presents with a febrile state accompanied by hypoxemia. No lung congestion detected on clinical examination. Additional clinical details are not documented.",
+      "patient_data_summary": "Vitals: step_name: Patient Registration, form_data: {'full_name': 'Savani Monika Dignesbhai', 'date_of_birth': '1995-04-04', 'gender': 'female', 'address': '227/228, KRUSHNA NAGAR, COUSWAY ROAD,, NEAR MULTI-PURPAJ HALL,, KATARGAM, Surat City, Suraj Gujarat - 395004', 'diabetes': 'no', 'hypertension': 'no', 'asthma': 'no', 'heart_disease': 'no', 'family_history': 'none', 'other_medical_reports': 'no'}, ai_generated_data: {'aadhaar_extraction': {'aadhaar_number': '2888 6761 6316', 'address': '227/228, KRUSHNA NAGAR, COUSWAY ROAD,, NEAR MULTI-PURPAJ HALL,, KATARGAM, Surat City, Suraj Gujarat - 395004', 'date_of_birth': '04/04/1995', 'extracted_from': 'both sides', 'extraction_confidence': 'high', 'full_name': 'Savani Monika Dignesbhai', 'gender': 'FEMALE'}}, files_uploaded: {'aadhar_combined': {'filename': 'aadhaar.jpg', 'upload_timestamp': '2025-09-14T19:56:48.041517', 'field_name': 'aadhar_combined', 'content_type': 'image/jpeg'}}, data_source: user_input_and_extraction, step_completed: True; Medical History: step_name: Vital Signs & Medical Photos, form_data: {'temperature': '101', 'temperature_unit': 'celsius', 'oxygen_saturation': '80', 'glucose_timing': 'random', 'lung_congestion': 'none', 'water_in_lungs': 'none', 'ecg_available': 'no'}, data_source: user_input_and_analysis, step_completed: True; Physical Exam: step_name: Medical Records & Contact Information, ai_generated_data: {'generated_questions': '[{\"abnormal_finding\":\"Body Temperature: 101.0 \u00b0C (ELEVATED - Normal: 36.1-37.2 \u00b0C)\",\"medical_concern\":\"hyperthermia or febrile illness\",\"priority\":\"critical\",\"question\":\"Your body temperature is 101.0 \u00b0C, which indicates a fever. Are you experiencing chills, sweating, or any signs of infection such as sore throat or body aches?\"},{\"abnormal_finding\":\"Oxygen Saturation: 80.0 % (LOW - Normal: 95-100 %)\",\"medical_concern\":\"hypoxemia\",\"priority\":\"critical\",\"question\":\"Your oxygen saturation is 80.0%, which is significantly below normal. Are you experiencing shortness of breath, dizziness, or chest discomfort?\"}]'}, data_source: user_input_and_analysis, step_completed: True; Symptoms & Lab Results: step_name: Complaints & Symptoms, form_data: {'complaint_text': 'fever'}, data_source: user_input_and_ai_analysis, step_completed: True",
+      "icd_codes_generated": [
+        {
+          "code": "XD81.0",
+          "confidence": 90,
+          "description": "A clinical state of reduced oxygen saturation (80%), indicating hypoxemia, which may be secondary to various causes including respiratory or systemic illness.",
+          "title": "Hypoxemia"
+        },
+        {
+          "code": "MB22.0",
+          "confidence": 85,
+          "description": "A condition characterized by inadequate oxygenation (oxygen saturation at 80%) without detailed assessment of underlying cause, suggestive of acute respiratory failure.",
+          "title": "Acute respiratory failure, unspecified"
+        }
+      ],
+      "elimination_history": [
+        {
+          "eliminated_code": "RA02.0",
+          "reasoning": "The patient's answer indicates that she experiences shortness of breath both at rest and during activity, which suggests a persistent respiratory issue. Since RA02.0 specifies fever with no localizing signs or symptoms, and the patient has documented hypoxemia and clinical signs pointing toward respiratory compromise, this code is less appropriate. The presence of hypoxemia and the patient's symptoms support a diagnosis of respiratory failure rather than just fever without localizing signs. Therefore, RA02.0 can be eliminated.",
+          "question": "Do you feel short of breath when you are resting or only when you are active?",
+          "answer": "Yes"
+        },
+        {
+          "eliminated_code": "RA01.0",
+          "reasoning": "The patient's presentation of fever and hypoxemia suggests a possible respiratory or infectious cause. The presence of chest tightness or discomfort indicates a respiratory or cardiac component, which aligns more with hypoxemia or respiratory failure rather than a nonspecific fever of unknown origin. Since RA01.0 pertains to fever of unspecified origin without respiratory symptoms, and the patient reports chest tightness, this code is less appropriate. Therefore, RA01.0 is eliminated.",
+          "question": "Do you feel any tightness or discomfort in your chest?",
+          "answer": "Yes"
+        },
+        {
+          "eliminated_code": "1A00.Z",
+          "reasoning": "The patient's affirmative response to skin color changes or unusual markings suggests a dermatological or systemic manifestation, which is more directly related to respiratory or hypoxemic conditions rather than general symptoms or signs involving the respiratory system alone. Therefore, 1A00.Z, which covers other specified symptoms or signs involving the respiratory system, can be reasonably eliminated.",
+          "question": "Do you notice any changes in your skin color or have you seen any unusual markings on your skin?",
+          "answer": "Yes"
+        }
+      ],
+      "differential_questions": [
+        {
+          "eliminated_code": "RA02.0",
+          "reasoning": "The patient's answer indicates that she experiences shortness of breath both at rest and during activity, which suggests a persistent respiratory issue. Since RA02.0 specifies fever with no localizing signs or symptoms, and the patient has documented hypoxemia and clinical signs pointing toward respiratory compromise, this code is less appropriate. The presence of hypoxemia and the patient's symptoms support a diagnosis of respiratory failure rather than just fever without localizing signs. Therefore, RA02.0 can be eliminated.",
+          "question": "Do you feel short of breath when you are resting or only when you are active?",
+          "answer": "Yes"
+        },
+        {
+          "eliminated_code": "RA01.0",
+          "reasoning": "The patient's presentation of fever and hypoxemia suggests a possible respiratory or infectious cause. The presence of chest tightness or discomfort indicates a respiratory or cardiac component, which aligns more with hypoxemia or respiratory failure rather than a nonspecific fever of unknown origin. Since RA01.0 pertains to fever of unspecified origin without respiratory symptoms, and the patient reports chest tightness, this code is less appropriate. Therefore, RA01.0 is eliminated.",
+          "question": "Do you feel any tightness or discomfort in your chest?",
+          "answer": "Yes"
+        },
+        {
+          "eliminated_code": "1A00.Z",
+          "reasoning": "The patient's affirmative response to skin color changes or unusual markings suggests a dermatological or systemic manifestation, which is more directly related to respiratory or hypoxemic conditions rather than general symptoms or signs involving the respiratory system alone. Therefore, 1A00.Z, which covers other specified symptoms or signs involving the respiratory system, can be reasonably eliminated.",
+          "question": "Do you notice any changes in your skin color or have you seen any unusual markings on your skin?",
+          "answer": "Yes"
+        }
+      ],
+      "recommended_lab_tests": [
+        {
+          "category": "Laboratory",
+          "cost_tier": "Low",
+          "expected_findings": "Possible leukocytosis indicating infection, or leukopenia suggesting severe infection or bone marrow suppression.",
+          "reasoning": "This test helps assess for signs of infection (elevated white blood cell count) or anemia (low hemoglobin), which could contribute to hypoxemia.",
+          "test_name": "Complete Blood Count with Differential",
+          "urgency": "Immediate/Within 24h"
+        },
+        {
+          "category": "Laboratory",
+          "cost_tier": "Medium",
+          "expected_findings": "Hypoxemia (low PaO2), possible hypercapnia (high PaCO2) indicating respiratory failure.",
+          "reasoning": "ABG provides critical information about the patient's oxygenation status, acid-base balance, and respiratory function, which is essential given the low oxygen saturation.",
+          "test_name": "Arterial Blood Gas (ABG)",
+          "urgency": "Immediate"
+        },
+        {
+          "category": "Laboratory",
+          "cost_tier": "Medium",
+          "expected_findings": "Positive cultures indicating bacterial infection.",
+          "reasoning": "To identify any underlying bacteremia or sepsis, especially given the febrile state.",
+          "test_name": "Blood Cultures",
+          "urgency": "Immediate"
+        },
+        {
+          "category": "Imaging",
+          "cost_tier": "Low",
+          "expected_findings": "Possible infiltrates, effusions, or other abnormalities indicating respiratory issues.",
+          "reasoning": "To evaluate for any acute pulmonary pathology such as pneumonia, pleural effusion, or other causes of respiratory distress.",
+          "test_name": "Chest X-ray",
+          "urgency": "Immediate/Within 24h"
+        },
+        {
+          "category": "Imaging",
+          "cost_tier": "High",
+          "expected_findings": "Detailed views of lung parenchyma and vasculature, possible identification of emboli or masses.",
+          "reasoning": "If the chest X-ray shows abnormalities, a CT scan can provide more detailed imaging to assess for complications such as pulmonary embolism or extensive pneumonia.",
+          "test_name": "CT Chest (if indicated by X-ray findings)",
+          "urgency": "Within 1 week"
+        }
+      ],
+      "analysis_notes": "The selected tests prioritize immediate assessment of the patient's hypoxemia and febrile state, focusing on identifying potential infections or respiratory failure. Laboratory tests provide critical information about infection status and respiratory function, while imaging studies help visualize lung pathology.",
+      "expert_review_package_created": true,
+      "generation_timestamp": "2025-09-14T19:58:42.214792",
+      "submission_for_review_timestamp": "2025-09-14T14:28:42.213Z"
+    },
+    "files_uploaded": {
+      "expert_review_submission": true,
+      "comprehensive_data_package": true
+    },
+    "timestamp": "2025-09-14T19:58:42.230508",
+    "data_source": "icd_generation",
+    "step_completed": true
+  },
+  "step_completion_status": {
+    "step1": {
+      "completed": true,
+      "timestamp": "2025-09-14T19:56:14.016110",
+      "form_fields_count": 1,
+      "ai_fields_count": 0,
+      "files_count": 0
+    },
+    "step2": {
+      "completed": true,
+      "timestamp": "2025-09-14T19:56:48.045671",
+      "form_fields_count": 10,
+      "ai_fields_count": 1,
+      "files_count": 1
+    },
+    "step3": {
+      "completed": true,
+      "timestamp": "2025-09-14T19:56:58.010559",
+      "form_fields_count": 7,
+      "ai_fields_count": 0,
+      "files_count": 0
+    },
+    "step4": {
+      "completed": true,
+      "timestamp": "2025-09-14T19:57:05.743959",
+      "form_fields_count": 0,
+      "ai_fields_count": 1,
+      "files_count": 0
+    },
+    "step5": {
+      "completed": true,
+      "timestamp": "2025-09-14T19:57:09.092437",
+      "form_fields_count": 1,
+      "ai_fields_count": 0,
+      "files_count": 0
+    },
+    "step6": {
+      "completed": true,
+      "timestamp": "2025-09-14T19:57:26.340122",
+      "form_fields_count": 3,
+      "ai_fields_count": 13,
+      "files_count": 0
+    },
+    "step7": {
+      "completed": true,
+      "timestamp": "2025-09-14T19:58:42.230508",
+      "form_fields_count": 6,
+      "ai_fields_count": 10,
+      "files_count": 2
+    }
+  }
+}

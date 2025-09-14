@@ -1,0 +1,642 @@
+{
+  "session_id": "2025-09-14T20:15:18.454214",
+  "step_completed": 7,
+  "created_at": "2025-09-14T20:15:18.454214",
+  "data_timestamps": {},
+  "llm_timestamps": {},
+  "user_profile": {
+    "login_history": [
+      "2025-09-14T20:15:18.454214"
+    ],
+    "last_updated": "2025-09-14T20:15:18.454214",
+    "login_count": 1,
+    "username": "mo786",
+    "user_type": "medical_operator",
+    "preferred_language": "english",
+    "session_id": "85ee7218-ce34-4bd3-877e-09816a48c33a",
+    "created_at": "2025-09-14T20:15:18.454214"
+  },
+  "session_info": {
+    "session_id": "85ee7218-ce34-4bd3-877e-09816a48c33a",
+    "username": "mo786",
+    "created_at": "2025-09-14T20:15:18.454214",
+    "last_updated": "2025-09-14T20:18:52.124638",
+    "user_type": "medical_operator",
+    "preferred_language": "english",
+    "highest_step_completed": 7
+  },
+  "step1": {
+    "step_name": "Case Category Selection",
+    "form_data": {
+      "case_category": "illness"
+    },
+    "ai_generated_data": {},
+    "files_uploaded": {},
+    "timestamp": "2025-09-14T20:15:21.931677",
+    "data_source": "user_input",
+    "step_completed": true
+  },
+  "step2": {
+    "step_name": "Patient Registration",
+    "form_data": {
+      "full_name": "Arshiya Mirza",
+      "date_of_birth": "2013-06-09",
+      "gender": "female",
+      "address": "C/O: Arshad Ayyub, 21, rajendra nagar, Pratapgarh, Pratapgarh, Rajasthan - 312605",
+      "diabetes": "no",
+      "hypertension": "no",
+      "asthma": "no",
+      "heart_disease": "no",
+      "family_history": "none",
+      "other_medical_reports": "no"
+    },
+    "ai_generated_data": {
+      "aadhaar_extraction": {
+        "aadhaar_number": "9667 8800 9134",
+        "address": "C/O: Arshad Ayyub, 21, rajendra nagar, Pratapgarh, Pratapgarh, Rajasthan - 312605",
+        "date_of_birth": "09/06/2013",
+        "extracted_from": "front and back sides of the Aadhaar card",
+        "extraction_confidence": "high",
+        "full_name": "Arshiya Mirza",
+        "gender": "FEMALE"
+      }
+    },
+    "files_uploaded": {
+      "aadhar_combined": {
+        "filename": "aadhaar1.jpg",
+        "upload_timestamp": "2025-09-14T20:16:10.461105",
+        "field_name": "aadhar_combined",
+        "content_type": "image/jpeg"
+      }
+    },
+    "timestamp": "2025-09-14T20:16:10.462601",
+    "data_source": "user_input_and_extraction",
+    "step_completed": true
+  },
+  "step3": {
+    "step_name": "Vital Signs & Medical Photos",
+    "form_data": {
+      "temperature": "101",
+      "temperature_unit": "fahrenheit",
+      "oxygen_saturation": "80",
+      "glucose_timing": "random",
+      "lung_congestion": "none",
+      "water_in_lungs": "none",
+      "ecg_available": "no"
+    },
+    "ai_generated_data": {},
+    "files_uploaded": {},
+    "custom_medical_images": [],
+    "timestamp": "2025-09-14T20:16:18.611919",
+    "data_source": "user_input_and_analysis",
+    "step_completed": true
+  },
+  "step4": {
+    "step_name": "Medical Records & Contact Information",
+    "form_data": {},
+    "ai_generated_data": {
+      "generated_questions": "[{\"abnormal_finding\":\"Oxygen Saturation: 80.0 %\",\"medical_concern\":\"hypoxemia\",\"priority\":\"critical\",\"question\":\"Your oxygen saturation is 80.0%, which is significantly below the normal range of 95-100%. Are you experiencing symptoms such as shortness of breath, rapid breathing, or chest discomfort?\"},{\"abnormal_finding\":\"Body Temperature: 101.0 \u00b0F\",\"medical_concern\":\"febrile response or infection\",\"priority\":\"abnormal\",\"question\":\"Your body temperature is 101.0 \u00b0F, indicating a fever. Are you experiencing symptoms like chills, sweating, or body aches?\"}]"
+    },
+    "files_uploaded": {},
+    "timestamp": "2025-09-14T20:16:25.695101",
+    "data_source": "user_input_and_analysis",
+    "step_completed": true
+  },
+  "step5": {
+    "step_name": "Complaints & Symptoms",
+    "form_data": {
+      "complaint_text": "fever"
+    },
+    "ai_generated_data": {},
+    "files_uploaded": {},
+    "timestamp": "2025-09-14T20:16:28.632339",
+    "data_source": "user_input_and_ai_analysis",
+    "step_completed": true
+  },
+  "step6": {
+    "step_name": "Analysis & Diagnosis",
+    "form_data": {
+      "assessment_completed": true,
+      "clinical_summary_saved": true,
+      "final_completion_timestamp": "2025-09-14T20:16:59.856391"
+    },
+    "ai_generated_data": {
+      "clinical_summary": "Clinical Summary\n\nPatient Information:\n- Name: Arshiya Mirza\n- Gender: Female\n- Age: not documented\n\nVital Signs:\n- Temperature: 101\u00b0F (febrile)\n- Oxygen Saturation: 80% (hypoxemia)\n- Lung Congestion: absent\n\nPresenting Complaints:\n- Chief Complaint: Fever\n\nClinical Findings:\n- Onset of Fever: Within the past few hours\n- Fever Pattern: Constant throughout the day\n- Severity of Fever: Subjectively very hot feeling\n- Factors Relieving Symptoms: Resting and staying cool\n- Factors Aggravating Symptoms: Physical activity or movement\n- Associated Symptoms: Headaches\n- Impact on Daily Activities: Yes, fever has impaired usual activities such as work, sleep, and mobility\n\nAssessment Summary:\nThe patient, Arshiya Mirza, presents with an acute febrile illness characterized by a temperature of 101\u00b0F and hypoxemia with oxygen saturation at 80%. The fever onset was recent, within hours, and is persistent and severe, described as a very hot sensation. Rest alleviates symptoms, whereas physical activity exacerbates them. The patient reports associated headaches and a significant impact on daily functioning. No lung congestion was noted on examination.",
+      "summary_generated_at": "2025-09-14T20:16:59.856391",
+      "assessment_completed": true,
+      "final_review_status": "completed",
+      "questions_skipped": false,
+      "questions_answered": 7,
+      "question_responses": {
+        "0": {
+          "question": "When did you first notice that you felt unusually hot or had chills?",
+          "category": "onset",
+          "answer_value": "Within the past few hours",
+          "timestamp": "2025-09-14T14:46:43.101Z"
+        },
+        "1": {
+          "question": "How often do you experience feeling feverish or hot during the day?",
+          "category": "frequency",
+          "answer_value": "Constant throughout the day",
+          "timestamp": "2025-09-14T14:46:44.186Z"
+        },
+        "2": {
+          "question": "Right now, how intense or high do you feel your fever? Do you feel very hot or only mildly warm?",
+          "category": "severity",
+          "answer_value": "Very hot feeling",
+          "timestamp": "2025-09-14T14:46:47.854Z"
+        },
+        "3": {
+          "question": "Does resting or staying cool make your feeling of being hot or fever better?",
+          "category": "relieving",
+          "answer_value": "Yes, resting helps",
+          "timestamp": "2025-09-14T14:46:48.700Z"
+        },
+        "4": {
+          "question": "What activities, if any, seem to make your feverish feeling worse, like physical activity or being in certain environments?",
+          "category": "aggravating",
+          "answer_value": "Physical activity or movement",
+          "timestamp": "2025-09-14T14:46:50.018Z"
+        },
+        "5": {
+          "question": "Do you notice any other symptoms that come along with your fever, like headaches, muscle aches, or feeling very tired?",
+          "category": "characteristics",
+          "answer_value": "Headaches",
+          "timestamp": "2025-09-14T14:46:51.578Z"
+        },
+        "6": {
+          "question": "Has your fever affected your usual daily activities, like work, sleep, or moving around?",
+          "category": "impact",
+          "answer_value": "Yes, it has made it hard to do daily tasks",
+          "timestamp": "2025-09-14T14:46:53.028Z"
+        }
+      },
+      "original_questions": [
+        {
+          "category": "onset",
+          "options": [
+            "Within the past few hours",
+            "Earlier today",
+            "Over the past few days",
+            "More than a week ago",
+            "I'm not sure"
+          ],
+          "question": "When did you first notice that you felt unusually hot or had chills?",
+          "relevance": "Understanding when the fever started helps determine if it's sudden or persistent, which is important for diagnosis.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "frequency",
+          "options": [
+            "Constant throughout the day",
+            "Several times a day",
+            "Once or twice a day",
+            "Only occasionally",
+            "I'm not sure"
+          ],
+          "question": "How often do you experience feeling feverish or hot during the day?",
+          "relevance": "Knowing how frequently the fever occurs can help assess its severity and pattern.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "severity",
+          "options": [
+            "Very hot feeling",
+            "Moderately warm",
+            "Slightly warm",
+            "Not feeling hot right now",
+            "I'm not sure"
+          ],
+          "question": "Right now, how intense or high do you feel your fever? Do you feel very hot or only mildly warm?",
+          "relevance": "Assessing current severity helps determine urgency and possible need for treatment.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "relieving",
+          "options": [
+            "Yes, resting helps",
+            "Cooling down with water or fans helps",
+            "No change regardless of rest or cooling",
+            "It feels worse when I try to cool down",
+            "I'm not sure"
+          ],
+          "question": "Does resting or staying cool make your feeling of being hot or fever better?",
+          "relevance": "Understanding what relieves symptoms guides supportive care strategies.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "aggravating",
+          "options": [
+            "Physical activity or movement",
+            "Being in warm or hot environments",
+            "Stress or anxiety",
+            "Eating heavy meals",
+            "I'm not sure"
+          ],
+          "question": "What activities, if any, seem to make your feverish feeling worse, like physical activity or being in certain environments?",
+          "relevance": "Identifying triggers helps manage activity levels and environment to reduce discomfort.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "characteristics",
+          "options": [
+            "Headaches",
+            "Muscle aches",
+            "Feeling very tired",
+            "Nausea or vomiting",
+            "No other symptoms"
+          ],
+          "question": "Do you notice any other symptoms that come along with your fever, like headaches, muscle aches, or feeling very tired?",
+          "relevance": "Additional symptoms can point to specific infections or illnesses needing attention.",
+          "type": "multiple_choice"
+        },
+        {
+          "category": "impact",
+          "options": [
+            "Yes, it has made it hard to do daily tasks",
+            "Slightly, but I can still manage",
+            "No, it hasn't affected my activities",
+            "I'm not sure"
+          ],
+          "question": "Has your fever affected your usual daily activities, like work, sleep, or moving around?",
+          "relevance": "Understanding the impact on daily life helps determine the severity and need for medical care.",
+          "type": "multiple_choice"
+        }
+      ],
+      "analysis_metadata": {
+        "total_questions_generated": 7,
+        "questions_answered": 7,
+        "completion_timestamp": "2025-09-14T14:46:55.205Z"
+      },
+      "total_questions_generated": 7,
+      "total_questions_answered": 7,
+      "completion_rate": 1.0,
+      "completed_at": "2025-09-14T20:16:55.207903",
+      "session_data": {
+        "questions_generated_from": {
+          "step3_vitals": true,
+          "step4_followups": true,
+          "step5_symptoms": true
+        },
+        "priority_distribution": {
+          "step5_priority": 0.8,
+          "step3_step4_priority": 0.2
+        }
+      },
+      "organized_qa_pairs": [
+        {
+          "question_index": 0,
+          "question_text": "When did you first notice that you felt unusually hot or had chills?",
+          "question_category": "onset",
+          "answer": "Within the past few hours",
+          "answered_at": "2025-09-14T14:46:43.101Z",
+          "original_question_data": {
+            "category": "onset",
+            "options": [
+              "Within the past few hours",
+              "Earlier today",
+              "Over the past few days",
+              "More than a week ago",
+              "I'm not sure"
+            ],
+            "question": "When did you first notice that you felt unusually hot or had chills?",
+            "relevance": "Understanding when the fever started helps determine if it's sudden or persistent, which is important for diagnosis.",
+            "type": "multiple_choice"
+          }
+        },
+        {
+          "question_index": 1,
+          "question_text": "How often do you experience feeling feverish or hot during the day?",
+          "question_category": "frequency",
+          "answer": "Constant throughout the day",
+          "answered_at": "2025-09-14T14:46:44.186Z",
+          "original_question_data": {
+            "category": "frequency",
+            "options": [
+              "Constant throughout the day",
+              "Several times a day",
+              "Once or twice a day",
+              "Only occasionally",
+              "I'm not sure"
+            ],
+            "question": "How often do you experience feeling feverish or hot during the day?",
+            "relevance": "Knowing how frequently the fever occurs can help assess its severity and pattern.",
+            "type": "multiple_choice"
+          }
+        },
+        {
+          "question_index": 2,
+          "question_text": "Right now, how intense or high do you feel your fever? Do you feel very hot or only mildly warm?",
+          "question_category": "severity",
+          "answer": "Very hot feeling",
+          "answered_at": "2025-09-14T14:46:47.854Z",
+          "original_question_data": {
+            "category": "severity",
+            "options": [
+              "Very hot feeling",
+              "Moderately warm",
+              "Slightly warm",
+              "Not feeling hot right now",
+              "I'm not sure"
+            ],
+            "question": "Right now, how intense or high do you feel your fever? Do you feel very hot or only mildly warm?",
+            "relevance": "Assessing current severity helps determine urgency and possible need for treatment.",
+            "type": "multiple_choice"
+          }
+        },
+        {
+          "question_index": 3,
+          "question_text": "Does resting or staying cool make your feeling of being hot or fever better?",
+          "question_category": "relieving",
+          "answer": "Yes, resting helps",
+          "answered_at": "2025-09-14T14:46:48.700Z",
+          "original_question_data": {
+            "category": "relieving",
+            "options": [
+              "Yes, resting helps",
+              "Cooling down with water or fans helps",
+              "No change regardless of rest or cooling",
+              "It feels worse when I try to cool down",
+              "I'm not sure"
+            ],
+            "question": "Does resting or staying cool make your feeling of being hot or fever better?",
+            "relevance": "Understanding what relieves symptoms guides supportive care strategies.",
+            "type": "multiple_choice"
+          }
+        },
+        {
+          "question_index": 4,
+          "question_text": "What activities, if any, seem to make your feverish feeling worse, like physical activity or being in certain environments?",
+          "question_category": "aggravating",
+          "answer": "Physical activity or movement",
+          "answered_at": "2025-09-14T14:46:50.018Z",
+          "original_question_data": {
+            "category": "aggravating",
+            "options": [
+              "Physical activity or movement",
+              "Being in warm or hot environments",
+              "Stress or anxiety",
+              "Eating heavy meals",
+              "I'm not sure"
+            ],
+            "question": "What activities, if any, seem to make your feverish feeling worse, like physical activity or being in certain environments?",
+            "relevance": "Identifying triggers helps manage activity levels and environment to reduce discomfort.",
+            "type": "multiple_choice"
+          }
+        },
+        {
+          "question_index": 5,
+          "question_text": "Do you notice any other symptoms that come along with your fever, like headaches, muscle aches, or feeling very tired?",
+          "question_category": "characteristics",
+          "answer": "Headaches",
+          "answered_at": "2025-09-14T14:46:51.578Z",
+          "original_question_data": {
+            "category": "characteristics",
+            "options": [
+              "Headaches",
+              "Muscle aches",
+              "Feeling very tired",
+              "Nausea or vomiting",
+              "No other symptoms"
+            ],
+            "question": "Do you notice any other symptoms that come along with your fever, like headaches, muscle aches, or feeling very tired?",
+            "relevance": "Additional symptoms can point to specific infections or illnesses needing attention.",
+            "type": "multiple_choice"
+          }
+        },
+        {
+          "question_index": 6,
+          "question_text": "Has your fever affected your usual daily activities, like work, sleep, or moving around?",
+          "question_category": "impact",
+          "answer": "Yes, it has made it hard to do daily tasks",
+          "answered_at": "2025-09-14T14:46:53.028Z",
+          "original_question_data": {
+            "category": "impact",
+            "options": [
+              "Yes, it has made it hard to do daily tasks",
+              "Slightly, but I can still manage",
+              "No, it hasn't affected my activities",
+              "I'm not sure"
+            ],
+            "question": "Has your fever affected your usual daily activities, like work, sleep, or moving around?",
+            "relevance": "Understanding the impact on daily life helps determine the severity and need for medical care.",
+            "type": "multiple_choice"
+          }
+        }
+      ]
+    },
+    "files_uploaded": {},
+    "timestamp": "2025-09-14T20:16:59.872124",
+    "data_source": "ai_analysis",
+    "step_completed": true
+  },
+  "step7": {
+    "step_name": "ICD11 Code Generation & Analysis",
+    "form_data": {
+      "icd_generation_completed": true,
+      "codes_generated": 6,
+      "patient_email": "yyy@gmail.com",
+      "patient_phone": "8989898900",
+      "referring_doctor_id": "4",
+      "referring_doctor_name": "Sunita Singh",
+      "referring_doctor_phone": "4444444444",
+      "referring_doctor_email": "sunita.singh@healthcare.com",
+      "referring_doctor_details": {
+        "id": 4,
+        "first_name": "Sunita",
+        "last_name": "Singh",
+        "phone_number": "4444444444",
+        "email_address": "sunita.singh@healthcare.com",
+        "area_of_expertise": "Dermatology"
+      },
+      "contact_info_completed": true,
+      "contact_info_timestamp": "2025-09-14T20:17:24.668599",
+      "clinical_summary_edited": "Patient Clinical Summary\nPatient Information:\n- Name: Arshiya Mirza\n- Age: Not documented\n- Gender: Female\nVital Signs:\n- Temperature: 101\u00b0F (febrile)\n- Oxygen Saturation: 80% (hypoxemia)\n- Blood Glucose: Not documented\n- Other vitals: Lung Congestion: absent\nPresenting Complaints:\n- Chief Complaint: Fever\n- Symptom Analysis:\n- Fever: Present, recent onset, within the past few hours\n- Additional Symptoms:\n- Headaches: Yes\n- Impact on daily activities: Yes, fever has impaired usual activities such as work, sleep, and mobility\nClinical Findings:\n- Onset of Fever: Within the past few hours\n- Fever Pattern: Constant throughout the day\n- Severity of Fever: Subjectively very hot feeling\n- Factors Relieving Symptoms: Resting and staying cool\n- Factors Aggravating Symptoms: Physical activity or movement\n- Associated Symptoms: Headaches\n- Impact on Daily Activities: Yes\nDetailed Symptom Assessment:\n- Onset:\n- Fever: Within the past few hours\n- Characteristics:\n- Fever: Constant throughout the day, very hot feeling\n- Severity:\n- Fever: Subjectively very hot\n- Relieving Factors:\n- Resting and staying cool\n- Aggravating Factors:\n- Physical activity or movement\n- Temporal Pattern:\n- Fever: Recent onset, persistent\n- Associated Symptoms:\n- Headaches\n- Functional Impact:\n- Impaired work, sleep, and mobility\nAssessment Summary:\nThe patient, Arshiya Mirza, presents with an acute febrile illness characterized by a temperature of 101\u00b0F and hypoxemia with oxygen saturation at 80%. The fever onset was recent, within hours, and is persistent and severe, described as a very hot sensation. Rest alleviates symptoms, whereas physical activity exacerbates them. The patient reports associated headaches and a significant impact on daily functioning. No lung congestion was noted on examination.",
+      "completion_timestamp": "2025-09-14T20:18:48.574159",
+      "session_duration": 0,
+      "final_codes_count": 2,
+      "total_eliminations": 4,
+      "total_lab_tests": 5,
+      "step_status": "differential_questioning_completed_with_lab_tests",
+      "expert_review_submitted": true,
+      "submission_timestamp": "2025-09-14T14:48:52.109Z",
+      "completion_status": "submitted_for_expert_review",
+      "total_icd_codes": 2,
+      "differential_questions_answered": 4
+    },
+    "ai_generated_data": {
+      "clinical_summary": "Patient Clinical Summary\nPatient Information:\n- Name: Arshiya Mirza\n- Age: Not documented\n- Gender: Female\nVital Signs:\n- Temperature: 101\u00b0F (febrile)\n- Oxygen Saturation: 80% (hypoxemia)\n- Blood Glucose: Not documented\n- Other vitals: Lung Congestion: absent\nPresenting Complaints:\n- Chief Complaint: Fever\n- Symptom Analysis:\n- Fever: Present, recent onset, within the past few hours\n- Additional Symptoms:\n- Headaches: Yes\n- Impact on daily activities: Yes, fever has impaired usual activities such as work, sleep, and mobility\nClinical Findings:\n- Onset of Fever: Within the past few hours\n- Fever Pattern: Constant throughout the day\n- Severity of Fever: Subjectively very hot feeling\n- Factors Relieving Symptoms: Resting and staying cool\n- Factors Aggravating Symptoms: Physical activity or movement\n- Associated Symptoms: Headaches\n- Impact on Daily Activities: Yes\nDetailed Symptom Assessment:\n- Onset:\n- Fever: Within the past few hours\n- Characteristics:\n- Fever: Constant throughout the day, very hot feeling\n- Severity:\n- Fever: Subjectively very hot\n- Relieving Factors:\n- Resting and staying cool\n- Aggravating Factors:\n- Physical activity or movement\n- Temporal Pattern:\n- Fever: Recent onset, persistent\n- Associated Symptoms:\n- Headaches\n- Functional Impact:\n- Impaired work, sleep, and mobility\nAssessment Summary:\nThe patient, Arshiya Mirza, presents with an acute febrile illness characterized by a temperature of 101\u00b0F and hypoxemia with oxygen saturation at 80%. The fever onset was recent, within hours, and is persistent and severe, described as a very hot sensation. Rest alleviates symptoms, whereas physical activity exacerbates them. The patient reports associated headaches and a significant impact on daily functioning. No lung congestion was noted on examination.",
+      "patient_data_summary": "Vitals: step_name: Patient Registration, form_data: {'full_name': 'Arshiya Mirza', 'date_of_birth': '2013-06-09', 'gender': 'female', 'address': 'C/O: Arshad Ayyub, 21, rajendra nagar, Pratapgarh, Pratapgarh, Rajasthan - 312605', 'diabetes': 'no', 'hypertension': 'no', 'asthma': 'no', 'heart_disease': 'no', 'family_history': 'none', 'other_medical_reports': 'no'}, ai_generated_data: {'aadhaar_extraction': {'aadhaar_number': '9667 8800 9134', 'address': 'C/O: Arshad Ayyub, 21, rajendra nagar, Pratapgarh, Pratapgarh, Rajasthan - 312605', 'date_of_birth': '09/06/2013', 'extracted_from': 'front and back sides of the Aadhaar card', 'extraction_confidence': 'high', 'full_name': 'Arshiya Mirza', 'gender': 'FEMALE'}}, files_uploaded: {'aadhar_combined': {'filename': 'aadhaar1.jpg', 'upload_timestamp': '2025-09-14T20:16:10.461105', 'field_name': 'aadhar_combined', 'content_type': 'image/jpeg'}}, data_source: user_input_and_extraction, step_completed: True; Medical History: step_name: Vital Signs & Medical Photos, form_data: {'temperature': '101', 'temperature_unit': 'fahrenheit', 'oxygen_saturation': '80', 'glucose_timing': 'random', 'lung_congestion': 'none', 'water_in_lungs': 'none', 'ecg_available': 'no'}, data_source: user_input_and_analysis, step_completed: True; Physical Exam: step_name: Medical Records & Contact Information, ai_generated_data: {'generated_questions': '[{\"abnormal_finding\":\"Oxygen Saturation: 80.0 %\",\"medical_concern\":\"hypoxemia\",\"priority\":\"critical\",\"question\":\"Your oxygen saturation is 80.0%, which is significantly below the normal range of 95-100%. Are you experiencing symptoms such as shortness of breath, rapid breathing, or chest discomfort?\"},{\"abnormal_finding\":\"Body Temperature: 101.0 \u00b0F\",\"medical_concern\":\"febrile response or infection\",\"priority\":\"abnormal\",\"question\":\"Your body temperature is 101.0 \u00b0F, indicating a fever. Are you experiencing symptoms like chills, sweating, or body aches?\"}]'}, data_source: user_input_and_analysis, step_completed: True; Symptoms & Lab Results: step_name: Complaints & Symptoms, form_data: {'complaint_text': 'fever'}, data_source: user_input_and_ai_analysis, step_completed: True",
+      "icd_codes_generated": [
+        {
+          "code": "UC50.0",
+          "confidence": 90,
+          "description": "Low blood oxygen saturation (80%), indicating hypoxemia, which may be secondary to respiratory infection or other causes associated with febrile illness.",
+          "title": "Hypoxemia"
+        },
+        {
+          "code": "RA01.Z",
+          "confidence": 80,
+          "description": "Unspecified febrile condition with recent onset, persistent, and severe, without detailed etiology identified at this stage.",
+          "title": "Fever, unspecified"
+        }
+      ],
+      "elimination_history": [
+        {
+          "eliminated_code": "RA01.0",
+          "reasoning": "The patient's presentation includes hypoxemia with oxygen saturation at 80% and a history of shortness of breath at rest, which strongly suggests a respiratory compromise. Since RA01.0 (Fever) is a broad symptom code and the patient's primary concern is hypoxemia with respiratory distress, it is more appropriate to focus on the hypoxemia code. Eliminating the fever code (RA01.0) aligns with prioritizing the more specific and clinically relevant diagnosis in this context.",
+          "question": "Do you feel short of breath or have trouble breathing when you are resting?",
+          "answer": "Yes"
+        },
+        {
+          "eliminated_code": "FA30.0",
+          "reasoning": "The patient's answer indicates a change in breathing when lying down, which is characteristic of conditions like pulmonary edema or heart failure, rather than ARDS. ARDS typically presents with rapid onset respiratory failure without positional variation. Therefore, FA30.0 (ARDS) is less likely and can be eliminated.",
+          "question": "Do you notice any changes in your breathing when you are lying down?",
+          "answer": "Yes"
+        },
+        {
+          "eliminated_code": "MB22.0",
+          "reasoning": "The patient's answer indicates that headaches change with activity, which suggests a dynamic symptom rather than a primary headache disorder. Since the clinical picture points toward an infectious febrile illness with hypoxemia, the headache is likely secondary to the systemic illness rather than a primary headache disorder. Therefore, the code for headache (MB22.0) can be reasonably eliminated.",
+          "question": "Do you notice any changes in your headaches, like if they feel different or happen more often when you're active?",
+          "answer": "Yes"
+        },
+        {
+          "eliminated_code": "MG30.0Y",
+          "reasoning": "The patient's report of skin rashes or unusual spots suggests an infectious or inflammatory process that can involve the skin, which aligns with infectious diseases. 'Other specified infectious diseases' (MG30.0Y) is a broad category that could encompass skin manifestations. Since the patient reports skin changes, this supports the likelihood of an infectious etiology rather than a non-specific febrile illness. Therefore, MG30.0Y is less specific and can be eliminated, focusing instead on codes related to hypoxemia or unspecified fever.",
+          "question": "Do you notice any changes in your skin, like rashes or unusual spots?",
+          "answer": "Yes"
+        }
+      ],
+      "differential_questions": [
+        {
+          "eliminated_code": "RA01.0",
+          "reasoning": "The patient's presentation includes hypoxemia with oxygen saturation at 80% and a history of shortness of breath at rest, which strongly suggests a respiratory compromise. Since RA01.0 (Fever) is a broad symptom code and the patient's primary concern is hypoxemia with respiratory distress, it is more appropriate to focus on the hypoxemia code. Eliminating the fever code (RA01.0) aligns with prioritizing the more specific and clinically relevant diagnosis in this context.",
+          "question": "Do you feel short of breath or have trouble breathing when you are resting?",
+          "answer": "Yes"
+        },
+        {
+          "eliminated_code": "FA30.0",
+          "reasoning": "The patient's answer indicates a change in breathing when lying down, which is characteristic of conditions like pulmonary edema or heart failure, rather than ARDS. ARDS typically presents with rapid onset respiratory failure without positional variation. Therefore, FA30.0 (ARDS) is less likely and can be eliminated.",
+          "question": "Do you notice any changes in your breathing when you are lying down?",
+          "answer": "Yes"
+        },
+        {
+          "eliminated_code": "MB22.0",
+          "reasoning": "The patient's answer indicates that headaches change with activity, which suggests a dynamic symptom rather than a primary headache disorder. Since the clinical picture points toward an infectious febrile illness with hypoxemia, the headache is likely secondary to the systemic illness rather than a primary headache disorder. Therefore, the code for headache (MB22.0) can be reasonably eliminated.",
+          "question": "Do you notice any changes in your headaches, like if they feel different or happen more often when you're active?",
+          "answer": "Yes"
+        },
+        {
+          "eliminated_code": "MG30.0Y",
+          "reasoning": "The patient's report of skin rashes or unusual spots suggests an infectious or inflammatory process that can involve the skin, which aligns with infectious diseases. 'Other specified infectious diseases' (MG30.0Y) is a broad category that could encompass skin manifestations. Since the patient reports skin changes, this supports the likelihood of an infectious etiology rather than a non-specific febrile illness. Therefore, MG30.0Y is less specific and can be eliminated, focusing instead on codes related to hypoxemia or unspecified fever.",
+          "question": "Do you notice any changes in your skin, like rashes or unusual spots?",
+          "answer": "Yes"
+        }
+      ],
+      "recommended_lab_tests": [
+        {
+          "category": "Laboratory",
+          "cost_tier": "Low",
+          "expected_findings": "Leukocytosis with a left shift, anemia, or thrombocytopenia may indicate an infectious process or other underlying conditions.",
+          "reasoning": "This test helps assess for signs of infection (e.g., leukocytosis) or other hematological abnormalities that could explain the fever and hypoxemia.",
+          "test_name": "Complete Blood Count with Differential",
+          "urgency": "Immediate"
+        },
+        {
+          "category": "Laboratory",
+          "cost_tier": "Medium",
+          "expected_findings": "Positive cultures indicating the presence of bacteria in the bloodstream.",
+          "reasoning": "To identify any bacteremia or sepsis, especially given the hypoxemia and fever, which could indicate a serious systemic infection.",
+          "test_name": "Blood Cultures",
+          "urgency": "Immediate"
+        },
+        {
+          "category": "Laboratory",
+          "cost_tier": "Low",
+          "expected_findings": "Electrolyte imbalances or renal impairment may be identified.",
+          "reasoning": "To assess renal function and electrolyte balance, which is crucial given the hypoxemia and potential for dehydration or metabolic derangements.",
+          "test_name": "Basic Metabolic Panel (BMP)",
+          "urgency": "Immediate"
+        },
+        {
+          "category": "Imaging",
+          "cost_tier": "Low",
+          "expected_findings": "Infiltrates, consolidation, or effusions that may indicate pneumonia or other lung pathology.",
+          "reasoning": "To evaluate for any pulmonary pathology such as pneumonia, pleural effusion, or other causes of hypoxemia.",
+          "test_name": "Chest X-ray",
+          "urgency": "Immediate"
+        },
+        {
+          "category": "Laboratory",
+          "cost_tier": "Medium",
+          "expected_findings": "Elevated CRP levels indicating an inflammatory response.",
+          "reasoning": "To assess the level of inflammation in the body, which can help gauge the severity of the infection.",
+          "test_name": "C-Reactive Protein (CRP)",
+          "urgency": "Within 24h"
+        }
+      ],
+      "analysis_notes": "The selected tests prioritize immediate identification of infection and assessment of respiratory status due to the patient's hypoxemia and fever. Laboratory tests provide critical information regarding the presence of infection and the body's response, while imaging helps visualize potential pulmonary causes.",
+      "expert_review_package_created": true,
+      "generation_timestamp": "2025-09-14T20:18:52.107363",
+      "submission_for_review_timestamp": "2025-09-14T14:48:52.109Z"
+    },
+    "files_uploaded": {
+      "expert_review_submission": true,
+      "comprehensive_data_package": true
+    },
+    "timestamp": "2025-09-14T20:18:52.124638",
+    "data_source": "icd_generation",
+    "step_completed": true
+  },
+  "step_completion_status": {
+    "step1": {
+      "completed": true,
+      "timestamp": "2025-09-14T20:15:21.931677",
+      "form_fields_count": 1,
+      "ai_fields_count": 0,
+      "files_count": 0
+    },
+    "step2": {
+      "completed": true,
+      "timestamp": "2025-09-14T20:16:10.462601",
+      "form_fields_count": 10,
+      "ai_fields_count": 1,
+      "files_count": 1
+    },
+    "step3": {
+      "completed": true,
+      "timestamp": "2025-09-14T20:16:18.611919",
+      "form_fields_count": 7,
+      "ai_fields_count": 0,
+      "files_count": 0
+    },
+    "step4": {
+      "completed": true,
+      "timestamp": "2025-09-14T20:16:25.695101",
+      "form_fields_count": 0,
+      "ai_fields_count": 1,
+      "files_count": 0
+    },
+    "step5": {
+      "completed": true,
+      "timestamp": "2025-09-14T20:16:28.632339",
+      "form_fields_count": 1,
+      "ai_fields_count": 0,
+      "files_count": 0
+    },
+    "step6": {
+      "completed": true,
+      "timestamp": "2025-09-14T20:16:59.872124",
+      "form_fields_count": 3,
+      "ai_fields_count": 15,
+      "files_count": 0
+    },
+    "step7": {
+      "completed": true,
+      "timestamp": "2025-09-14T20:18:52.124638",
+      "form_fields_count": 6,
+      "ai_fields_count": 10,
+      "files_count": 2
+    }
+  }
+}
