@@ -1,0 +1,42 @@
+Analyze the uploaded Aadhaar card image and extract personal information.
+
+EXTRACTION REQUIREMENTS:
+1. Extract all visible text and personal details from the Aadhaar card
+2. Identify and extract the following fields if visible:
+   - Full Name
+   - Date of Birth (in DD/MM/YYYY or DD-MM-YYYY format)
+   - Gender (Male/Female)
+   - Address (complete address)
+   - Aadhaar Number (12-digit number)
+   
+3. Handle both front and back sides of Aadhaar card
+4. If the image contains both sides, extract information from both
+5. Clean and format the extracted data appropriately
+
+IMPORTANT INSTRUCTIONS:
+- Extract ONLY what is clearly visible and readable
+- Do not guess or infer information that is not clearly visible
+- For dates, convert to standard format DD/MM/YYYY
+- For gender, use exact text (Male/Female) as shown on card
+- For addresses, extract the complete address as shown
+- If any field is not visible or unclear, mark it as null
+
+RESPONSE FORMAT (JSON):
+{
+    "success": true,
+    "extracted_data": {
+        "full_name": "Complete name as on Aadhaar",
+        "date_of_birth": "DD/MM/YYYY format",
+        "gender": "Male/Female",
+        "address": "Complete address as on card",
+        "aadhaar_number": "12-digit number if visible",
+        "extraction_confidence": "high/medium/low",
+        "extracted_from": "Description of what was processed (front/back/both sides)"
+    }
+}
+
+If extraction fails or image is unclear, return:
+{
+    "success": false,
+    "error": "Clear description of the issue"
+}

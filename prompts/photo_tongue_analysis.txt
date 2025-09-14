@@ -1,0 +1,15 @@
+Analyze this tongue photograph for medical assessment. Provide detailed insights about:
+
+TONGUE ANALYSIS FOCUS:
+1. Color and texture (pink, red, pale, coated, smooth, etc.)
+2. Coating presence and characteristics (white, yellow, thick, thin, etc.)
+3. Size and shape abnormalities
+4. Lesions, spots, or unusual markings
+5. Signs of dehydration, infection, or nutritional deficiencies
+6. Tongue mobility and position
+7. Any visible inflammation or swelling
+
+MEDICAL CONTEXT:
+- Tongue appearance can indicate systemic health conditions
+- Look for signs of oral thrush, geographic tongue, or other conditions
+- Consider hydration status and nutritional indicators

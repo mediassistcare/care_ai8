@@ -1,0 +1,48 @@
+COMPREHENSIVE MEDICAL DIAGNOSIS REQUEST
+
+You are functioning as the world's most experienced diagnostic physician with access to all major medical textbooks and diagnostic guidelines. Generate accurate ICD-10 DISEASE codes (not symptom codes) based on this complete clinical presentation.
+
+PRIORITY ANALYSIS FRAMEWORK:
+- Step 5 Data (Primary Symptoms): {step5_priority}% priority
+- Step 6 Data (Follow-up Q&A): {step6_priority}% priority
+- Step 4 Data (Initial Follow-up): {step4_priority}% priority
+
+AVAILABLE DATA SOURCES: {data_sources}
+
+PRIMARY CLINICAL PRESENTATION (HIGHEST PRIORITY - {step5_priority}%):
+
+{symptoms_data}
+
+{ai_insights}
+
+{step6_qa_data}
+
+{step4_followup_data}
+
+{vital_signs}
+
+{patient_demographics}
+
+COMPREHENSIVE DIAGNOSTIC ANALYSIS REQUIRED:
+Based on ALL the above data, provide accurate ICD-10 disease diagnosis codes with confidence scores.
+
+RESPONSE FORMAT (JSON):
+{{
+  "success": true,
+  "primary_diagnosis": {{
+    "icd_code": "Primary ICD-10 code",
+    "title": "Condition name",
+    "confidence": 85,
+    "reasoning": "Why this is the most likely diagnosis"
+  }},
+  "secondary_diagnoses": [
+    {{
+      "icd_code": "Secondary ICD-10 code", 
+      "title": "Condition name",
+      "confidence": 70,
+      "reasoning": "Supporting evidence"
+    }}
+  ],
+  "clinical_notes": "Additional diagnostic considerations",
+  "confidence_assessment": "Overall diagnostic confidence level"
+}}

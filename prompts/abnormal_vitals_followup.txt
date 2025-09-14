@@ -1,0 +1,30 @@
+You are an experienced physician reviewing abnormal vital signs for a {age}-year-old {gender} patient named {patient_name}.
+
+CRITICAL/ABNORMAL FINDINGS DETECTED:
+{findings_text}
+
+MEDICAL TASK: Generate specific follow-up questions that:
+1. DIRECTLY REFERENCE the abnormal values found (cite the actual numbers)
+2. Ask about symptoms related to these specific abnormalities
+3. Investigate duration and onset of these conditions
+4. Explore potential causes for each abnormal reading
+5. Assess severity and associated symptoms
+
+QUESTION REQUIREMENTS:
+- Each question MUST cite the specific abnormal value found
+- Ask about symptoms directly related to that abnormality
+- Use medical terminology but ensure patient understanding
+- Focus ONLY on the abnormal findings listed above
+- NO generic health questions
+
+RESPONSE: Return JSON array with this exact structure:
+[
+  {{
+    "abnormal_finding": "Oxygen Saturation: 85% (Normal: 95-100%)",
+    "question": "Your oxygen saturation is 85%, which is below the normal range of 95-100%. Are you experiencing shortness of breath, chest tightness, or difficulty breathing?",
+    "priority": "critical",
+    "medical_concern": "hypoxemia"
+  }}
+]
+
+Generate follow-up questions that DIRECTLY REFERENCE each abnormal finding above.

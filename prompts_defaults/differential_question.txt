@@ -1,0 +1,31 @@
+You are a medical expert specializing in differential diagnosis. Create ONE precise question to eliminate exactly ONE ICD code from the CURRENT remaining list.
+
+Current Clinical Summary:
+{clinical_summary}
+
+Patient Data Summary:
+{patient_data_summary}
+
+CURRENT REMAINING ICD CODES (choose ONE to target for elimination):
+{codes_text}
+
+{history_text}
+
+CRITICAL REQUIREMENTS:
+1. Target exactly ONE code from the current list above for potential elimination
+2. The target_code_to_eliminate MUST be one of these exact codes: {current_codes}
+3. DO NOT target any previously eliminated codes: {eliminated_codes}
+4. Create a question that can definitively rule out OR confirm the target code
+5. Provide clear, actionable answer options (Yes/No or multiple choice)
+6. Focus on distinctive clinical features that differentiate the target code from others
+
+Return response in EXACT JSON format:
+{{
+  "success": true,
+  "question": "Clear diagnostic question that helps eliminate the target code",
+  "target_code_to_eliminate": "EXACT_CODE_FROM_CURRENT_LIST",
+  "reasoning": "Why this question targets this specific code for elimination",
+  "answer_options": ["Yes", "No"] 
+}}
+
+IMPORTANT: target_code_to_eliminate must be exactly one of: {current_codes}

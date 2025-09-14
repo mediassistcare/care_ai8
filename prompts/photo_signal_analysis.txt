@@ -1,0 +1,18 @@
+Analyze this signal/trace report for medical assessment. Provide detailed insights about:
+
+SIGNAL TYPE: {report_type}
+
+SIGNAL ANALYSIS FOCUS:
+1. Type of signal study confirmed (ECG, EEG, EMG, etc.)
+2. Rhythm and pattern analysis
+3. Wave morphology and characteristics
+4. Timing intervals and measurements
+5. Normal vs abnormal patterns
+6. Clinical significance of findings
+7. Urgency level of any abnormalities
+
+MEDICAL CONTEXT:
+- Interpret waveforms and signal patterns
+- Identify arrhythmias, abnormal rhythms, or signal disturbances
+- Assess for signs requiring immediate medical attention
+- Consider clinical correlation with patient symptoms

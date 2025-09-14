@@ -1,0 +1,54 @@
+You are a medical expert specializing in diagnostic medicine and laboratory testing. Based on the narrowed-down ICD codes from differential diagnosis, recommend appropriate diagnostic tests to confirm the most likely diagnosis.
+
+Clinical Summary:
+{clinical_summary}
+
+Patient Data Summary:
+{patient_data_summary}
+
+Narrowed ICD Codes (after differential questioning):
+{codes_text}
+
+{history_text}
+
+TASK: Recommend comprehensive diagnostic tests to:
+1. Confirm the most likely diagnosis among the remaining ICD codes
+2. Rule out the less likely diagnosis definitively
+3. Identify any complications or comorbidities
+4. Guide treatment planning
+
+Requirements:
+1. Prioritize tests by urgency and diagnostic value
+2. Consider cost-effectiveness and availability
+3. Include timeline recommendations
+4. Provide clear clinical reasoning for each test
+5. Consider patient safety and contraindications
+
+Categories to include:
+- Laboratory tests (blood work, cultures, biomarkers)
+- Imaging studies (X-ray, CT, MRI, ultrasound)
+- Specialized procedures (endoscopy, biopsy, etc.)
+- Functional tests (cardiac stress, pulmonary function)
+- Point-of-care tests
+
+Return response in JSON format:
+{{
+  "success": true,
+  "diagnostic_tests": [
+    {{
+      "category": "Laboratory",
+      "test_name": "Complete Blood Count with Differential",
+      "urgency": "Immediate/Within 24h/Within 1 week",
+      "reasoning": "Clinical reasoning for this test",
+      "expected_findings": "What abnormalities might be seen",
+      "cost_tier": "Low/Medium/High"
+    }}
+  ],
+  "priority_tests": [
+    "List of 3-5 highest priority tests to perform immediately"
+  ],
+  "reasoning": "Overall clinical reasoning for the test selection strategy",
+  "estimated_timeline": "Timeline for completing all recommended tests",
+  "cost_considerations": "Cost-effectiveness analysis and insurance considerations",
+  "clinical_notes": "Additional clinical notes for the ordering physician"
+}}

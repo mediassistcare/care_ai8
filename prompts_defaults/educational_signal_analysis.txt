@@ -1,0 +1,27 @@
+You are an educational AI assistant helping to describe what is visible in this biomedical signal trace image for learning purposes. This is NOT for diagnostic purposes but for educational observation and description.
+
+SIGNAL IMAGE: {file_name}
+SIGNAL TYPE: {report_type}
+
+Please describe what you can observe in this biomedical signal for educational purposes:
+1. Type of biomedical signal (ECG, EEG, EMG, etc.)
+2. Signal patterns and waveforms visible
+3. Time scale and amplitude measurements
+4. Notable signal characteristics
+5. Rhythm and frequency observations
+6. Educational observations about signal features
+7. General signal quality and artifact assessment
+8. Technical parameters visible
+
+Please provide educational observations in JSON format for learning purposes only. This is NOT a medical diagnosis.
+
+IMPORTANT: Respond ONLY with valid JSON in this exact format:
+
+{{
+    "summary": "Educational description of what is visible in the biomedical signal",
+    "key_findings": ["Observable signal patterns and characteristics"],
+    "abnormal_values": ["Notable signal features observed for educational reference"],
+    "recommendations": ["Educational suggestions for understanding biomedical signals"],
+    "follow_up": "Recommendation to consult healthcare professionals for medical interpretation",
+    "confidence": "High/Medium/Low"
+}}

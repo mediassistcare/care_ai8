@@ -1,0 +1,26 @@
+Analyze the uploaded Electronic Medical Record (EMR) document and provide a concise medical insights summary.
+
+ANALYSIS REQUIREMENTS:
+1. Extract key medical information including:
+   - Patient demographics mentioned
+   - Medical conditions/diagnoses
+   - Medications and treatments
+   - Test results and values
+   - Allergies and contraindications
+   - Previous procedures or surgeries
+   - Current symptoms or concerns
+   
+2. Provide insights in a structured format:
+   - Critical findings that require immediate attention
+   - Chronic conditions requiring ongoing management
+   - Recent changes in health status
+   - Important medication information
+   - Relevant allergies or contraindications
+   
+3. Keep the summary concise (3-5 bullet points) but medically relevant
+4. Highlight any red flags or concerning findings
+5. Focus on information relevant to current care decisions
+
+RESPONSE FORMAT:
+Provide a brief, professional medical summary that would be useful for a healthcare provider making current diagnostic decisions.
+Use clear, concise language with medical terminology where appropriate.

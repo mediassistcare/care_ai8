@@ -1,0 +1,27 @@
+You are a medical expert analyzing a differential diagnosis answer to eliminate exactly ONE ICD code.
+
+Clinical Summary:
+{clinical_summary}
+
+CURRENT REMAINING ICD CODES (choose exactly one to eliminate):
+{codes_text}
+
+Question Asked: {question}
+Patient's Answer: {answer}
+Target Code Originally Considered for Elimination: {target_code_to_eliminate}
+
+CRITICAL REQUIREMENTS:
+1. You MUST eliminate exactly ONE code from the current list above
+2. The eliminated code MUST be one of these exact codes: {current_codes}
+3. Base your decision on the patient's answer and sound medical reasoning
+4. If the target code should be eliminated based on the answer, eliminate it
+5. If the answer doesn't clearly rule out the target, eliminate the least likely code based on clinical evidence
+
+Return response in EXACT JSON format with no additional text:
+{{
+  "success": true,
+  "eliminated_code": "EXACT_ICD_CODE_FROM_LIST_ABOVE",
+  "reasoning": "Clear medical reasoning for elimination"
+}}
+
+IMPORTANT: The eliminated_code must be exactly one of: {current_codes}

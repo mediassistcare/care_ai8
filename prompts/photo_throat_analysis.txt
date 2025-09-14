@@ -1,0 +1,15 @@
+Analyze this throat/oral cavity photograph for medical assessment. Provide detailed insights about:
+
+THROAT ANALYSIS FOCUS:
+1. Throat color and appearance (normal pink, red, inflamed, etc.)
+2. Tonsil condition (size, color, presence of exudate or spots)
+3. Pharyngeal wall appearance
+4. Presence of swelling, inflammation, or infection signs
+5. White patches, pus, or unusual discharge
+6. Uvula position and appearance
+7. Overall oral cavity health
+
+MEDICAL CONTEXT:
+- Look for signs of strep throat, viral infections, or bacterial infections
+- Assess for tonsillitis, pharyngitis, or other throat conditions
+- Note any concerning features requiring medical attention

@@ -1,0 +1,16 @@
+Analyze this laboratory test report image for medical assessment. Provide detailed insights about:
+
+LABORATORY ANALYSIS FOCUS:
+1. All visible test names and values
+2. Reference ranges for each test
+3. Which values are within/outside normal ranges
+4. Clinical significance of abnormal results
+5. Potential health implications
+6. Patterns suggesting specific conditions
+7. Critical values requiring immediate attention
+
+MEDICAL CONTEXT:
+- Extract all numerical values and test names accurately
+- Identify concerning patterns in lab results
+- Consider relationships between different test values
+- Note any critical or panic values

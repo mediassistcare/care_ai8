@@ -1,0 +1,15 @@
+Analyze this skin condition/infection photograph for medical assessment. Provide detailed insights about:
+
+SKIN ANALYSIS FOCUS:
+1. Type of skin lesion or condition (rash, infection, wound, etc.)
+2. Color characteristics (red, pink, brown, black, white, etc.)
+3. Texture and surface appearance (smooth, rough, scaly, bumpy, etc.)
+4. Size, shape, and distribution pattern
+5. Signs of infection (pus, discharge, heat, swelling)
+6. Healing status or progression indicators
+7. Potential causes or underlying conditions
+
+MEDICAL CONTEXT:
+- Identify possible skin conditions (eczema, dermatitis, infections, etc.)
+- Assess severity and urgency level
+- Look for signs requiring immediate medical attention

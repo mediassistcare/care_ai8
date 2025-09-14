@@ -1,0 +1,14 @@
+Extract ALL visible text from this insurance document image in exact chronological order.
+
+CRITICAL REQUIREMENTS:
+1. Extract EVERY piece of text visible in the image
+2. Maintain exact chronological/reading order (top to bottom, left to right)
+3. Include ALL elements: headers, body text, footers, fine print, watermarks, stamps
+4. Include text in tables, forms, boxes, and all visual elements
+5. Include ALL dates, numbers, policy numbers, codes, signatures, annotations
+6. Include company names, addresses, contact information
+7. Include terms, conditions, benefit details, coverage information
+8. Do NOT summarize or interpret - extract complete raw text only
+9. Preserve formatting context (indicate if text is in tables/boxes/headers)
+
+OUTPUT REQUIREMENT: Return ONLY the complete extracted text in exact reading order. No analysis, no summary, no interpretation - just the raw text content.
