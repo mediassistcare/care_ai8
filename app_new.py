@@ -8655,5 +8655,6 @@ if __name__ == '__main__':
     print(f"OpenAI API Key loaded: {'Yes' if api_key else 'No'}")
     if api_key:
         print(f"API Key starts with: {api_key[:10]}...")
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5006, debug=True)
+
 
