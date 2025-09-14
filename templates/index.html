@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="welcome-container">
+    <div class="welcome-card">
+        <div class="welcome-header">
+            <i class="fas fa-user-md"></i>
+            <h1>Welcome to Care Diagnostics</h1>
+            <p>Professional medical assessment and diagnostic assistance</p>
+        </div>
+        
+        <div class="welcome-content">
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <i class="fas fa-clipboard-check"></i>
+                    <h3>Comprehensive Assessment</h3>
+                    <p>Complete vital signs and symptom evaluation</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-brain"></i>
+                    <h3>AI-Powered Analysis</h3>
+                    <p>Advanced diagnostic suggestions based on your symptoms</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Secure & Private</h3>
+                    <p>Your health information is protected and confidential</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-file-medical-alt"></i>
+                    <h3>Detailed Report</h3>
+                    <p>Comprehensive diagnostic report with ICD codes</p>
+                </div>
+            </div>
+            
+            <div class="process-steps">
+                <h3>6-Step Medical Assessment Process</h3>
+                <div class="steps-grid">
+                    <div class="step-item">
+                        <span class="step-number">1</span>
+                        <span>Patient Registration</span>
+                        <small>Demographics, medical history, medications</small>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-number">2</span>
+                        <span>Vital Signs</span>
+                        <small>Temperature, BP, heart rate, weight, height</small>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-number">3</span>
+                        <span>AI Follow-up Questions</span>
+                        <small>Targeted questions based on your data</small>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-number">4</span>
+                        <span>Open-ended Complaints</span>
+                        <small>Describe your symptoms and concerns</small>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-number">5</span>
+                        <span>Complaint Analysis</span>
+                        <small>AI analysis of symptoms and correlations</small>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-number">6</span>
+                        <span>Final Diagnosis</span>
+                        <small>ICD-10 codes and clinical recommendations</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="welcome-footer">
+            <button class="btn-primary" onclick="window.location.href='/step1'">
+                Begin Assessment
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

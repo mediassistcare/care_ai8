@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Prompt - {{ filename }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 0;
+        }
+
+        .content-container {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-action {
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .content-display {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .content-raw {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .toolbar {
+            background: #343a40;
+            color: white;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .stats-badge {
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <!-- Header -->
+    <div class="admin-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-0">
+                        <i class="fas fa-eye me-3"></i>
+                        View Prompt
+                    </h1>
+                    <p class="mb-0 mt-2">{{ filename }}</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex gap-2 justify-content-end">
+                        <a href="{{ url_for('edit_prompt', filename=filename) }}" class="btn btn-warning btn-action">
+                            <i class="fas fa-edit me-2"></i>Edit
+                        </a>
+                        <a href="{{ url_for('index') }}" class="btn btn-light btn-action">
+                            <i class="fas fa-arrow-left me-2"></i>Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <!-- File Information -->
+        <div class="file-info">
+            <div class="row">
+                <div class="col-md-8">
+                    <h6 class="mb-1">
+                        <i class="fas fa-file-code me-2 text-primary"></i>
+                        {{ filename }}
+                    </h6>
+                    <div class="text-muted small">
+                        File path: <code>prompts/{{ filename }}</code>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex gap-2 justify-content-end flex-wrap">
+                        <span class="badge bg-primary stats-badge">
+                            <i class="fas fa-font me-1"></i>{{ content|length }} chars
+                        </span>
+                        <span class="badge bg-info stats-badge">
+                            <i class="fas fa-list-ol me-1"></i>{{ content.split('\n')|length }} lines
+                        </span>
+                        <span class="badge bg-success stats-badge">
+                            <i class="fas fa-keyboard me-1"></i>{{ content.split()|length }} words
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Display Toggle -->
+        <div class="mb-3">
+            <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="viewMode" id="formatted" checked>
+                <label class="btn btn-outline-primary" for="formatted">
+                    <i class="fas fa-magic me-1"></i>Formatted View
+                </label>
+
+                <input type="radio" class="btn-check" name="viewMode" id="raw">
+                <label class="btn btn-outline-primary" for="raw">
+                    <i class="fas fa-code me-1"></i>Raw Text
+                </label>
+            </div>
+
+            <div class="float-end">
+                <button class="btn btn-outline-secondary btn-sm" onclick="copyToClipboard()">
+                    <i class="fas fa-copy me-1"></i>Copy Content
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="downloadFile()">
+                    <i class="fas fa-download me-1"></i>Download
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Container -->
+        <div class="card content-container">
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-file-alt me-2"></i>
+                    <span id="viewModeTitle">Formatted Content</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <small class="text-light">
+                        Read-only view
+                    </small>
+                </div>
+            </div>
+
+            <!-- Formatted Content -->
+            <div id="formattedContent" class="content-display">{{ content }}</div>
+
+            <!-- Raw Content -->
+            <div id="rawContent" class="content-raw" style="display: none;">{{ content }}</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <div>
+                <small class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i>
+                    This is a read-only view. Click "Edit" to make changes.
+                </small>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+                <a href="{{ url_for('edit_prompt', filename=filename) }}" class="btn btn-primary btn-action">
+                    <i class="fas fa-edit me-2"></i>Edit This Prompt
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-4 bg-dark text-white text-center">
+        <div class="container">
+            <p class="mb-0">
+                <i class="fas fa-code me-2"></i>
+                Prompt Admin Portal v1.0 | Care Diagnostics System
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+
+    <script>
+        // Content for JavaScript operations
+        const fileContent = {{ content| tojson | safe }};
+        const fileName = {{ filename| tojson | safe }};
+
+        // View mode toggle
+        document.addEventListener('DOMContentLoaded', function () {
+            const formattedRadio = document.getElementById('formatted');
+            const rawRadio = document.getElementById('raw');
+            const formattedContent = document.getElementById('formattedContent');
+            const rawContent = document.getElementById('rawContent');
+            const viewModeTitle = document.getElementById('viewModeTitle');
+
+            formattedRadio.addEventListener('change', function () {
+                if (this.checked) {
+                    formattedContent.style.display = 'block';
+                    rawContent.style.display = 'none';
+                    viewModeTitle.textContent = 'Formatted Content';
+                }
+            });
+
+            rawRadio.addEventListener('change', function () {
+                if (this.checked) {
+                    formattedContent.style.display = 'none';
+                    rawContent.style.display = 'block';
+                    viewModeTitle.textContent = 'Raw Text';
+                }
+            });
+        });
+
+        // Copy to clipboard functionality
+        function copyToClipboard() {
+            navigator.clipboard.writeText(fileContent).then(function () {
+                // Show success feedback
+                const btn = event.target.closest('button');
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+                btn.classList.remove('btn-outline-secondary');
+                btn.classList.add('btn-success');
+
+                setTimeout(function () {
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-outline-secondary');
+                }, 2000);
+            }).catch(function (err) {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy content to clipboard');
+            });
+        }
+
+        // Download file functionality
+        function downloadFile() {
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+
+</html>

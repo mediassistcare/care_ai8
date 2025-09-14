@@ -1,0 +1,2374 @@
+{% extends "base.html" %}
+
+{% block title %}Medical Records & Contact - Step 4 - Care Diagnostics{% endblock %}
+
+{% block content %}
+<div class="step-container">
+    <div class="step-header">
+        <h2><i class="fas fa-file-medical"></i> Step 4: Medical Records & Contact Information</h2>
+        <p>Upload medical reports, capture medicine information, and provide contact details</p>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 66.67%"></div>
+        </div>
+    </div>
+
+    <form id="medicalForm" class="medical-form" novalidate>
+        
+        <!-- Pagination Controls -->
+        <div class="pagination-controls">
+            <div class="pagination-dots">
+                <div class="dot active" data-section="1">
+                    <span class="dot-number">1</span>
+                    <span class="dot-label">Current Medications</span>
+                </div>
+                <div class="dot" data-section="2">
+                    <span class="dot-number">2</span>
+                    <span class="dot-label">AI Follow-up Questions</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Current Medications (previously section 3) -->
+        <div class="form-section-page" id="section-1" style="display: block;">
+        
+        <!-- Current Medications Section -->
+        <div class="form-section medications-section">
+            <h3><i class="fas fa-pills"></i> Current Medications</h3>
+            <p class="section-description">Medicines currently being taken for various conditions</p>
+
+            
+            <!-- Medications Grid Container -->
+            <div class="medications-grid-container">
+                <!-- Row 1: Diabetes and Blood Pressure -->
+                <div class="medication-row">
+                    <!-- Diabetes Medications -->
+                    <div class="medication-card">
+                        <h4><i class="fas fa-tint"></i> Diabetes Medications</h4>
+                        <div class="form-group vital-input">
+                            <label for="diabetes_medication">Medicine Name</label>
+                            <input type="text" id="diabetes_medication" name="diabetes_medication" placeholder="e.g., Metformin, Insulin">
+                            <div class="vital-range">Current diabetes medication</div>
+                        </div>
+                        <div class="form-group vital-input">
+                            <label for="diabetes_dosage">Dosage & Frequency</label>
+                            <input type="text" id="diabetes_dosage" name="diabetes_dosage" placeholder="e.g., 500mg twice daily">
+                            <div class="vital-range">How much and how often</div>
+                        </div>
+                    </div>
+
+                    <!-- Blood Pressure Medications -->
+                    <div class="medication-card">
+                        <h4><i class="fas fa-heart"></i> Blood Pressure Medications</h4>
+                        <div class="form-group vital-input">
+                            <label for="bp_medication">Medicine Name</label>
+                            <input type="text" id="bp_medication" name="bp_medication" placeholder="e.g., Amlodipine, Telmisartan">
+                            <div class="vital-range">Current BP medication</div>
+                        </div>
+                        <div class="form-group vital-input">
+                            <label for="bp_dosage">Dosage & Frequency</label>
+                            <input type="text" id="bp_dosage" name="bp_dosage" placeholder="e.g., 5mg once daily">
+                            <div class="vital-range">How much and how often</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2: Asthma and Heart Condition -->
+                <div class="medication-row">
+                    <!-- Asthma Medications -->
+                    <div class="medication-card">
+                        <h4><i class="fas fa-lungs"></i> Asthma Medications</h4>
+                        <div class="form-group vital-input">
+                            <label for="asthma_medication">Medicine Name</label>
+                            <input type="text" id="asthma_medication" name="asthma_medication" placeholder="e.g., Salbutamol, Budesonide">
+                            <div class="vital-range">Current asthma medication</div>
+                        </div>
+                        <div class="form-group vital-input">
+                            <label for="asthma_dosage">Dosage & Frequency</label>
+                            <input type="text" id="asthma_dosage" name="asthma_dosage" placeholder="e.g., 2 puffs as needed">
+                            <div class="vital-range">How much and how often</div>
+                        </div>
+                    </div>
+
+                    <!-- Heart Condition Medications -->
+                    <div class="medication-card">
+                        <h4><i class="fas fa-heartbeat"></i> Heart Condition Medications</h4>
+                        <div class="form-group vital-input">
+                            <label for="heart_medication">Medicine Name</label>
+                            <input type="text" id="heart_medication" name="heart_medication" placeholder="e.g., Atorvastatin, Aspirin">
+                            <div class="vital-range">Current heart medication</div>
+                        </div>
+                        <div class="form-group vital-input">
+                            <label for="heart_dosage">Dosage & Frequency</label>
+                            <input type="text" id="heart_dosage" name="heart_dosage" placeholder="e.g., 10mg once daily">
+                            <div class="vital-range">How much and how often</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Other Medications (Full Width) -->
+                <div class="medication-row-single">
+                    <!-- Other Medications -->
+                    <div class="medication-card medication-card-wide">
+                        <h4><i class="fas fa-prescription-bottle-alt"></i> Other Medications</h4>
+                        <div class="medication-grid">
+                            <div class="form-group vital-input">
+                                <label for="other_medication">Other Medicine Names</label>
+                                <textarea id="other_medication" name="other_medication" rows="2" placeholder="List any other medications, supplements, or vitamins"></textarea>
+                                <div class="vital-range">Any other medications not listed above</div>
+                            </div>
+                            <div class="form-group vital-input">
+                                <label for="other_dosage">Dosage & Frequency</label>
+                                <textarea id="other_dosage" name="other_dosage" rows="2" placeholder="Dosage and frequency for other medications"></textarea>
+                                <div class="vital-range">How much and how often for other medications</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Navigation for Section 1 -->
+        <div class="section-navigation">
+            <button type="button" class="btn-navigation btn-prev" style="visibility: hidden;" disabled>
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn-navigation btn-next" onclick="nextSection()">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        </div>
+        <!-- End Section 1 -->
+
+        <!-- Section 2: AI Follow-up Questions (previously section 4) -->
+        <div class="form-section-page" id="section-2" style="display: none;">
+
+        <!-- AI Follow-up Questions Section -->
+        <div class="form-section followup-section">
+            <h3><i class="fas fa-robot"></i> AI Follow-up Questions</h3>
+            <p class="section-description">AI-generated questions based on your vital signs and medical history</p>
+            
+            <div class="vitals-subsection">
+                <h4><i class="fas fa-question-circle"></i> Generated Questions</h4>
+                <div class="followup-questions" id="followup-questions">
+                    <div class="loading-questions">
+                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        <p>AI is analyzing your vital signs and medical information...</p>
+                        <p>Generating personalized follow-up questions...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Navigation for Section 2 -->
+        <div class="section-navigation">
+            <button type="button" class="btn-navigation btn-prev" onclick="prevSection()">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn-navigation btn-next" onclick="submitForm()" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">
+                <i class="fas fa-check"></i> Complete Step 4
+            </button>
+        </div>
+        
+        </div>
+        <!-- End Section 2 -->
+
+    </form>
+</div>
+
+<!-- Disclaimer Popup -->
+<div id="disclaimerModal" class="disclaimer-modal" style="display: none;">
+    <div class="disclaimer-modal-content">
+        <div class="disclaimer-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Important Medical Disclaimer</h3>
+        </div>
+        <div class="disclaimer-body">
+            <p>You are now about to enter a section of the app where our AI system will play a crucial role in guiding your interaction. The AI will ask you questions, analyze your responses, and generate valuable insights tailored to your situation.</p>
+            
+            <p>To ensure the best results, we ask that you be <strong>open, honest, and as descriptive as possible</strong> when sharing your information. The more accurate and detailed your responses are, the better the AI can narrow down to the root cause of your concerns and provide meaningful follow-up questions.</p>
+            
+            <p>Please remember that while the AI aims to assist you with personalized guidance, <strong>it is not a substitute for professional medical advice, diagnosis, or treatment</strong>. Always consult a qualified healthcare provider for medical concerns or emergencies.</p>
+            
+            <p class="disclaimer-agreement">By continuing, you acknowledge that you understand the role of the AI in this process and agree to proceed with full and truthful participation.</p>
+        </div>
+        <div class="disclaimer-footer">
+            <button type="button" class="btn-disclaimer-cancel" onclick="closeDisclaimer()">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button type="button" class="btn-disclaimer-continue" onclick="acceptDisclaimer()">
+                <i class="fas fa-check"></i> I Understand & Continue
+            </button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentSection = 1;
+const totalSections = 2;
+
+// Load patient data when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadPatientDataForPrefill();
+    setupFileUploads();
+    checkEMRStatus();
+    
+    // Initialize the step with proper section display
+    initializeStepDisplay();
+});
+
+// Initialize step display based on medical history
+function initializeStepDisplay() {
+    // This will be called after patient data is loaded and sections are set up
+    // The actual setup happens in checkMedicalHistoryAndSetupSections
+}
+
+// Load patient data for pre-filling forms (but not the name since it's already displayed)
+function loadPatientDataForPrefill() {
+    fetch('/get_patient_data')
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.registration) {
+            // Check medical history to determine if Section 1 should be shown
+            checkMedicalHistoryAndSetupSections(data.registration);
+            
+            // Pre-fill contact info if available
+            if (data.registration.phone) {
+                document.getElementById('phone_primary').value = data.registration.phone;
+            }
+            if (data.registration.email) {
+                document.getElementById('email').value = data.registration.email;
+            }
+            if (data.registration.emergency_name) {
+                document.getElementById('emergency_name').value = data.registration.emergency_name;
+            }
+            if (data.registration.emergency_phone) {
+                document.getElementById('emergency_phone_primary').value = data.registration.emergency_phone;
+            }
+            
+            // Check EMR status from registration step (data is now cleaned of suffixes)
+            const emrExisting = data.registration.emr_existing;
+            
+            console.log('EMR existing value:', emrExisting);
+            console.log('Registration data keys:', Object.keys(data.registration));
+            
+            if (emrExisting === 'yes') {
+                // Show EMR link group and make it required
+                const emrGroup = document.getElementById('emr-link-group');
+                emrGroup.style.display = 'block';
+                emrGroup.classList.add('required');
+                
+                document.getElementById('emr_link').required = true;
+                document.getElementById('emr-status').textContent = 'EMR link is required (you selected Yes in registration)';
+                document.getElementById('emr-status').style.color = '#e74c3c';
+                document.getElementById('emr-status').style.fontWeight = 'bold';
+                
+                // Add visual indicator to the label
+                const emrLabel = document.querySelector('label[for="emr_link"]');
+                if (emrLabel && !emrLabel.innerHTML.includes('*')) {
+                    emrLabel.innerHTML = 'EMR Link <span style="color: #e74c3c;">*</span>';
+                }
+                
+                console.log('EMR field is required - displaying EMR link input');
+            } else {
+                // Hide EMR link group when not needed
+                const emrGroup = document.getElementById('emr-link-group');
+                emrGroup.style.display = 'none';
+                emrGroup.classList.remove('required');
+                document.getElementById('emr_link').required = false;
+                console.log('EMR field not required - hiding EMR link input');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error loading patient data:', error);
+    });
+}
+
+// Check EMR status
+function checkEMRStatus() {
+    // This would integrate with EMR systems to validate links
+    // For now, we'll just show a placeholder
+}
+
+// Check medical history and setup sections dynamically
+function checkMedicalHistoryAndSetupSections(registrationData) {
+    console.log('Checking medical history for dynamic sections...', registrationData);
+    
+    // Get medical history selections from Step 2
+    const diabetes = registrationData.diabetes;
+    const hypertension = registrationData.hypertension;
+    const asthma = registrationData.asthma;
+    const heart_disease = registrationData.heart_disease;
+    
+    console.log('Medical conditions:', { diabetes, hypertension, asthma, heart_disease });
+    
+    // Check if any condition is selected as "yes"
+    const hasAnyCondition = diabetes === 'yes' || hypertension === 'yes' || 
+                           asthma === 'yes' || heart_disease === 'yes';
+    
+    if (!hasAnyCondition) {
+        // No medical conditions selected - skip Section 1
+        console.log('No medical conditions selected, skipping Section 1');
+        setupSkipSection1();
+    } else {
+        // Some conditions selected - show Section 1 with relevant medications
+        console.log('Medical conditions found, setting up Section 1 with relevant medications');
+        setupDynamicMedicationSection(diabetes, hypertension, asthma, heart_disease);
+    }
+}
+
+// Setup to skip Section 1 entirely
+function setupSkipSection1() {
+    console.log('Setting up to skip Section 1 - no medical conditions selected');
+    
+    // Hide Section 1 completely
+    const section1 = document.getElementById('section-1');
+    if (section1) {
+        section1.style.display = 'none';
+    }
+    
+    // Show Section 2 (AI Follow-up Questions) but keep it as "section 2"
+    const section2 = document.getElementById('section-2');
+    if (section2) {
+        section2.style.display = 'none'; // Keep it hidden initially
+    }
+    
+    // Update pagination dots to show only AI Follow-up Questions as "1"
+    const dots = document.querySelectorAll('.pagination-dots .dot');
+    if (dots.length >= 2) {
+        // Hide the first dot (Current Medications)
+        dots[0].style.display = 'none';
+        
+        // Update the second dot to be labeled as "1" instead of "2"
+        const secondDot = dots[1];
+        if (secondDot) {
+            const dotNumber = secondDot.querySelector('.dot-number');
+            if (dotNumber) {
+                dotNumber.textContent = '1';
+            }
+            // Make sure it's marked as active
+            secondDot.classList.add('active');
+        }
+    }
+    
+    // Keep totalSections as 2, but start at section 1 (which is hidden)
+    // This way the navigation logic works correctly
+    currentSection = 1;
+    
+    // Mark that we're skipping section 1
+    window.skipSection1 = true;
+    
+    // Show disclaimer immediately since user is essentially starting with AI section
+    setTimeout(() => {
+        showDisclaimer();
+    }, 500); // Small delay to ensure page is fully loaded
+}
+
+// Setup dynamic medication section with only relevant conditions
+function setupDynamicMedicationSection(diabetes, hypertension, asthma, heart_disease) {
+    console.log('Setting up dynamic medication section for selected conditions');
+    
+    const medicationsContainer = document.querySelector('#section-1 .medications-grid-container');
+    if (!medicationsContainer) return;
+    
+    // Clear existing content
+    medicationsContainer.innerHTML = '';
+    
+    let medicationRows = '';
+    let cardsInCurrentRow = 0;
+    let currentRow = '';
+    
+    // Add medication cards only for "yes" conditions (2 per row)
+    if (diabetes === 'yes') {
+        if (cardsInCurrentRow === 0) {
+            currentRow = '<div class="medication-row">';
+        }
+        currentRow += createMedicationCardContent('diabetes', 'Diabetes Medications', 'fas fa-tint', 
+            'diabetes_medication', 'diabetes_dosage', 'e.g., Metformin, Insulin', 'e.g., 500mg twice daily');
+        cardsInCurrentRow++;
+        
+        if (cardsInCurrentRow === 2) {
+            currentRow += '</div>';
+            medicationRows += currentRow;
+            cardsInCurrentRow = 0;
+            currentRow = '';
+        }
+    }
+    
+    if (hypertension === 'yes') {
+        if (cardsInCurrentRow === 0) {
+            currentRow = '<div class="medication-row">';
+        }
+        currentRow += createMedicationCardContent('bp', 'Blood Pressure Medications', 'fas fa-heart', 
+            'bp_medication', 'bp_dosage', 'e.g., Amlodipine, Telmisartan', 'e.g., 5mg once daily');
+        cardsInCurrentRow++;
+        
+        if (cardsInCurrentRow === 2) {
+            currentRow += '</div>';
+            medicationRows += currentRow;
+            cardsInCurrentRow = 0;
+            currentRow = '';
+        }
+    }
+    
+    if (asthma === 'yes') {
+        if (cardsInCurrentRow === 0) {
+            currentRow = '<div class="medication-row">';
+        }
+        currentRow += createMedicationCardContent('asthma', 'Asthma Medications', 'fas fa-lungs', 
+            'asthma_medication', 'asthma_dosage', 'e.g., Salbutamol, Budesonide', 'e.g., 2 puffs as needed');
+        cardsInCurrentRow++;
+        
+        if (cardsInCurrentRow === 2) {
+            currentRow += '</div>';
+            medicationRows += currentRow;
+            cardsInCurrentRow = 0;
+            currentRow = '';
+        }
+    }
+    
+    if (heart_disease === 'yes') {
+        if (cardsInCurrentRow === 0) {
+            currentRow = '<div class="medication-row">';
+        }
+        currentRow += createMedicationCardContent('heart', 'Heart Condition Medications', 'fas fa-heartbeat', 
+            'heart_medication', 'heart_dosage', 'e.g., Atorvastatin, Aspirin', 'e.g., 10mg once daily');
+        cardsInCurrentRow++;
+        
+        if (cardsInCurrentRow === 2) {
+            currentRow += '</div>';
+            medicationRows += currentRow;
+            cardsInCurrentRow = 0;
+            currentRow = '';
+        }
+    }
+    
+    // Close any open row
+    if (cardsInCurrentRow > 0) {
+        currentRow += '</div>';
+        medicationRows += currentRow;
+    }
+    
+    // Always add "Other Medications" section
+    medicationRows += createOtherMedicationsCard();
+    
+    // Update the container with dynamic cards
+    medicationsContainer.innerHTML = medicationRows;
+    
+    // Ensure Section 1 is visible and properly set up
+    const section1 = document.getElementById('section-1');
+    if (section1) {
+        section1.style.display = 'block';
+    }
+    
+    // Make sure we start with Section 1 visible
+    currentSection = 1;
+    const section2 = document.getElementById('section-2');
+    if (section2) {
+        section2.style.display = 'none';
+        
+        // Ensure the Previous button is visible in Section 2 for normal flow
+        const prevButton = section2.querySelector('.btn-prev');
+        if (prevButton) {
+            prevButton.style.display = 'inline-flex'; // or 'block' depending on the original display
+        }
+    }
+}
+
+// Helper function to create medication card HTML
+function createMedicationCard(type, title, icon, medicationId, dosageId, medicationPlaceholder, dosagePlaceholder) {
+    return `
+        <div class="medication-row">
+            <div class="medication-card">
+                <h4><i class="${icon}"></i> ${title}</h4>
+                <div class="form-group vital-input">
+                    <label for="${medicationId}">Medicine Name</label>
+                    <input type="text" id="${medicationId}" name="${medicationId}" placeholder="${medicationPlaceholder}">
+                    <div class="vital-range">Current ${type} medication</div>
+                </div>
+                <div class="form-group vital-input">
+                    <label for="${dosageId}">Dosage & Frequency</label>
+                    <input type="text" id="${dosageId}" name="${dosageId}" placeholder="${dosagePlaceholder}">
+                    <div class="vital-range">How much and how often</div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Helper function to create individual medication card content (without row wrapper)
+function createMedicationCardContent(type, title, icon, medicationId, dosageId, medicationPlaceholder, dosagePlaceholder) {
+    return `
+        <div class="medication-card">
+            <h4><i class="${icon}"></i> ${title}</h4>
+            <div class="form-group vital-input">
+                <label for="${medicationId}">Medicine Name</label>
+                <input type="text" id="${medicationId}" name="${medicationId}" placeholder="${medicationPlaceholder}">
+                <div class="vital-range">Current ${type} medication</div>
+            </div>
+            <div class="form-group vital-input">
+                <label for="${dosageId}">Dosage & Frequency</label>
+                <input type="text" id="${dosageId}" name="${dosageId}" placeholder="${dosagePlaceholder}">
+                <div class="vital-range">How much and how often</div>
+            </div>
+        </div>
+    `;
+}
+
+// Helper function to create other medications card
+function createOtherMedicationsCard() {
+    return `
+        <div class="medication-row-single">
+            <div class="medication-card medication-card-wide">
+                <h4><i class="fas fa-prescription-bottle-alt"></i> Other Medications</h4>
+                <div class="medication-grid">
+                    <div class="form-group vital-input">
+                        <label for="other_medication">Other Medicine Names</label>
+                        <textarea id="other_medication" name="other_medication" rows="2" placeholder="List any other medications, supplements, or vitamins"></textarea>
+                        <div class="vital-range">Any other medications not listed above</div>
+                    </div>
+                    <div class="form-group vital-input">
+                        <label for="other_dosage">Dosage & Frequency</label>
+                        <textarea id="other_dosage" name="other_dosage" rows="2" placeholder="Dosage and frequency for other medications"></textarea>
+                        <div class="vital-range">How much and how often for other medications</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Load AI-generated follow-up questions
+function loadFollowupQuestions() {
+    const container = document.getElementById('followup-questions');
+    
+    fetch('/generate_followup_questions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (data.questions && data.questions.length > 0) {
+                // Display follow-up questions
+                displayFollowupQuestions(data.questions);
+                
+                // Show simple header for questions if available
+                if (data.findings_count > 0) {
+                    const summaryHtml = `
+                        <div class="findings-summary">
+                            <div class="summary-header">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span>Additional Questions</span>
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('afterbegin', summaryHtml);
+                }
+            } else if (data.summary) {
+                // Display summary for health assessment
+                container.innerHTML = `
+                    <div class="vitals-summary">
+                        <div class="summary-header">
+                            <i class="fas fa-check-circle" style="color: #27ae60;"></i>
+                            <span>Health Assessment Summary</span>
+                        </div>
+                        <div class="summary-content">
+                            ${data.summary.replace(/\n/g, '<br>')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = '<p class="no-questions">No additional questions at this time.</p>';
+            }
+        } else {
+            container.innerHTML = '<p class="error-questions">Error loading questions. Please continue with the form.</p>';
+        }
+    })
+    .catch(error => {
+        console.error('Error loading follow-up questions:', error);
+        container.innerHTML = '<p class="error-questions">Error loading questions. Please continue with the form.</p>';
+    });
+}
+
+// Display follow-up questions
+function displayFollowupQuestions(questions) {
+    const container = document.getElementById('followup-questions');
+    let html = '';
+    
+    // Add simple instructions
+    html += `
+        <div class="questions-instructions">
+            <p><i class="fas fa-info-circle"></i> Please answer the following questions to help us better understand your health.</p>
+        </div>
+    `;
+    
+    questions.forEach((question, index) => {
+        html += `
+            <div class="question-card">
+                <div class="question-text">${question.question}</div>
+                <div class="question-input">
+                    <textarea name="followup_answer_${index}" rows="3" 
+                              placeholder="Please provide information about this..."></textarea>
+                </div>
+            </div>
+        `;
+    });
+    
+    // Store questions for form submission
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'generated_questions';
+    hiddenInput.value = JSON.stringify(questions);
+    
+    // Replace the entire container content (this removes the loading spinner)
+    container.innerHTML = html;
+    container.appendChild(hiddenInput);
+}
+
+// Setup file upload handlers
+function setupFileUploads() {
+    // Lab report upload
+    document.getElementById('lab_report_file').addEventListener('change', function(e) {
+        handleFileUpload(e, 'lab', 'Laboratory Report');
+    });
+    
+    // Medical image upload
+    document.getElementById('medical_image_file').addEventListener('change', function(e) {
+        handleFileUpload(e, 'image', 'Medical Image');
+    });
+    
+    // Signaling report upload
+    document.getElementById('signaling_report_file').addEventListener('change', function(e) {
+        handleFileUpload(e, 'signal', 'Signaling Report');
+    });
+}
+
+// Handle file uploads and AI extraction
+function handleFileUpload(event, type, displayName) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const statusElement = document.getElementById(`${type}-upload-status`);
+    const extractedInfoElement = document.getElementById(`${type}-extracted-info`);
+    
+    statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading and analyzing...';
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', type);
+    
+    fetch('/analyze_medical_document', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            statusElement.innerHTML = '<i class="fas fa-check text-green"></i> Uploaded and analyzed successfully';
+            
+            if (data.extracted_info) {
+                document.getElementById(`${type}-extracted-content`).innerHTML = data.extracted_info;
+                extractedInfoElement.style.display = 'block';
+            }
+        } else {
+            statusElement.innerHTML = '<i class="fas fa-exclamation-triangle text-red"></i> Upload failed: ' + (data.error || 'Unknown error');
+        }
+    })
+    .catch(error => {
+        console.error('Upload error:', error);
+        statusElement.innerHTML = '<i class="fas fa-times text-red"></i> Upload error: ' + error.message;
+    });
+}
+
+// Navigation functions
+function nextSection() {
+    // Show disclaimer popup when moving from section 1 to section 2 (AI section)
+    if (currentSection === 1) {
+        showDisclaimer();
+        return;
+    }
+    
+    if (currentSection < totalSections) {
+        document.getElementById(`section-${currentSection}`).style.display = 'none';
+        currentSection++;
+        document.getElementById(`section-${currentSection}`).style.display = 'block';
+        updatePagination();
+    }
+}
+
+function prevSection() {
+    if (currentSection > 1) {
+        document.getElementById(`section-${currentSection}`).style.display = 'none';
+        currentSection--;
+        document.getElementById(`section-${currentSection}`).style.display = 'block';
+        updatePagination();
+    }
+}
+
+// Disclaimer popup functions
+function showDisclaimer() {
+    const modal = document.getElementById('disclaimerModal');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+function closeDisclaimer() {
+    const modal = document.getElementById('disclaimerModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Re-enable scrolling
+}
+
+function acceptDisclaimer() {
+    closeDisclaimer();
+    
+    // Check if we're skipping Section 1 (no medical conditions)
+    if (window.skipSection1) {
+        // Show Section 2 directly and load follow-up questions
+        document.getElementById('section-2').style.display = 'block';
+        currentSection = 1; // From user's perspective, this is now section 1
+        updatePagination();
+        loadFollowupQuestions();
+        
+        // Hide the Previous button since there's only one section
+        const prevButton = document.querySelector('#section-2 .btn-prev');
+        if (prevButton) {
+            prevButton.style.display = 'none';
+        }
+    } else {
+        // Normal flow: Proceed to next section (section 2 - AI section)
+        if (currentSection < totalSections) {
+            document.getElementById(`section-${currentSection}`).style.display = 'none';
+            currentSection++;
+            document.getElementById(`section-${currentSection}`).style.display = 'block';
+            updatePagination();
+            
+            // Load follow-up questions when entering section 2 (AI section)
+            if (currentSection === 2) {
+                loadFollowupQuestions();
+            }
+        }
+    }
+}
+
+function updatePagination() {
+    const dots = document.querySelectorAll('.pagination-dots .dot');
+    
+    if (window.skipSection1) {
+        // Special handling when Section 1 is skipped
+        // The visible dot (originally dot 2) should be active when currentSection = 1
+        dots.forEach((dot, index) => {
+            if (index === 0) {
+                // First dot is hidden, so skip it
+                return;
+            } else if (index === 1) {
+                // Second dot represents "Section 1" when skipping
+                if (currentSection === 1) {
+                    dot.classList.add('active');
+                    dot.classList.remove('completed');
+                } else {
+                    dot.classList.remove('active');
+                }
+            }
+        });
+    } else {
+        // Normal pagination logic
+        dots.forEach((dot, index) => {
+            const sectionNumber = index + 1;
+            if (sectionNumber === currentSection) {
+                dot.classList.add('active');
+            } else if (sectionNumber < currentSection) {
+                dot.classList.remove('active');
+                dot.classList.add('completed');
+            } else {
+                dot.classList.remove('active', 'completed');
+            }
+        });
+    }
+    
+    const progressFill = document.querySelector('.progress-fill');
+    if (progressFill) {
+        const percentage = 57.14 + ((currentSection - 1) / totalSections) * 10; // Step 4 base + internal progress
+        progressFill.style.width = `${percentage}%`;
+    }
+}
+
+function submitForm() {
+    console.log('submitForm() called');
+    submitFormData();
+}
+
+function submitFormData() {
+    console.log('submitFormData() called');
+    const form = document.getElementById('medicalForm');
+    
+    if (!form) {
+        console.error('Form not found!');
+        alert('Error: Form not found');
+        return;
+    }
+    
+    console.log('Form found, proceeding with submission...');
+    
+    // Show loading on the final button
+    const submitBtn = document.querySelector('.section-navigation .btn-next');
+    if (!submitBtn) {
+        console.error('Submit button not found!');
+        alert('Error: Submit button not found');
+        return;
+    }
+    
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    submitBtn.disabled = true;
+    
+    const formData = new FormData(form);
+    
+    console.log('Sending data to /save_step4...');
+    
+    fetch('/save_step4', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        console.log('Response received:', response.status, response.statusText);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response data:', data);
+        if (data.success) {
+            console.log('Success! Redirecting to step5...');
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Saved Successfully!';
+            submitBtn.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+            setTimeout(() => {
+                console.log('Navigating to /step5');
+                window.location.href = '/step5';
+            }, 1500);
+        } else {
+            console.error('Server error:', data.error);
+            alert('Error saving medical records: ' + (data.error || 'Unknown error'));
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert('Error: ' + error.message);
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    });
+}
+</script>
+
+<style>
+/* Pagination Controls Styles */
+.pagination-controls {
+    margin-bottom: 6px;
+    padding: 4px;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.pagination-dots {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.pagination-dots::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 30px;
+    right: 30px;
+    height: 1px;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+.dot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+    padding: 3px;
+    border-radius: 4px;
+}
+
+.dot:hover {
+    background: rgba(52, 152, 219, 0.1);
+}
+
+.dot-number {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #e9ecef;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 10px;
+    margin-bottom: 2px;
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.dot-label {
+    font-size: 9px;
+    color: #6c757d;
+    font-weight: 500;
+    max-width: 80px;
+    line-height: 1.1;
+    transition: color 0.3s ease;
+}
+
+.dot.active .dot-number {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border-color: #3498db;
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+
+.dot.active .dot-label {
+    color: #3498db;
+    font-weight: 600;
+}
+
+.dot.completed .dot-number {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+    border-color: #27ae60;
+    box-shadow: 0 2px 4px rgba(39, 174, 96, 0.3);
+}
+
+.dot.completed .dot-label {
+    color: #27ae60;
+    font-weight: 600;
+}
+
+/* Form Section Page Styles - Same as Step 3 */
+.form-section-page {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Compact styling for all form pages */
+#section-2.form-section-page, #section-3.form-section-page {
+    padding: 6px 0;
+    line-height: 1.3;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form Section Styles - Same as Step 3 */
+.form-section {
+    background: white;
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border: 1px solid #e8f4fd;
+    margin-bottom: 8px;
+}
+
+.form-section h3 {
+    color: #2c3e50;
+    margin-bottom: 4px;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-description {
+    color: #7f8c8d;
+    margin-bottom: 6px;
+    font-style: italic;
+    font-size: 0.8em;
+    line-height: 1.3;
+}
+
+/* Vitals Grid Layout - Same as Step 3 */
+.vitals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.vitals-subsection {
+    margin-bottom: 8px;
+}
+
+.vitals-subsection h4 {
+    color: #34495e;
+    margin-bottom: 6px;
+    font-size: 1.0em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 2px;
+    font-size: 0.85em;
+}
+
+.vital-input input, .vital-input textarea, .vital-input select {
+    padding: 6px;
+    border: 1px solid #e8f4fd;
+    border-radius: 4px;
+    font-size: 0.85em;
+    background: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.vital-input input:focus, .vital-input textarea:focus, .vital-input select:focus {
+    outline: none;
+    border-color: #3498db;
+    background: white;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+}
+
+.vital-range {
+    font-size: 0.7em;
+    color: #7f8c8d;
+    margin-top: 1px;
+    font-style: italic;
+}
+
+/* Ultra Compact styling for ALL sections to fit screen */
+#section-1 .form-section, #section-2 .form-section {
+    padding: 1px;
+    margin-bottom: 0px;
+}
+
+#section-1 .vitals-subsection, #section-2 .vitals-subsection {
+    margin-bottom: 0px;
+}
+
+#section-1 .section-description, #section-2 .section-description {
+    margin-bottom: 0px;
+    font-size: 0.55em;
+    line-height: 0.9;
+}
+
+#section-1 .vitals-grid, #section-2 .vitals-grid {
+    gap: 1px;
+    margin-bottom: 0px;
+}
+
+#section-1 .form-group, #section-2 .form-group {
+    margin-bottom: 0px;
+}
+
+#section-1 .form-section h3, #section-2 .form-section h3 {
+    margin-bottom: 0px;
+    font-size: 0.8em;
+}
+
+#section-1 .vitals-subsection h4, #section-2 .vitals-subsection h4 {
+    margin-bottom: 0px;
+    font-size: 0.7em;
+    padding-bottom: 0px;
+}
+
+#section-1 .vital-input label, #section-2 .vital-input label {
+    margin-bottom: 0px;
+    font-size: 0.65em;
+}
+
+#section-1 .vital-input input, #section-3 .vital-input input,
+#section-1 .vital-input textarea, #section-2 .vital-input textarea,
+#section-1 .vital-input select, #section-2 .vital-input select,
+#section-2 .vital-input input, #section-3 .vital-input textarea,
+#section-2 .vital-input select, #section-3 .vital-input select,
+#section-2 .vital-input input, #section-2 .vital-input textarea,
+#section-2 .vital-input select {
+    padding: 1px;
+    font-size: 0.65em;
+    min-height: 20px;
+}
+
+#section-1 .vital-range, #section-2 .vital-range {
+    font-size: 0.5em;
+}
+
+/* Section Navigation - Same as Step 3 */
+.section-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    padding: 8px;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+#section-1 .section-navigation, #section-2 .section-navigation {
+    margin-top: 1px;
+    padding: 1px;
+}
+
+/* Page 2 specific ultra compact spacing */
+#section-2 .form-section {
+    padding: 0px;
+    margin-bottom: 0px;
+}
+
+#section-2 .vitals-subsection {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+/* Ultra compact file upload areas */
+.file-upload-area {
+    border: 2px dashed #ddd;
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+    background: #fafbfc;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 6px;
+}
+
+#section-2 .file-upload-area {
+    padding: 6px;
+    margin-bottom: 3px;
+}
+
+.file-upload-area:hover {
+    border-color: #007bff;
+    background: #f0f7ff;
+}
+
+.file-upload-area i {
+    font-size: 1.5em;
+    color: #007bff;
+    margin-bottom: 4px;
+}
+
+#section-2 .file-upload-area i {
+    font-size: 1.2em;
+    margin-bottom: 2px;
+}
+
+.file-upload-area p {
+    margin: 0;
+    color: #666;
+    font-size: 0.8em;
+}
+
+#section-2 .file-upload-area p {
+    font-size: 0.7em;
+}
+
+.file-upload-area input[type="file"] {
+    display: none;
+}
+
+.upload-status {
+    margin-top: 4px;
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 0.7em;
+    text-align: center;
+}
+
+#section-2 .upload-status {
+    margin-top: 2px;
+    padding: 2px;
+    font-size: 0.65em;
+}
+
+/* Ultra compact navigation buttons */
+.btn-navigation {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#section-1 .btn-navigation, #section-2 .btn-navigation, 
+#section-1 .btn-navigation, #section-2 .btn-navigation {
+    padding: 4px 8px;
+    font-size: 0.7em;
+    gap: 2px;
+}
+
+/* Ultra compact loading questions */
+.loading-questions {
+    text-align: center;
+    padding: 12px;
+    color: #666;
+}
+
+#section-2 .loading-questions {
+    padding: 6px;
+}
+
+.loading-questions i {
+    font-size: 1.2em;
+    margin-bottom: 4px;
+}
+
+#section-2 .loading-questions i {
+    font-size: 1em;
+    margin-bottom: 2px;
+}
+
+.loading-questions p {
+    margin: 0;
+    font-size: 0.8em;
+}
+
+#section-2 .loading-questions p {
+    font-size: 0.7em;
+}
+
+/* AI Insights Styling - Ultra Ultra Compact */
+.ai-insights-container {
+    margin-top: 1px;
+    border: 1px solid #e8f4fd;
+    border-radius: 3px;
+    background: linear-gradient(135deg, #f8fbff, #f0f8ff);
+    overflow: hidden;
+}
+
+#section-2 .ai-insights-container {
+    margin-top: 0px;
+}
+
+.insights-header {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 2px 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#section-2 .insights-header {
+    padding: 1px 2px;
+}
+
+.insights-header h5 {
+    margin: 0;
+    font-size: 0.6em;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+#section-2 .insights-header h5 {
+    font-size: 0.55em;
+    gap: 1px;
+}
+
+.insights-loader {
+    font-size: 0.55em;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#section-2 .insights-loader {
+    font-size: 0.5em;
+}
+
+.insights-content {
+    padding: 2px;
+    font-size: 0.55em;
+    line-height: 1.1;
+    color: #2c3e50;
+}
+
+#section-2 .insights-content {
+    padding: 1px;
+    font-size: 0.5em;
+    line-height: 1.0;
+}
+
+.insight-section {
+    margin-bottom: 1px;
+    padding-bottom: 1px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+#section-2 .insight-section {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+.insight-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.insight-label {
+    font-weight: 600;
+    color: #2980b9;
+    margin-bottom: 0px;
+}
+
+#section-2 .insight-label {
+    margin-bottom: 0px;
+}
+
+.insight-value {
+    color: #34495e;
+    margin-bottom: 1px;
+}
+
+#section-2 .insight-value {
+    margin-bottom: 0px;
+}
+
+.confidence-badge {
+    display: inline-block;
+    padding: 0px 2px;
+    border-radius: 6px;
+    font-size: 0.6em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+#section-2 .confidence-badge {
+    padding: 0px 1px;
+    font-size: 0.5em;
+}
+
+.confidence-high {
+    background-color: #d5f4e6;
+    color: #27ae60;
+}
+
+.confidence-medium {
+    background-color: #fef9e7;
+    color: #f39c12;
+}
+
+.confidence-low {
+    background-color: #fadbd8;
+    color: #e74c3c;
+}
+
+/* File input styling - Ultra Compact */
+.file-input {
+    position: relative;
+}
+
+.file-input input[type="file"] {
+    width: 100%;
+    padding: 4px;
+    border: 2px dashed #bdc3c7;
+    border-radius: 4px;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#section-2 .file-input input[type="file"] {
+    padding: 3px;
+}
+
+.file-input input[type="file"]:hover {
+    border-color: #3498db;
+    background: #e8f4fd;
+}
+
+.file-hint {
+    font-size: 0.65em;
+    color: #7f8c8d;
+    margin-top: 1px;
+    font-style: italic;
+}
+
+#section-2 .file-hint {
+    font-size: 0.6em;
+    margin-top: 0px;
+}
+
+/* Ultra Compact Radio Button Styling */
+.radio-button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-top: 1px;
+}
+
+#section-2 .radio-button-group {
+    gap: 0px;
+}
+
+.radio-row {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+}
+
+#section-2 .radio-row {
+    gap: 2px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 1px 3px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.65em;
+    white-space: nowrap;
+    min-width: fit-content;
+    line-height: 1.0;
+}
+
+#section-2 .radio-option {
+    padding: 1px 2px;
+    gap: 1px;
+    font-size: 0.6em;
+}
+
+.radio-option:hover {
+    background: #e8f4fd;
+    border-color: #3498db;
+}
+
+.radio-option input[type="radio"] {
+    margin: 0;
+    width: 10px;
+    height: 10px;
+}
+
+#section-2 .radio-option input[type="radio"] {
+    width: 8px;
+    height: 8px;
+}
+
+.radio-option input[type="radio"]:checked + label,
+.radio-option:has(input[type="radio"]:checked) {
+    background: #3498db;
+    color: white;
+    border-color: #2980b9;
+}
+
+/* Ensure radio buttons fit in compact space */
+@media (max-width: 768px) {
+    .radio-row {
+        gap: 2px;
+    }
+    
+    .radio-option {
+        font-size: 0.6em;
+        padding: 1px 2px;
+    }
+}
+
+.btn-navigation {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+
+.btn-navigation:hover {
+    background: linear-gradient(135deg, #2980b9, #1f639a);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
+}
+
+.btn-navigation:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-prev {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+}
+
+.btn-prev:hover {
+    background: linear-gradient(135deg, #7f8c8d, #6c7b7d);
+}
+
+/* Step 4 specific styles */
+.patient-info-section {
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    border-left: 4px solid #2196f3;
+}
+
+.patient-display {
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.patient-name-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.patient-name-display label {
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.patient-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2196f3;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 2px solid #e9ecef;
+}
+
+.patient-details {
+    display: flex;
+    gap: 15px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.patient-age, .patient-gender {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    padding: 4px 8px;
+    background: #e3f2fd;
+    border-radius: 4px;
+    border: 1px solid #bbdefb;
+}
+
+/* EMR Link Field Styling */
+#emr-link-group {
+    transition: all 0.3s ease;
+}
+
+#emr-link-group.required {
+    background: #fff8f0;
+    border: 2px solid #ff9800;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+#emr-link-group.required label {
+    color: #e65100;
+    font-weight: 600;
+}
+
+#emr-link-group.required input {
+    border-color: #ff9800;
+}
+
+#emr-link-group.required #emr-status {
+    color: #e65100 !important;
+    font-weight: 600 !important;
+}
+
+.contact-section {
+    background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+    border-left: 4px solid #4caf50;
+}
+
+.emergency-section {
+    background: linear-gradient(135deg, #ffebee, #fce4ec);
+    border-left: 4px solid #f44336;
+}
+
+.lab-reports-section {
+    background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+    border-left: 4px solid #9c27b0;
+}
+
+.medical-images-section {
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    border-left: 4px solid #ff9800;
+}
+
+.signaling-section {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    border-left: 4px solid #f44336;
+}
+
+.medications-section {
+    background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+    border-left: 4px solid #4caf50;
+}
+
+.followup-section {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border-left: 4px solid #2196f3;
+}
+
+.upload-area {
+    margin-bottom: 20px;
+}
+
+.file-upload-section {
+    margin-top: 8px;
+}
+
+#section-2 .file-upload-section {
+    margin-top: 4px;
+}
+
+.upload-card {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    background: #fafafa;
+    transition: all 0.3s ease;
+}
+
+#section-2 .upload-card {
+    padding: 12px;
+}
+
+.upload-card:hover {
+    border-color: #007bff;
+    background: #f8f9ff;
+}
+
+.upload-icon {
+    font-size: 36px;
+    color: #007bff;
+    margin-bottom: 8px;
+}
+
+#section-2 .upload-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.upload-card h4 {
+    margin: 0 0 4px 0;
+    color: #333;
+    font-size: 1.0em;
+}
+
+#section-2 .upload-card h4 {
+    font-size: 0.9em;
+}
+
+.upload-card p {
+    margin: 0 0 12px 0;
+    color: #666;
+    font-size: 0.8em;
+}
+
+#section-2 .upload-card p {
+    font-size: 0.7em;
+    margin-bottom: 8px;
+}
+
+.btn-upload {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-upload:hover {
+    background: linear-gradient(135deg, #0056b3, #004085);
+    transform: translateY(-1px);
+}
+
+.upload-status {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.extracted-info-display {
+    margin-top: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+#section-2 .extracted-info-display {
+    margin-top: 3px;
+    padding: 4px;
+}
+
+.extracted-info-display h5 {
+    margin: 0 0 4px 0;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8em;
+}
+
+#section-2 .extracted-info-display h5 {
+    font-size: 0.7em;
+    margin-bottom: 2px;
+}
+
+.extracted-content {
+    background: #f8f9fa;
+    padding: 4px;
+    border-radius: 4px;
+    border-left: 3px solid #007bff;
+    white-space: pre-wrap;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.7em;
+}
+
+#section-2 .extracted-content {
+    padding: 3px;
+    font-size: 0.65em;
+}
+
+.question-card {
+    background: white;
+    border-radius: 6px;
+    padding: 6px;
+    margin-bottom: 4px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+#section-2 .question-card {
+    padding: 4px;
+    margin-bottom: 2px;
+}
+
+.question-text {
+    font-size: 0.8em;
+    color: #333;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+#section-2 .question-text {
+    font-size: 0.7em;
+    margin-bottom: 2px;
+}
+
+.question-input textarea {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.7em;
+    resize: vertical;
+    min-height: 40px;
+}
+
+#section-2 .question-input textarea {
+    padding: 3px;
+    font-size: 0.65em;
+    min-height: 35px;
+}
+
+.medication-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+#section-3 .medication-grid {
+    gap: 4px;
+    margin-bottom: 2px;
+}
+
+.upload-area {
+    margin-bottom: 6px;
+}
+
+#section-2 .upload-area {
+    margin-bottom: 3px;
+}
+
+/* Medications Grid Layout for 2x2 arrangement - Ultra Compact */
+.medications-grid-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.medication-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+}
+
+.medication-row-single {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+}
+
+.medication-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 6px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.medication-card-wide {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 6px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    grid-column: 1 / -1;
+}
+
+#section-3 .medication-card,
+#section-3 .medication-card-wide {
+    padding: 4px;
+}
+
+.medication-card h5 {
+    margin: 0 0 4px 0;
+    font-size: 0.8em;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#section-3 .medication-card h5 {
+    font-size: 0.7em;
+    margin-bottom: 2px;
+    gap: 2px;
+}
+
+.medication-inputs {
+    display: grid;
+    gap: 3px;
+}
+
+#section-3 .medication-inputs {
+    gap: 2px;
+}
+
+.med-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.med-input-group label {
+    font-size: 0.7em;
+    color: #555;
+    margin-bottom: 0px;
+}
+
+#section-3 .med-input-group label {
+    font-size: 0.65em;
+}
+
+.med-input-group input,
+.med-input-group select,
+.med-input-group textarea {
+    padding: 3px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.7em;
+    min-height: 26px;
+}
+
+#section-3 .med-input-group input,
+#section-3 .med-input-group select,
+#section-3 .med-input-group textarea {
+    padding: 2px;
+    font-size: 0.65em;
+    min-height: 24px;
+}
+
+.med-input-group textarea {
+    resize: vertical;
+    min-height: 40px;
+}
+
+#section-3 .med-input-group textarea {
+    min-height: 35px;
+}
+    flex-direction: column;
+    gap: 8px;
+}
+
+.medication-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.medication-row-single {
+    display: flex;
+    width: 100%;
+}
+
+.medication-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.medication-card-wide {
+    width: 100%;
+}
+
+.medication-card h4 {
+    color: #34495e;
+    margin-bottom: 6px;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+#section-3 .medications-grid-container {
+    gap: 4px;
+}
+
+#section-3 .medication-row {
+    gap: 4px;
+}
+
+#section-3 .medication-card {
+    padding: 6px;
+}
+
+#section-3 .medication-card h4 {
+    font-size: 0.8em;
+    margin-bottom: 4px;
+}
+
+.loading-questions {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.loading-questions i {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.question-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.question-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.question-category {
+    background: #007bff;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.question-text {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.question-input textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+}
+
+.no-questions, .error-questions {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    font-style: italic;
+}
+
+.error-questions {
+    color: #dc3545;
+}
+
+.text-green { color: #28a745; }
+.text-red { color: #dc3545; }
+/* Follow-up Questions Styling */
+.questions-instructions {
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+    border-left: 4px solid #2196f3;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.questions-instructions p {
+    margin: 0;
+    color: #1565c0;
+    font-weight: 500;
+}
+
+.findings-summary {
+    background: linear-gradient(135deg, #fff3e0, #fce4ec);
+    border-left: 4px solid #ff9800;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.summary-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #e65100;
+}
+
+.critical-badge {
+    background: #f44336;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.vitals-summary {
+    background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+    border-left: 4px solid #4caf50;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.vitals-summary .summary-header {
+    color: #2e7d32;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.vitals-summary .summary-content {
+    color: #388e3c;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.question-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.question-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.question-card.priority-critical {
+    border-left: 4px solid #d32f2f;
+    background: linear-gradient(135deg, #fff, #ffebee);
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.15);
+    animation: pulse-critical 2s infinite;
+}
+
+@keyframes pulse-critical {
+    0% { box-shadow: 0 4px 12px rgba(211, 47, 47, 0.15); }
+    50% { box-shadow: 0 6px 16px rgba(211, 47, 47, 0.25); }
+    100% { box-shadow: 0 4px 12px rgba(211, 47, 47, 0.15); }
+}
+
+.question-card.priority-high {
+    border-left: 4px solid #f44336;
+    background: linear-gradient(135deg, #fff, #ffebee);
+}
+
+.question-card.priority-medium {
+    border-left: 4px solid #ff9800;
+    background: linear-gradient(135deg, #fff, #fff3e0);
+}
+
+.question-card.priority-low {
+    border-left: 4px solid #4caf50;
+    background: linear-gradient(135deg, #fff, #e8f5e8);
+}
+
+.abnormal-finding {
+    background: #ffebee;
+    color: #d32f2f;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #ffcdd2;
+}
+
+.priority-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.priority-badge.priority-critical {
+    background: #d32f2f;
+    color: white;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.7; }
+}
+
+.priority-badge.priority-high {
+    background: #f44336;
+    color: white;
+}
+
+.question-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.question-header i {
+    color: #1976d2;
+    font-size: 18px;
+}
+
+.question-category {
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.priority-badge {
+    background: #f44336;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: auto;
+}
+
+.question-text {
+    font-size: 16px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.question-input textarea {
+    width: 100%;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.question-input textarea:focus {
+    outline: none;
+    border-color: #2196f3;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.question-input textarea[required] {
+    border-color: #ff9800;
+}
+
+.no-questions, .error-questions {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-style: italic;
+}
+
+.error-questions {
+    color: #f44336;
+}
+
+.loading-questions {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.loading-questions i {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #2196f3;
+}
+
+.text-blue { color: #007bff; }
+.text-purple { color: #6f42c1; }
+.text-orange { color: #fd7e14; }
+
+@media (max-width: 768px) {
+    .medication-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .medication-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+    
+    .medication-row-single {
+        width: 100%;
+    }
+    
+    .medication-card-wide {
+        width: 100%;
+    }
+    
+    .vitals-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .patient-name-display {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .upload-card {
+        padding: 15px;
+    }
+    
+    .upload-icon {
+        font-size: 28px;
+    }
+    
+    .form-section {
+        padding: 8px;
+    }
+    
+    .section-navigation {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .btn-navigation {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    #section-2 .upload-card, #section-3 .upload-card {
+        padding: 10px;
+    }
+    
+    #section-2 .upload-icon, #section-3 .upload-icon {
+        font-size: 20px;
+    }
+    
+    .medication-card {
+        margin-bottom: 6px;
+    }
+}
+</style>
+{% endblock %}

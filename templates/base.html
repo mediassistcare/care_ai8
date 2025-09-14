@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Care Diagnostics{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>Care Diagnostics</span>
+            </div>
+            <div class="nav-progress" id="progress-bar">
+                {% set current = current_step or request.endpoint %}
+                <div class="progress-step {% if current == 'step1' or current == 'index' %}active{% elif current in ['step2', 'step3', 'step4', 'step5', 'step6'] %}completed{% endif %}" onclick="navigateToStep(1)">1</div>
+                <div class="progress-step {% if current == 'step2' %}active{% elif current in ['step3', 'step4', 'step5', 'step6'] %}completed{% endif %}" onclick="navigateToStep(2)">2</div>
+                <div class="progress-step {% if current == 'step3' %}active{% elif current in ['step4', 'step5', 'step6'] %}completed{% endif %}" onclick="navigateToStep(3)">3</div>
+                <div class="progress-step {% if current == 'step4' %}active{% elif current in ['step5', 'step6'] %}completed{% endif %}" onclick="navigateToStep(4)">4</div>
+                <div class="progress-step {% if current == 'step5' %}active{% elif current in ['step6'] %}completed{% endif %}" onclick="navigateToStep(5)">5</div>
+                <div class="progress-step {% if current == 'step6' %}active{% endif %}" onclick="navigateToStep(6)">6</div>
+            </div>
+            <div class="nav-user">
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span>{{ session.username or 'Guest' }}</span>
+                </div>
+                <form method="POST" action="{{ url_for('logout') }}" style="display: inline;">
+                    <button type="submit" class="btn-logout" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        function navigateToStep(stepNumber) {
+            if (stepNumber >= 1 && stepNumber <= 6) {
+                window.location.href = '/step' + stepNumber;
+            }
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

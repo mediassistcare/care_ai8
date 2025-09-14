@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Complete Report - Care Diagnostics{% endblock %}
+
+{% block content %}
+<div class="report-container">
+    <div class="report-header">
+        <h1><i class="fas fa-file-medical-alt"></i> Complete Diagnostic Report</h1>
+        <div class="report-meta">
+            <p><strong>Generated:</strong> {{ data.completed_at[:19] if data.completed_at else 'N/A' }}</p>
+            <p><strong>Report ID:</strong> CD-{{ data.completed_at[-8:] if data.completed_at else 'XXXXXXXX' }}</p>
+        </div>
+    </div>
+
+    <div class="report-sections">
+        <!-- Vital Signs Section -->
+        <div class="report-section">
+            <h2><i class="fas fa-heartbeat"></i> Vital Signs</h2>
+            {% if data.vitals %}
+            <div class="vitals-grid">
+                <div class="vital-item">
+                    <span class="vital-label">Temperature:</span>
+                    <span class="vital-value">{{ data.vitals.temperature }}° {{ 'C' if data.vitals.temperature_unit == 'celsius' else 'F' }}</span>
+                </div>
+                <div class="vital-item">
+                    <span class="vital-label">Heart Rate:</span>
+                    <span class="vital-value">{{ data.vitals.heart_rate }} bpm</span>
+                </div>
+                <div class="vital-item">
+                    <span class="vital-label">Respiratory Rate:</span>
+                    <span class="vital-value">{{ data.vitals.respiratory_rate }} breaths/min</span>
+                </div>
+                <div class="vital-item">
+                    <span class="vital-label">Blood Pressure:</span>
+                    <span class="vital-value">{{ data.vitals.systolic_bp }}/{{ data.vitals.diastolic_bp }} mmHg</span>
+                </div>
+                <div class="vital-item">
+                    <span class="vital-label">Oxygen Saturation:</span>
+                    <span class="vital-value">{{ data.vitals.oxygen_saturation }}%</span>
+                </div>
+                <div class="vital-item">
+                    <span class="vital-label">Height:</span>
+                    <span class="vital-value">{{ data.vitals.height }} {{ data.vitals.height_unit }}</span>
+                </div>
+                <div class="vital-item">
+                    <span class="vital-label">Weight:</span>
+                    <span class="vital-value">{{ data.vitals.weight }} {{ data.vitals.weight_unit }}</span>
+                </div>
+                <div class="vital-item">
+                    <span class="vital-label">BMI:</span>
+                    <span class="vital-value">{{ data.vitals.bmi if data.vitals.bmi else 'N/A' }}</span>
+                </div>
+            </div>
+            {% else %}
+            <p class="no-data">No vital signs data available</p>
+            {% endif %}
+        </div>
+
+        <!-- Complaint Category Section -->
+        <div class="report-section">
+            <h2><i class="fas fa-list-alt"></i> Complaint Category</h2>
+            <p class="category-value">{{ data.complaint_category if data.complaint_category else 'Not specified' }}</p>
+        </div>
+
+        <!-- Current Condition Section -->
+        <div class="report-section">
+            <h2><i class="fas fa-notes-medical"></i> Current Condition Description</h2>
+            <div class="condition-description">
+                {{ data.current_condition if data.current_condition else 'No description provided' }}
+            </div>
+        </div>
+
+        <!-- Assessment Answers Section -->
+        {% if data.assessment_answers %}
+        <div class="report-section">
+            <h2><i class="fas fa-clipboard-check"></i> Assessment Responses</h2>
+            <div class="assessment-grid">
+                {% for key, value in data.assessment_answers.items() %}
+                <div class="assessment-item">
+                    <span class="assessment-question">{{ key }}:</span>
+                    <span class="assessment-answer">{{ value }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Diagnoses Section -->
+        {% if data.diagnoses %}
+        <div class="report-section">
+            <h2><i class="fas fa-stethoscope"></i> Diagnostic Assessment</h2>
+            <div class="report-diagnoses">
+                {% for diagnosis in data.diagnoses %}
+                <div class="report-diagnosis-card">
+                    <div class="diagnosis-rank-badge">{{ loop.index }}</div>
+                    <div class="diagnosis-info">
+                        <h3>{{ diagnosis.condition_name }}</h3>
+                        <div class="diagnosis-details">
+                            <p><strong>ICD-10 Code:</strong> {{ diagnosis.icd_code }}</p>
+                            <p><strong>Confidence Level:</strong> {{ diagnosis.confidence }}</p>
+                            <p><strong>Clinical Reasoning:</strong> {{ diagnosis.reasoning }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Disclaimer Section -->
+        <div class="report-section disclaimer-section">
+            <h2><i class="fas fa-exclamation-triangle"></i> Important Medical Disclaimer</h2>
+            <div class="disclaimer-content">
+                <p>This diagnostic report is generated by an AI system and is intended for informational purposes only. It should not be considered as professional medical advice, diagnosis, or treatment.</p>
+                
+                <p><strong>Please note:</strong></p>
+                <ul>
+                    <li>This assessment is not a substitute for professional medical consultation</li>
+                    <li>Always consult with qualified healthcare providers for medical concerns</li>
+                    <li>Seek immediate medical attention for emergency situations</li>
+                    <li>The AI system may not account for all possible conditions or individual factors</li>
+                    <li>This report should be shared with your healthcare provider for professional evaluation</li>
+                </ul>
+                
+                <p>If you have serious health concerns or symptoms persist, please contact your healthcare provider or emergency services immediately.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="report-actions">
+        <button type="button" class="btn-secondary" onclick="window.location.href='/'">
+            <i class="fas fa-home"></i> New Assessment
+        </button>
+        <button type="button" class="btn-primary" onclick="window.print()">
+            <i class="fas fa-print"></i> Print Report
+        </button>
+    </div>
+</div>
+{% endblock %}

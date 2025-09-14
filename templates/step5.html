@@ -1,0 +1,1880 @@
+{% extends "base.html" %}
+
+{% block title %}Symptom Assessment - Step 5 - Care Diagnostics{% endblock %}
+
+{% block content %}
+<div class="step-container">
+    <div class="step-header">
+        <h2><i class="fas fa-stethoscope"></i> Step 5: Comprehensive Symptom Assessment</h2>
+        <p>Describe your symptoms and upload any medical documentation for AI analysis</p>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 83%"></div>
+        </div>
+    </div>
+
+    <form id="symptom-assessment-form" class="medical-form">
+        
+        <!-- Pagination Controls -->
+        <div class="pagination-controls">
+            <div class="pagination-dots">
+                <div class="dot active" data-section="1">
+                    <span class="dot-number">1</span>
+                    <span class="dot-label">Symptom Description</span>
+                </div>
+                {% if has_medical_reports %}
+                <div class="dot" data-section="2">
+                    <span class="dot-number">2</span>
+                    <span class="dot-label">Medical Documentation</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Section 1: Symptom Description -->
+        <div class="form-section-page" id="section-1" style="display: block;">
+
+            {# Abnormal Findings Section - Hidden from patient view #}
+            {# Medical findings are preserved in backend for healthcare providers #}
+            {% if abnormal_findings %}
+            <div class="form-section abnormal-findings-section" style="display: none;">
+                <h3><i class="fas fa-exclamation-triangle"></i> Abnormal Findings Detected</h3>
+                <div class="alert alert-warning">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Based on your vital signs and medical data, we detected the following abnormal findings:</strong>
+                </div>
+                
+                <div class="abnormal-findings-grid">
+                    {% for finding in abnormal_findings %}
+                    <div class="finding-card {{ finding.priority }}">
+                        <div class="finding-header">
+                            <span class="priority-badge priority-{{ finding.priority }}">
+                                {% if finding.priority == 'critical' %}
+                                    <i class="fas fa-exclamation-circle"></i> Critical
+                                {% elif finding.priority == 'abnormal' %}
+                                    <i class="fas fa-exclamation-triangle"></i> Abnormal
+                                {% else %}
+                                    <i class="fas fa-info-circle"></i> Note
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="finding-content">
+                            <h4>{{ finding.finding }}</h4>
+                            {% if finding.concern %}
+                                <p class="medical-concern">
+                                    <strong>Medical Concern:</strong> {{ finding.concern|title }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="findings-note">
+                    <p><strong>Please note:</strong> When describing your symptoms below, consider mentioning any symptoms related to these findings to help us provide a more accurate assessment.</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="form-section">
+                <h3><i class="fas fa-edit"></i> Your Health Concerns</h3>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Please be detailed:</strong> Describe your symptoms, when they started, how severe they are, what makes them better or worse, and any other relevant details.
+                </div>
+                
+                <div class="form-group">
+                    <label for="complaint_text">
+                        <strong>Describe your current symptoms or health concerns:</strong>
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <textarea 
+                        id="complaint_text" 
+                        name="complaint_text" 
+                        rows="8" 
+                        placeholder="Please describe in detail:
+• What symptoms are you experiencing?
+• When did they start?
+• How severe are they (mild, moderate, severe)?
+• What makes them better or worse?
+• Any associated symptoms?
+• How are they affecting your daily life?
+
+Example: 'I have been experiencing severe headaches for the past 3 days. They start in the morning and get worse throughout the day. The pain is throbbing and located mainly on the right side of my head. Bright lights make it worse, and lying down in a dark room helps a little. I also feel nauseous and have been having trouble sleeping.'"
+                        required
+                        maxlength="2000">{{ step5_data.get('complaint_text', '') }}</textarea>
+                    <small class="form-note">Be as specific as possible - this helps our AI provide better analysis</small>
+                    <div class="character-counter">
+                        <span id="char-count">0</span>/2000 characters
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 1 Navigation -->
+            <div class="section-navigation">
+                {% if has_medical_reports %}
+                <button type="button" class="btn-navigation btn-next" onclick="nextSection()">
+                    <i class="fas fa-arrow-right"></i> Continue to Medical Documentation
+                </button>
+                {% else %}
+                <button type="submit" class="btn-navigation btn-next" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">
+                    Submit Symptoms & Continue <i class="fas fa-arrow-right"></i>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if has_medical_reports %}
+        <!-- Section 2: Medical Documentation with AI Analysis -->
+        <div class="form-section-page" id="section-2" style="display: none;">
+            
+            <!-- Photography Section -->
+            <div class="form-section photography-section">
+                <h3><i class="fas fa-camera text-indigo"></i> Medical Documentation with AI Analysis</h3>
+                <p class="section-description">Upload medical reports, images, and documents with categorized AI-powered analysis</p>
+                
+                <!-- Upload Form Container -->
+                <div class="upload-form-container">
+                    <div class="upload-form-card">
+                        <div class="upload-form-header">
+                            <h4><i class="fas fa-cloud-upload-alt"></i> Upload Medical Document/Image</h4>
+                        </div>
+                        
+                        <div class="upload-form-content">
+                            <!-- Category Selection -->
+                            <div class="form-group category-selection">
+                                <label>Document Category *</label>
+                                <div class="category-radio-group">
+                                    <label class="category-radio-option">
+                                        <input type="radio" name="upload-category" value="laboratory" id="category-laboratory">
+                                        <span class="radio-custom"></span>
+                                        <div class="radio-content">
+                                            <span class="radio-text">Laboratory Reports</span>
+                                            <span class="radio-description">Pathology, biochemistry, blood, and body fluid investigations</span>
+                                        </div>
+                                    </label>
+                                    
+                                    <label class="category-radio-option">
+                                        <input type="radio" name="upload-category" value="imaging" id="category-imaging">
+                                        <span class="radio-custom"></span>
+                                        <div class="radio-content">
+                                            <span class="radio-text">Imaging Results</span>
+                                            <span class="radio-description">X-ray, MRI, CT, ultrasound, and photographic documentation</span>
+                                        </div>
+                                    </label>
+                                    
+                                    <label class="category-radio-option">
+                                        <input type="radio" name="upload-category" value="signaling" id="category-signaling">
+                                        <span class="radio-custom"></span>
+                                        <div class="radio-content">
+                                            <span class="radio-text">Signal Tracings</span>
+                                            <span class="radio-description">ECG, EEG, EMG, and other electrophysiological tracings</span>
+                                        </div>
+                                    </label>
+                                    
+                                    <label class="category-radio-option">
+                                        <input type="radio" name="upload-category" value="multimedia" id="category-multimedia">
+                                        <span class="radio-custom"></span>
+                                        <div class="radio-content">
+                                            <span class="radio-text">Clinical Photographs</span>
+                                            <span class="radio-description">Skin, throat, or other impacted areas documentation</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- File Upload -->
+                            <div class="form-group file-upload-section">
+                                <label for="medical-file">Select File *</label>
+                                <div class="custom-file-input">
+                                    <input type="file" id="medical-file" accept="image/*,.pdf,.doc,.docx">
+                                    <label for="medical-file" class="file-input-label" id="file-label">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <span>Click to upload file</span>
+                                        <small>Images, PDFs, or documents up to 10MB</small>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Caption/Description -->
+                            <div class="form-group caption-section">
+                                <label for="upload-caption">File Purpose Description *</label>
+                                <input type="text" id="upload-caption" class="caption-input" 
+                                       placeholder="Describe the file purpose in short form"
+                                       title="Provide a brief description of the file purpose to help identify it later">
+                            </div>
+                            
+                            <!-- AI Model Selection -->
+                            <div class="form-group model-selection" style="display: none;">
+                                <label for="ai-model">AI Analysis Model</label>
+                                <select id="ai-model" class="model-dropdown">
+                                    <!-- Options will be populated by JavaScript -->
+                                </select>
+                            </div>
+                            
+                            <!-- Process Button -->
+                            <div class="form-group process-section">
+                                <button type="button" id="process-upload-btn" class="btn-process-upload" disabled>
+                                    <i class="fas fa-brain"></i> Process & Analyze
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Upload History Section -->
+                <div class="upload-history-section" id="upload-history-section" style="display: block; min-height: 50px;">
+                    <div class="history-header">
+                        <h4><i class="fas fa-history"></i> Upload History</h4>
+                        <p class="history-description">Manage your uploaded medical documents</p>
+                    </div>
+                    <div class="history-container" id="history-container">
+                        <!-- Upload history table will be added here by JavaScript -->
+                        <table class="history-table" id="history-table" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Purpose Description</th>
+                                    <th>Upload Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body">
+                                <!-- Rows will be added dynamically -->
+                            </tbody>
+                        </table>
+                        <div id="no-history-message" class="no-history-message">
+                            No documents uploaded yet. Upload medical documents to see them here.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2 Navigation -->
+            <div class="section-navigation">
+                <button type="button" class="btn-navigation btn-prev" onclick="prevSection()">
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button type="submit" class="btn-navigation btn-next" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">
+                    Submit Symptoms & Continue <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <!-- Hidden insights display for backend data -->
+            <div id="insights-display" class="insights-container" style="display: none;">
+                <div id="medical-labels-display"></div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Loading State -->
+        <div id="loading-state" class="loading-container" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Analyzing your symptoms...</p>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Global variables for section management and medical documentation
+let currentSection = 1;
+let availableModels = ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-3.5-turbo'];
+let defaultModel = 'gpt-4o-mini';
+let uploadHistory = [];
+let uploadCounter = 0;
+let hasMedicalReports = {{ 'true' if has_medical_reports else 'false' }};
+
+// Function to manage required attributes based on upload history
+function updateRequiredFields() {
+    const hasUploads = uploadHistory.length > 0;
+    
+    // Get all form fields in section 2
+    const categoryRadios = document.querySelectorAll('input[name="upload-category"]');
+    const fileInput = document.getElementById('medical-file');
+    const captionInput = document.getElementById('upload-caption');
+    
+    if (hasUploads) {
+        // User has uploads, make fields optional
+        categoryRadios.forEach(radio => radio.removeAttribute('required'));
+        if (fileInput) fileInput.removeAttribute('required');
+        if (captionInput) captionInput.removeAttribute('required');
+        console.log('Made upload fields optional - user has', uploadHistory.length, 'uploads');
+    } else {
+        // No uploads yet, make fields required if section 2 is visible
+        const section2 = document.getElementById('section-2');
+        if (section2 && section2.style.display !== 'none') {
+            categoryRadios.forEach((radio, index) => {
+                if (index === 0) radio.setAttribute('required', 'required'); // Only first radio needs required
+            });
+            if (fileInput) fileInput.setAttribute('required', 'required');
+            if (captionInput) captionInput.setAttribute('required', 'required');
+            console.log('Made upload fields required - no uploads yet');
+        }
+    }
+}
+
+// Load upload history from localStorage on page load
+function loadUploadHistory() {
+    try {
+        const saved = localStorage.getItem('uploadHistory');
+        if (saved) {
+            uploadHistory = JSON.parse(saved);
+            console.log('Loaded upload history from localStorage:', uploadHistory.length, 'items');
+            // Update the UI with loaded history
+            updateUploadHistory();
+        }
+        // Update required fields based on upload history
+        updateRequiredFields();
+    } catch (error) {
+        console.error('Error loading upload history from localStorage:', error);
+        uploadHistory = [];
+        updateRequiredFields();
+    }
+}
+
+// Initialize page when DOM loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadUploadHistory(); // Load history first
+    initializePage();
+    initializeCharacterCounter();
+    initializeMultiUpload();
+});
+
+function initializePage() {
+    // Set initial active dot
+    updatePaginationDots();
+    
+    // Add click handlers to pagination dots
+    document.querySelectorAll('.dot').forEach(dot => {
+        dot.addEventListener('click', function() {
+            const targetSection = parseInt(this.dataset.section);
+            goToSection(targetSection);
+        });
+    });
+}
+
+// Section Navigation Functions
+function nextSection() {
+    console.log('nextSection called, currentSection:', currentSection, 'hasMedicalReports:', hasMedicalReports);
+    
+    // If medical reports are not enabled, section 1 should submit directly
+    if (!hasMedicalReports) {
+        console.log('No medical reports, submitting form directly');
+        // Submit the form directly from section 1
+        document.getElementById('symptom-assessment-form').submit();
+        return;
+    }
+    
+    if (currentSection < 2) {
+        // Validate current section before proceeding
+        if (currentSection === 1) {
+            const symptomsText = document.getElementById('complaint_text').value.trim();
+            if (!symptomsText) {
+                alert('Please describe your symptoms before continuing to medical documentation.');
+                document.getElementById('complaint_text').focus();
+                return;
+            }
+        }
+        
+        console.log('Moving from section', currentSection, 'to section', currentSection + 1);
+        currentSection++;
+        showSection(currentSection);
+        updatePaginationDots();
+        console.log('Section changed successfully, new currentSection:', currentSection);
+    } else {
+        console.log('Already at max section:', currentSection);
+    }
+}
+
+function prevSection() {
+    if (currentSection > 1) {
+        currentSection--;
+        showSection(currentSection);
+        updatePaginationDots();
+    }
+}
+
+function goToSection(sectionNum) {
+    // If medical reports are not enabled, only allow section 1
+    if (!hasMedicalReports && sectionNum > 1) {
+        return;
+    }
+    
+    // Validate if going forward
+    if (sectionNum > currentSection && currentSection === 1) {
+        const symptomsText = document.getElementById('complaint_text').value.trim();
+        if (!symptomsText) {
+            alert('Please describe your symptoms before accessing medical documentation.');
+            document.getElementById('complaint_text').focus();
+            return;
+        }
+    }
+    
+    currentSection = sectionNum;
+    showSection(currentSection);
+    updatePaginationDots();
+}
+
+function showSection(sectionNum) {
+    // Hide all sections
+    document.querySelectorAll('.form-section-page').forEach(section => {
+        section.style.display = 'none';
+    });
+    
+    // Show target section
+    const targetSection = document.getElementById(`section-${sectionNum}`);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+    }
+    
+    // Update required fields when showing/hiding sections
+    updateRequiredFields();
+}
+
+function updatePaginationDots() {
+    document.querySelectorAll('.dot').forEach(dot => {
+        dot.classList.remove('active');
+        if (parseInt(dot.dataset.section) === currentSection) {
+            dot.classList.add('active');
+        }
+    });
+}
+
+// Character counter for symptom description
+function initializeCharacterCounter() {
+    const textarea = document.getElementById('complaint_text');
+    const charCount = document.getElementById('char-count');
+
+    if (textarea && charCount) {
+        // Initialize counter
+        const currentLength = textarea.value.length;
+        charCount.textContent = currentLength;
+        updateCharCountColor(currentLength, charCount);
+        
+        textarea.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            charCount.textContent = currentLength;
+            updateCharCountColor(currentLength, charCount);
+        });
+    }
+}
+
+function updateCharCountColor(length, element) {
+    if (length > 2000) {
+        element.style.color = '#e74c3c';
+    } else if (length > 1500) {
+        element.style.color = '#f39c12';
+    } else {
+        element.style.color = '#27ae60';
+    }
+}
+
+// Enhanced Medical Documentation Upload System
+async function initializeMultiUpload() {
+    // Fetch available models from backend
+    try {
+        const response = await fetch('/get_available_models');
+        const result = await response.json();
+        if (result.success) {
+            availableModels = result.models;
+            defaultModel = result.default_model || 'gpt-4o-mini';
+            console.log('Available models loaded:', availableModels);
+            console.log('Default model:', defaultModel);
+        } else {
+            console.warn('Failed to load models from backend, using fallback');
+        }
+    } catch (error) {
+        console.error('Error fetching available models:', error);
+    }
+    
+    // Initialize the upload form
+    initializeUploadForm();
+}
+
+function initializeUploadForm() {
+    // Populate model dropdown
+    const modelSelect = document.getElementById('ai-model');
+    if (modelSelect) {
+        modelSelect.innerHTML = '';
+        availableModels.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model;
+            option.textContent = model;
+            if (model === defaultModel) option.selected = true;
+            modelSelect.appendChild(option);
+        });
+    }
+    
+    // Add event listeners
+    setupUploadEventListeners();
+    
+    // Run initial validation to set proper button state
+    validateUploadForm();
+}
+
+function setupUploadEventListeners() {
+    // Category radio buttons change handler
+    const categoryRadios = document.querySelectorAll('input[name="upload-category"]');
+    categoryRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                validateUploadForm();
+            }
+        });
+    });
+    
+    // File input change handler
+    const fileInput = document.getElementById('medical-file');
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            handleFileSelection(this);
+            validateUploadForm();
+        });
+    }
+    
+    // Caption input handler
+    const captionInput = document.getElementById('upload-caption');
+    if (captionInput) {
+        captionInput.addEventListener('input', validateUploadForm);
+    }
+    
+    // Process button handler
+    const processBtn = document.getElementById('process-upload-btn');
+    if (processBtn) {
+        processBtn.addEventListener('click', processUpload);
+    }
+}
+
+function handleFileSelection(fileInput) {
+    const fileLabel = document.getElementById('file-label');
+    
+    if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        
+        // Validate file size (10MB limit)
+        if (file.size > 10 * 1024 * 1024) {
+            alert('File size must be less than 10MB');
+            fileInput.value = '';
+            return;
+        }
+        
+        // Update file label
+        fileLabel.classList.add('has-file');
+        fileLabel.innerHTML = `
+            <i class="fas fa-check-circle"></i>
+            <span>${file.name}</span>
+            <small>File ready for upload (${(file.size / 1024 / 1024).toFixed(2)} MB)</small>
+        `;
+    } else {
+        // Reset file label
+        fileLabel.classList.remove('has-file');
+        fileLabel.innerHTML = `
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Click to upload file</span>
+            <small>Images, PDFs, or documents up to 10MB</small>
+        `;
+    }
+}
+
+function validateUploadForm() {
+    const fileInput = document.getElementById('medical-file');
+    const captionInput = document.getElementById('upload-caption');
+    const processBtn = document.getElementById('process-upload-btn');
+    
+    // Get selected category from radio buttons
+    const selectedCategory = document.querySelector('input[name="upload-category"]:checked');
+    const hasCategory = selectedCategory && selectedCategory.value;
+    const hasFile = fileInput && fileInput.files && fileInput.files[0];
+    const hasCaption = captionInput && captionInput.value.trim();
+    const isValid = hasCategory && hasFile && hasCaption;
+    
+    // Apply visual validation styles
+    const categoryRadioGroup = document.querySelector('.category-radio-group');
+    const fileUploadSection = document.querySelector('.file-upload-section');
+    
+    // Category validation
+    if (categoryRadioGroup) {
+        categoryRadioGroup.classList.remove('error', 'success');
+        if (hasCategory) {
+            categoryRadioGroup.classList.add('success');
+        } else {
+            categoryRadioGroup.classList.add('error');
+        }
+    }
+    
+    // File upload validation
+    if (fileUploadSection) {
+        fileUploadSection.classList.remove('error', 'success');
+        if (hasFile) {
+            fileUploadSection.classList.add('success');
+        } else {
+            fileUploadSection.classList.add('error');
+        }
+    }
+    
+    // Caption validation
+    if (captionInput) {
+        captionInput.classList.remove('error', 'success');
+        if (hasCaption) {
+            captionInput.classList.add('success');
+        } else {
+            captionInput.classList.add('error');
+        }
+    }
+    
+    if (processBtn) {
+        processBtn.disabled = !isValid;
+        
+        // Update button text based on validation state
+        if (!hasCategory && !hasFile && !hasCaption) {
+            processBtn.innerHTML = '<i class="fas fa-brain"></i> Complete all required fields';
+        } else if (!hasCategory) {
+            processBtn.innerHTML = '<i class="fas fa-brain"></i> Select document category';
+        } else if (!hasFile) {
+            processBtn.innerHTML = '<i class="fas fa-brain"></i> Select file to upload';
+        } else if (!hasCaption) {
+            processBtn.innerHTML = '<i class="fas fa-brain"></i> Describe file purpose';
+        } else {
+            processBtn.innerHTML = '<i class="fas fa-brain"></i> Process & Analyze';
+        }
+    }
+    
+    return isValid;
+}
+
+async function processUpload() {
+    const fileInput = document.getElementById('medical-file');
+    const captionInput = document.getElementById('upload-caption');
+    const modelSelect = document.getElementById('ai-model');
+    const processBtn = document.getElementById('process-upload-btn');
+    
+    // Get selected category from radio buttons
+    const selectedCategory = document.querySelector('input[name="upload-category"]:checked');
+    
+    if (!validateUploadForm()) {
+        alert('Please complete all required fields: select a document category, choose a file, and describe the file purpose.');
+        return;
+    }
+    
+    const originalBtnText = processBtn.innerHTML;
+    processBtn.disabled = true;
+    processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    
+    try {
+        const formData = new FormData();
+        formData.append('image', fileInput.files[0]);
+        formData.append('photo_type', selectedCategory.value);
+        formData.append('custom_prompt', generateCategoryPrompt(selectedCategory.value, captionInput.value));
+        formData.append('selected_model', modelSelect.value);
+        
+        const response = await fetch('/analyze_medical_photo_custom', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        console.log('Upload response:', result);
+        console.log('Insights received:', result.insights);
+        
+        if (result.success) {
+            // Get category label from the radio button's text content
+            const categoryLabel = selectedCategory.parentNode.querySelector('.radio-text').textContent;
+            
+            // Add to upload history
+            const uploadData = {
+                id: ++uploadCounter,
+                category: selectedCategory.value,
+                categoryLabel: categoryLabel,
+                filename: fileInput.files[0].name,
+                caption: captionInput.value || '',
+                model: modelSelect.value,
+                timestamp: new Date().toISOString(),
+                fileSize: fileInput.files[0].size,
+                insights: result.insights,
+                status: 'completed'
+            };
+            
+            console.log('Upload data created:', uploadData);
+            console.log('Insights in uploadData:', uploadData.insights);
+            
+            uploadHistory.unshift(uploadData);
+            console.log('Upload history updated, length:', uploadHistory.length);
+            
+            // Save to localStorage
+            localStorage.setItem('uploadHistory', JSON.stringify(uploadHistory));
+            
+            updateUploadHistory();
+            
+            // Update required fields since we now have uploads
+            updateRequiredFields();
+            
+            // Reset form
+            resetUploadForm();
+            
+            alert('Document processed successfully!');
+        } else {
+            alert('Error processing document: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error processing document: ' + error.message);
+    } finally {
+        processBtn.disabled = false;
+        processBtn.innerHTML = originalBtnText;
+    }
+}
+
+function resetUploadForm() {
+    // Clear radio button selection
+    const categoryRadios = document.querySelectorAll('input[name="upload-category"]');
+    categoryRadios.forEach(radio => radio.checked = false);
+    
+    document.getElementById('medical-file').value = '';
+    document.getElementById('upload-caption').value = '';
+    
+    const fileLabel = document.getElementById('file-label');
+    fileLabel.classList.remove('has-file');
+    fileLabel.innerHTML = `
+        <i class="fas fa-cloud-upload-alt"></i>
+        <span>Click to upload file</span>
+        <small>Images, PDFs, or documents up to 10MB</small>
+    `;
+    
+    validateUploadForm();
+}
+
+function generateCategoryPrompt(category, caption) {
+    const prompts = {
+        laboratory: `Analyze this laboratory report. ${caption ? 'User notes: ' + caption : ''} Please provide detailed analysis of the test results, identify any abnormal values, and suggest clinical significance.`,
+        imaging: `Analyze this medical imaging report/image. ${caption ? 'User notes: ' + caption : ''} Please examine for any abnormalities, describe key findings, and provide clinical interpretations.`,
+        signaling: `Analyze this electrophysiological signal/report. ${caption ? 'User notes: ' + caption : ''} Please interpret the signal patterns, identify any abnormalities, and provide clinical significance.`,
+        multimedia: `Analyze this medical photograph/image. ${caption ? 'User notes: ' + caption : ''} Please examine for visual abnormalities, describe any concerning features, and provide medical observations.`
+    };
+    
+    return prompts[category] || `Analyze this medical document. ${caption ? 'User notes: ' + caption : ''} Please provide detailed medical analysis and observations.`;
+}
+
+function updateUploadHistory() {
+    const historySection = document.getElementById('upload-history-section');
+    const historyTable = document.getElementById('history-table');
+    const historyTableBody = document.getElementById('history-table-body');
+    const noHistoryMessage = document.getElementById('no-history-message');
+    
+    console.log('updateUploadHistory called:', {
+        historyLength: uploadHistory.length,
+        historySection: !!historySection,
+        historyTable: !!historyTable
+    });
+    
+    if (uploadHistory.length > 0) {
+        console.log('Setting history section to display: block');
+        historySection.style.display = 'block';
+        historySection.style.visibility = 'visible';
+        historySection.style.opacity = '1';
+        
+        // Show table and hide no history message
+        historyTable.style.display = 'table';
+        noHistoryMessage.style.display = 'none';
+        
+        // Clear existing table rows
+        historyTableBody.innerHTML = '';
+        
+        uploadHistory.forEach(upload => {
+            console.log('Creating history row for upload:', upload.id);
+            const historyRow = createHistoryRow(upload);
+            historyTableBody.appendChild(historyRow);
+        });
+        
+        console.log('History table updated with', uploadHistory.length, 'rows');
+        
+        // Scroll to history section to make it visible
+        setTimeout(() => {
+            historySection.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }, 300);
+    } else {
+        console.log('No history items, showing empty message');
+        historyTable.style.display = 'none';
+        noHistoryMessage.style.display = 'block';
+        historySection.style.display = 'block';
+    }
+}
+
+function createHistoryRow(upload) {
+    const row = document.createElement('tr');
+    row.className = 'history-row';
+    row.id = `history-row-${upload.id}`;
+    
+    // Format the date nicely
+    const uploadDate = new Date(upload.timestamp);
+    const formattedDate = uploadDate.toLocaleDateString() + ' ' + uploadDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    
+    row.innerHTML = `
+        <td class="file-name-cell">
+            <div class="file-info">
+                <i class="${getCategoryIcon(upload.category)}"></i>
+                <span class="filename">${upload.filename}</span>
+                <span class="file-size">(${(upload.fileSize / 1024 / 1024).toFixed(2)} MB)</span>
+            </div>
+        </td>
+        <td class="purpose-cell">
+            <span class="purpose-description">${upload.caption}</span>
+            <span class="category-badge ${upload.category}">${upload.category}</span>
+        </td>
+        <td class="date-cell">
+            ${formattedDate}
+        </td>
+        <td class="actions-cell">
+            <button type="button" class="btn-delete-row" onclick="deleteHistoryItem(${upload.id})" title="Delete this upload">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </td>
+    `;
+    
+    return row;
+}
+
+function getCategoryIcon(category) {
+    const icons = {
+        laboratory: 'fas fa-flask',
+        imaging: 'fas fa-x-ray',
+        signaling: 'fas fa-chart-line',
+        pathology: 'fas fa-microscope',
+        throat: 'fas fa-head-side-cough',
+        tongue: 'fas fa-comment-dots',
+        infection: 'fas fa-virus',
+        medical: 'fas fa-stethoscope',
+        default: 'fas fa-file-medical'
+    };
+    return icons[category] || icons.default;
+}
+
+function getStatusIcon(status) {
+    switch(status) {
+        case 'completed':
+            return '<i class="fas fa-check-circle status-icon status-completed" title="Analysis completed"></i>';
+        case 'processing':
+            return '<i class="fas fa-spinner fa-spin status-icon status-processing" title="Processing..."></i>';
+        case 'error':
+            return '<i class="fas fa-exclamation-triangle status-icon status-error" title="Error occurred"></i>';
+        default:
+            return '<i class="fas fa-clock status-icon status-pending" title="Pending"></i>';
+    }
+}
+
+function getStatusMessage(upload) {
+    switch(upload.status) {
+        case 'processing':
+            return '<div class="status-message processing"><i class="fas fa-spinner fa-spin"></i> Analysis in progress...</div>';
+        case 'error':
+            return `<div class="status-message error"><i class="fas fa-exclamation-triangle"></i> ${upload.error || 'Analysis failed'}</div>`;
+        default:
+            return '<div class="status-message pending"><i class="fas fa-clock"></i> Waiting for analysis...</div>';
+    }
+}
+
+function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffInHours = (now - date) / (1000 * 60 * 60);
+    
+    if (diffInHours < 1) {
+        const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+        return `${diffInMinutes} minutes ago`;
+    } else if (diffInHours < 24) {
+        return `${Math.floor(diffInHours)} hours ago`;
+    } else {
+        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }
+}
+
+function formatInsights(insights) {
+    if (!insights) {
+        return '<div class="insights-content">No insights available.</div>';
+    }
+    
+    try {
+        // Display the medical analysis in a clean format
+        let jsonString = JSON.stringify(insights, null, 2);
+        
+        let html = `
+            <div style="background: #f8f9fa; padding: 15px; border: 1px solid #dee2e6; border-radius: 5px;">
+                <h4 style="color: #28a745; margin-bottom: 15px;">✅ Medical Analysis Results</h4>
+                <div style="background: white; padding: 15px; border: 1px solid #e9ecef; border-radius: 4px; overflow-x: auto;">
+                    <pre style="margin: 0; font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.4; color: #333; white-space: pre-wrap; word-wrap: break-word;">${jsonString}</pre>
+                </div>
+            </div>
+        `;
+        
+        return html;
+    } catch (error) {
+        console.error('Error in formatInsights:', error);
+        return '<div style="color: red; padding: 15px;">Error formatting insights: ' + error.message + '</div>';
+    }
+}
+
+function deleteHistoryItem(uploadId) {
+    console.log('Delete requested for upload ID:', uploadId);
+    console.log('Current upload history before delete:', uploadHistory.map(u => u.id));
+    
+    if (confirm('Are you sure you want to delete this upload? This action cannot be undone.')) {
+        // Remove from uploadHistory array
+        const originalLength = uploadHistory.length;
+        uploadHistory = uploadHistory.filter(upload => upload.id !== uploadId);
+        
+        console.log('Upload history after filter:', uploadHistory.map(u => u.id));
+        console.log('Items removed:', originalLength - uploadHistory.length);
+        
+        // Remove from localStorage
+        localStorage.setItem('uploadHistory', JSON.stringify(uploadHistory));
+        
+        // Update the UI
+        updateUploadHistory();
+        
+        // Update required fields since upload count may have changed
+        updateRequiredFields();
+        
+        console.log('Deleted upload with ID:', uploadId);
+        console.log('Remaining uploads:', uploadHistory.length);
+    }
+}
+
+// function toggleInsights(uploadId) {
+//     const insightsDiv = document.getElementById(`insights-${uploadId}`);
+//     const toggleBtn = document.getElementById(`toggle-btn-${uploadId}`);
+//     
+//     if (insightsDiv && toggleBtn) {
+//         if (insightsDiv.style.display === 'none') {
+//             insightsDiv.style.display = 'block';
+//             toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Hide Analysis';
+//         } else {
+//             insightsDiv.style.display = 'none';
+//             toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> View Analysis';
+//         }
+//     }
+// }
+
+// Enhanced Form submission with automatic insights generation and medical documentation data
+document.getElementById('symptom-assessment-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Validate symptoms text
+    const symptomsText = document.getElementById('complaint_text').value.trim();
+    
+    if (!symptomsText) {
+        alert('Please describe your symptoms before submitting.');
+        document.getElementById('complaint_text').focus();
+        return;
+    }
+    
+    // If medical reports are enabled and section 2 is currently visible, 
+    // and no uploads have been made, validate the upload form
+    if (hasMedicalReports && currentSection === 2 && uploadHistory.length === 0) {
+        // User is in section 2 but hasn't uploaded anything yet
+        // Check if they're trying to submit without completing the upload form
+        const selectedCategory = document.querySelector('input[name="upload-category"]:checked');
+        const fileInput = document.getElementById('medical-file');
+        const captionInput = document.getElementById('upload-caption');
+        
+        const hasCategory = selectedCategory && selectedCategory.value;
+        const hasFile = fileInput && fileInput.files && fileInput.files[0];
+        const hasCaption = captionInput && captionInput.value.trim();
+        
+        // Only validate if they have started filling the form but not completed it
+        if (hasCategory || hasFile || hasCaption) {
+            let missingFields = [];
+            
+            if (!hasCategory) {
+                missingFields.push('Document Category');
+            }
+            if (!hasFile) {
+                missingFields.push('Medical Document File');
+            }
+            if (!hasCaption) {
+                missingFields.push('Document Description');
+            }
+            
+            if (missingFields.length > 0) {
+                const message = `Please complete the following required fields in the Medical Documents section:\n• ${missingFields.join('\n• ')}`;
+                alert(message);
+                return;
+            }
+        }
+    }
+    
+    const submitBtn = document.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    try {
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing & Saving...';
+        submitBtn.disabled = true;
+        
+        // First, generate insights automatically with medical documentation context
+        console.log('Generating AI insights with medical documentation context...');
+        
+        // Prepare insights request with medical documentation data
+        const insightsRequestData = {
+            symptoms: symptomsText,
+            medical_documents: uploadHistory.filter(upload => upload.status === 'completed')
+        };
+        
+        const insightsResponse = await fetch('/analyze_symptoms_with_medical_docs', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(insightsRequestData)
+        });
+        
+        let insightsData = null;
+        if (insightsResponse.ok) {
+            const insightsResult = await insightsResponse.json();
+            if (insightsResult.success) {
+                insightsData = insightsResult.insights;
+                // Store insights but don't display them to patient
+                window.currentInsightsData = insightsData;
+                console.log('AI insights generated with medical documentation context and stored for submission');
+            }
+        }
+        
+        // Prepare form data
+        const formData = new FormData();
+        formData.append('complaint_text', symptomsText);
+        
+        // Include insights data if generated
+        if (insightsData) {
+            formData.append('symptom_insights', JSON.stringify(insightsData));
+            formData.append('insights_generated', 'true');
+            console.log('Including enhanced AI insights data in form submission');
+        }
+        
+        // Include medical documentation data
+        if (uploadHistory.length > 0) {
+            formData.append('medical_documents', JSON.stringify(uploadHistory));
+            console.log('Including medical documentation data in form submission');
+        }
+        
+        // Submit the form with insights and medical documentation
+        console.log('Submitting form to /save_step5...');
+        const response = await fetch('/save_step5', {
+            method: 'POST',
+            body: formData
+        });
+        
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
+        
+        const data = await response.json();
+        console.log('Response data:', data);
+        
+        if (data.success) {
+            console.log('Success! Redirecting to step6...');
+            window.location.href = '/step6';
+        } else {
+            console.error('Server returned error:', data.error || 'Failed to save data');
+            alert('Error: ' + (data.error || 'Failed to save data'));
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+});
+</script>
+
+
+</script>
+
+<style>
+/* Section-based layout styling */
+.form-section-page {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.form-section-page.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pagination Controls */
+.pagination-controls {
+    margin: 20px 0 30px 0;
+    text-align: center;
+}
+
+.pagination-dots {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.dot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    padding: 15px;
+    border-radius: 12px;
+    min-width: 120px;
+}
+
+.dot:hover {
+    background: rgba(52, 152, 219, 0.1);
+    transform: translateY(-2px);
+}
+
+.dot.active {
+    color: #3498db;
+    background: rgba(52, 152, 219, 0.1);
+}
+
+.dot-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #bdc3c7;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.dot.active .dot-number {
+    background: #3498db;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.dot-label {
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Section Navigation */
+.section-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding: 20px 0;
+    border-top: 1px solid #e8f4fd;
+}
+
+.btn-navigation {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-navigation.btn-prev {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    color: white;
+}
+
+.btn-navigation.btn-prev:hover {
+    background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(127, 140, 141, 0.3);
+}
+
+.btn-navigation.btn-next {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.btn-navigation.btn-next:hover {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+/* Enhanced Medical Documentation Upload Styling */
+.upload-form-container {
+    margin-bottom: 30px;
+}
+
+.upload-form-card {
+    border: 1px solid #e8f4fd;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ffffff, #f8fbff);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.upload-form-card:hover {
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.12);
+    transform: translateY(-2px);
+}
+
+.upload-form-header {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e8f4fd;
+}
+
+.upload-form-header h4 {
+    margin: 0;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.upload-form-content {
+    padding: 25px;
+}
+
+/* Category Selection Styling */
+.category-selection {
+    margin-bottom: 25px;
+}
+
+.category-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.category-radio-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px 18px;
+    border: 2px solid #e8f4fd;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.category-radio-option:hover {
+    border-color: #3b82f6;
+    background: #f8faff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.category-radio-option input[type="radio"] {
+    display: none;
+}
+
+.category-radio-option input[type="radio"]:checked + .radio-custom {
+    background: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.category-radio-option input[type="radio"]:checked + .radio-custom::after {
+    opacity: 1;
+}
+
+.category-radio-option input[type="radio"]:checked ~ .radio-content .radio-text {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+.category-radio-option input[type="radio"]:checked {
+    background: linear-gradient(135deg, #e3f2fd, #f8faff);
+    border-color: #3b82f6;
+}
+
+.radio-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d1d5db;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.radio-custom::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.radio-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.radio-content .radio-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1f2937;
+    transition: all 0.3s ease;
+}
+
+.radio-content .radio-description {
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.4;
+    font-weight: 400;
+}
+
+/* Validation styles for category radio group */
+.category-radio-group.error {
+    border: 2px solid #e74c3c;
+    border-radius: 12px;
+    padding: 10px;
+    background: #fdf2f2;
+}
+
+.category-radio-group.success {
+    border: 2px solid #27ae60;
+    border-radius: 12px;
+    padding: 10px;
+    background: #f0fff4;
+}
+
+/* File upload validation styles */
+.file-upload-section.error .file-input-label {
+    border-color: #e74c3c !important;
+    background: #fdf2f2 !important;
+}
+
+.file-upload-section.success .file-input-label {
+    border-color: #27ae60 !important;
+    background: #f0fff4 !important;
+}
+
+/* File Upload Section */
+.file-upload-section {
+    margin-bottom: 20px;
+}
+
+.custom-file-input {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+}
+
+.custom-file-input input[type="file"] {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+}
+
+.file-input-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    border: 3px dashed #bdc3c7;
+    border-radius: 8px;
+    background: #fafbfc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 120px;
+}
+
+.file-input-label:hover {
+    border-color: #3498db;
+    background: #f0f8ff;
+    transform: translateY(-2px);
+}
+
+.file-input-label.has-file {
+    border-color: #27ae60;
+    background: #f0fdf4;
+    border-style: solid;
+}
+
+.file-input-label i {
+    font-size: 2em;
+    color: #7f8c8d;
+    transition: color 0.3s ease;
+}
+
+.file-input-label:hover i {
+    color: #3498db;
+}
+
+.file-input-label.has-file i {
+    color: #27ae60;
+}
+
+/* Caption Section */
+.caption-section {
+    margin-bottom: 20px;
+}
+
+.caption-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e8f4fd;
+    border-radius: 8px;
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+}
+
+.caption-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.caption-input:invalid {
+    border-color: #e74c3c;
+}
+
+.caption-input:valid {
+    border-color: #27ae60;
+}
+
+.caption-input.error {
+    border-color: #e74c3c !important;
+    background-color: #fdf2f2;
+}
+
+.caption-input.success {
+    border-color: #27ae60 !important;
+    background-color: #f0fff4;
+}
+
+/* Mandatory field indicator */
+.caption-section label::after {
+    content: "";
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    display: block;
+    font-size: 15px;
+}
+
+/* Enhanced mandatory field styling */
+.form-group label:contains("*"),
+.form-group label[for="upload-caption"],
+.form-group label[for="medical-file"],
+.category-selection label {
+    color: #2c3e50;
+}
+
+.form-group label:contains("*")::after {
+    color: #e74c3c;
+    margin-left: 2px;
+}
+
+/* Make asterisks more visible */
+.form-group label {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.form-group label:contains("*") {
+    position: relative;
+}
+
+/* Error state for validation */
+.form-group.error label {
+    color: #e74c3c;
+}
+
+.form-group.success label {
+    color: #27ae60;
+}
+
+/* Model Selection */
+.model-selection {
+    margin-bottom: 25px;
+}
+
+.model-dropdown {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e8f4fd;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.model-dropdown:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* Process Button */
+.process-section {
+    text-align: center;
+}
+
+.btn-process-upload {
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+    justify-content: center;
+}
+
+.btn-process-upload:hover:not(:disabled) {
+    background: linear-gradient(135deg, #7d3c98, #8e44ad);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(142, 68, 173, 0.3);
+}
+
+.btn-process-upload:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Upload History Section */
+.upload-history-section {
+    margin-top: 40px;
+    border-top: 2px solid #e8f4fd;
+    padding-top: 30px;
+    background: #f8f9fa !important;
+    border: 2px solid #007bff !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
+}
+
+.history-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.history-header h4 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1.2em;
+}
+
+.history-description {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.history-container {
+    margin-top: 20px;
+}
+
+/* History Table Styling */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.history-table thead {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.history-table th {
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9em;
+    letter-spacing: 0.5px;
+}
+
+.history-table tbody tr {
+    border-bottom: 1px solid #e8f4fd;
+    transition: all 0.3s ease;
+}
+
+.history-table tbody tr:hover {
+    background: #f8f9fa;
+    transform: scale(1.01);
+}
+
+.history-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.history-table td {
+    padding: 15px 12px;
+    vertical-align: middle;
+}
+
+/* Table Cell Specific Styling */
+.file-name-cell {
+    min-width: 200px;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-info i {
+    color: #3498db;
+    font-size: 1.1em;
+}
+
+.filename {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.file-size {
+    color: #7f8c8d;
+    font-size: 0.85em;
+    font-style: italic;
+}
+
+.purpose-cell {
+    max-width: 300px;
+}
+
+.purpose-description {
+    display: block;
+    color: #555;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.category-badge.laboratory { background: #e3f2fd; color: #1976d2; }
+.category-badge.imaging { background: #f3e5f5; color: #7b1fa2; }
+.category-badge.signaling { background: #e8f5e8; color: #388e3c; }
+.category-badge.pathology { background: #fff3e0; color: #f57c00; }
+.category-badge.throat { background: #fce4ec; color: #c2185b; }
+.category-badge.tongue { background: #f1f8e9; color: #689f38; }
+.category-badge.infection { background: #ffebee; color: #d32f2f; }
+.category-badge.medical { background: #e0f2f1; color: #00796b; }
+
+.date-cell {
+    color: #555;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+.actions-cell {
+    text-align: center;
+    width: 120px;
+}
+
+.btn-delete-row {
+    background: #dc3545;
+    border: 1px solid #dc3545;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.85em;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-delete-row:hover {
+    background: #c82333;
+    border-color: #bd2130;
+    transform: translateY(-1px);
+}
+
+.no-history-message {
+    padding: 40px 20px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    background: white;
+    border: 1px dashed #dee2e6;
+    border-radius: 8px;
+}
+
+/* Responsive design for table */
+@media (max-width: 768px) {
+    .history-table {
+        font-size: 0.85em;
+    }
+    
+    .history-table th,
+    .history-table td {
+        padding: 10px 8px;
+    }
+    
+    .purpose-cell {
+        max-width: 200px;
+    }
+    
+    .btn-delete-row {
+        padding: 6px 8px;
+        font-size: 0.8em;
+    }
+    
+    .file-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+
+.submit-container {
+    text-align: center;
+    padding: 30px;
+    background: #e8f5e8;
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.submit-help {
+    margin-top: 15px;
+    color: #6c757d;
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* Loading styling */
+.loading-container {
+    text-align: center;
+    padding: 30px;
+}
+
+.loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Character counter styling */
+.character-counter {
+    text-align: right;
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+#char-count {
+    font-weight: bold;
+}
+
+/* Photography section specific styling */
+.photography-section {
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border: 1px solid #e8f4fd;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.text-indigo {
+    color: #6f42c1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .pagination-dots {
+        gap: 20px;
+    }
+    
+    .dot {
+        min-width: 100px;
+        padding: 10px;
+    }
+    
+    .section-navigation {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .btn-navigation {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .upload-form-content {
+        padding: 20px;
+    }
+    
+    .btn-process-upload {
+        width: 100%;
+        min-width: auto;
+    }
+}
+</style>
+{% endblock %}

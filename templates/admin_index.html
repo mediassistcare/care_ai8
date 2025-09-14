@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Admin Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+        }
+
+        .stats-card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-card {
+            transition: transform 0.2s;
+            border-radius: 10px;
+        }
+
+        .file-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-action {
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+        }
+
+        .alert-dismissible .btn-close {
+            padding: 0.5rem 0.75rem;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <!-- Header -->
+    <div class="admin-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-0"><i class="fas fa-cogs me-3"></i>Prompt Admin Portal</h1>
+                    <p class="mb-0 mt-2">Manage AI prompts for Care Diagnostics application</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex gap-2 justify-content-end align-items-center">
+                        <!-- User info and logout -->
+                        <div class="text-light me-3">
+                            <small>
+                                <i class="fas fa-user me-1"></i>
+                                Welcome, {{ session.username }}
+                            </small>
+                        </div>
+                        
+                        <form method="POST" action="{{ url_for('create_backup') }}" style="display: inline;">
+                            <button type="submit" class="btn btn-light btn-action">
+                                <i class="fas fa-save me-2"></i>Create Backup
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ url_for('restore_defaults') }}" style="display: inline;"
+                            onsubmit="return confirm('This will restore all prompts to default state and create a backup. Are you sure?')">
+                            <button type="submit" class="btn btn-warning btn-action">
+                                <i class="fas fa-undo me-2"></i>Restore Defaults
+                            </button>
+                        </form>
+                        <a href="{{ url_for('logout') }}" class="btn btn-outline-light btn-action"
+                           onclick="return confirm('Are you sure you want to logout?')">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show"
+            role="alert">
+            <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-file-alt fa-2x text-primary mb-3"></i>
+                        <h3 class="mb-1">{{ stats.total_files }}</h3>
+                        <p class="text-muted mb-0">Total Files</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-layer-group fa-2x text-success mb-3"></i>
+                        <h3 class="mb-1">{{ stats.total_categories }}</h3>
+                        <p class="text-muted mb-0">UI Categories</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-list-ol fa-2x text-info mb-3"></i>
+                        <h3 class="mb-1">{{ stats.total_lines }}</h3>
+                        <p class="text-muted mb-0">Total Lines</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-chart-bar fa-2x text-warning mb-3"></i>
+                        <h3 class="mb-1">{{ "%.0f"|format(stats.avg_size) }}</h3>
+                        <p class="text-muted mb-0">Avg. Size (chars)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categorized Prompt Files -->
+        {% if categorized_files %}
+        {% for category, info in categorized_files.items() %}
+        <div class="card mb-4">
+            <div class="card-header bg-gradient"
+                style="background: linear-gradient(45deg, #667eea 0%, #764ba2 100%); color: white;">
+                <h4 class="mb-0">
+                    <i
+                        class="fas fa-{{ 'cog' if 'Core' in category else 'upload' if 'Upload' in category else 'camera' if 'Photo' in category else 'user-md' if 'Patient' in category else 'heartbeat' if 'Vital' in category else 'file-medical' if 'Medical Records' in category else 'comment-medical' if 'Symptom Description' in category else 'search-plus' if 'Detailed Analysis' in category else 'code-branch' if 'ICD11' in category else 'file-medical-alt' if 'Final Report' in category else 'folder' }} me-2"></i>
+                    {{ category }}
+                    <span class="badge bg-light text-dark ms-2">{{ info.files|length }} files</span>
+                </h4>
+                <!-- UI Page Title with blue color and larger font -->
+                <div class="mt-2 mb-1">
+                    <div class="text-primary" style="font-size: 1.3rem; font-weight: 600;">
+                        <i class="fas fa-desktop me-2"></i>{{ info.get('ui_page', 'No UI Page Set') }}
+                    </div>
+                </div>
+                <p class="mb-0 mt-1 small">{{ info.description }}</p>
+            </div>
+            <div class="card-body">
+                {% if info.files %}
+                <div class="row">
+                    {% for file in info.files %}
+                    <div class="col-lg-6 col-xl-4 mb-3">
+                        <div class="card file-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="card-title mb-0">
+                                        <i class="fas fa-file-code me-2 text-primary"></i>
+                                        {{ file.name }}
+                                    </h6>
+                                    <span class="badge bg-light text-dark">{{ file.lines }} lines</span>
+                                </div>
+
+                                <div class="text-muted small mb-3">
+                                    <div><i class="fas fa-clock me-1"></i>{{ file.modified }}</div>
+                                    <div><i class="fas fa-weight me-1"></i>{{ file.size }} chars</div>
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('view_prompt', filename=file.name) }}"
+                                        class="btn btn-outline-primary btn-sm flex-fill">
+                                        <i class="fas fa-eye me-1"></i>View
+                                    </a>
+                                    <a href="{{ url_for('edit_prompt', filename=file.name) }}"
+                                        class="btn btn-primary btn-sm flex-fill">
+                                        <i class="fas fa-edit me-1"></i>Edit
+                                    </a>
+                                </div>
+                                
+                                <!-- Additional action buttons -->
+                                <div class="d-flex gap-2 mt-2">
+                                    <a href="{{ url_for('compare_with_default', filename=file.name) }}"
+                                        class="btn btn-outline-info btn-sm flex-fill">
+                                        <i class="fas fa-code-compare me-1"></i>Compare
+                                    </a>
+                                    <form method="POST" action="{{ url_for('restore_file_default', filename=file.name) }}" 
+                                          style="flex: 1;" class="d-inline"
+                                          onsubmit="return confirm('This will restore {{ file.name }} to its default state and create a backup. Are you sure?')">
+                                        <button type="submit" class="btn btn-outline-warning btn-sm w-100">
+                                            <i class="fas fa-undo me-1"></i>Restore
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-3">
+                    <i class="fas fa-folder-open fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">No files in this category</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No prompt files found</h5>
+                <p class="text-muted">Check if the prompts directory exists and contains .txt files.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer class="mt-5 py-4 bg-dark text-white text-center">
+        <div class="container">
+            <p class="mb-0">
+                <i class="fas fa-code me-2"></i>
+                Prompt Admin Portal v1.0 | Care Diagnostics System
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

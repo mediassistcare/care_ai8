@@ -1,0 +1,2794 @@
+{% extends "base.html" %}
+
+{% block title %}Vital Signs - Step 3 - Care Diagnostics{% endblock %}
+
+{% block content %}
+<div class="step-container">
+    <div class="step-header">
+        <h2><i class="fas fa-heartbeat"></i> Step 3: Comprehensive Vital Signs & Body Composition</h2>
+        <p>Please provide all available vital signs and physiological measurements</p>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 50%"></div>
+        </div>
+    </div>
+
+    <form id="vitalsForm" class="medical-form" novalidate>
+        
+        <!-- Pagination Controls -->
+        <div class="pagination-controls">
+            <div class="pagination-dots">
+                <div class="dot active" data-section="1">
+                    <span class="dot-number">1</span>
+                    <span class="dot-label">Core Vital Signs</span>
+                </div>
+                <div class="dot" data-section="2">
+                    <span class="dot-number">2</span>
+                    <span class="dot-label">Body Composition & Glucose</span>
+                </div>
+                <div class="dot" data-section="3">
+                    <span class="dot-number">3</span>
+                    <span class="dot-label">Heart, Lung & Respiratory</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Core Vital Signs -->
+        <div class="form-section-page" id="section-1" style="display: block;">
+        
+        <!-- Essential Vital Signs Section -->
+        <div class="form-section vital-signs-section">
+            <h3><i class="fas fa-thermometer-half text-red"></i> Core Vital Signs</h3>
+            <p class="section-description">Essential vital signs required for medical assessment</p>
+            
+            <!-- Temperature -->
+            <div class="vitals-subsection">
+                <h4><i class="fas fa-thermometer-half"></i> Temperature</h4>
+                <div class="vitals-grid">
+                    <div class="form-group vital-input">
+                        <label for="temperature">Body Temperature *</label>
+                        <input type="number" id="temperature" name="temperature" step="0.1" required placeholder="e.g., 36.5" 
+                               value="{{ step3_data.get('temperature', '') }}">
+                        <div class="vital-range">{{ vital_ranges.temperature.display if vital_ranges else 'Normal: 36.1-37.5°C (97.0-99.5°F)' }}</div>
+                    </div>
+                    <div class="form-group vital-input">
+                        <label for="temperature_unit">Unit</label>
+                        <div class="radio-group-inline">
+                            <label class="radio-inline">
+                                <input type="radio" name="temperature_unit" value="celsius" 
+                                       {% if step3_data.get('temperature_unit', 'celsius') == 'celsius' %}checked{% endif %}>
+                                <span>Celsius (°C)</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="temperature_unit" value="fahrenheit"
+                                       {% if step3_data.get('temperature_unit') == 'fahrenheit' %}checked{% endif %}>
+                                <span>Fahrenheit (°F)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cardiovascular Measurements -->
+            <div class="vitals-subsection">
+                <h4><i class="fas fa-heart"></i> Cardiovascular</h4>
+                <div class="vitals-grid">
+                    <div class="form-group vital-input">
+                        <label for="pulse_rate">Pulse Rate (bpm) *</label>
+                        <input type="number" id="pulse_rate" name="pulse_rate" min="30" max="200" required placeholder="e.g., 72"
+                               value="{{ step3_data.get('pulse_rate', '') }}">
+                        <div class="vital-range">{{ vital_ranges.pulse_rate.display if vital_ranges else 'Normal: 60-100 bpm' }}</div>
+                    </div>
+                    <div class="form-group vital-input">
+                        <label for="respiratory_rate">Respiratory Rate (bpm) *</label>
+                        <input type="number" id="respiratory_rate" name="respiratory_rate" min="8" max="40" required placeholder="e.g., 16"
+                               value="{{ step3_data.get('respiratory_rate', '') }}">
+                        <div class="vital-range">{{ vital_ranges.respiratory_rate.display if vital_ranges else 'Normal: 12-20 bpm' }}</div>
+                    </div>
+                </div>
+                
+                <div class="vitals-grid">
+                    <div class="form-group vital-input">
+                        <label for="systolic_bp">Systolic BP (mmHg) *</label>
+                        <input type="number" id="systolic_bp" name="systolic_bp" min="60" max="250" required placeholder="e.g., 120"
+                               value="{{ step3_data.get('systolic_bp', '') }}">
+                        <div class="vital-range">{{ vital_ranges.systolic_bp.display if vital_ranges else 'Normal: 90-120 mmHg' }}</div>
+                    </div>
+                    <div class="form-group vital-input">
+                        <label for="diastolic_bp">Diastolic BP (mmHg) *</label>
+                        <input type="number" id="diastolic_bp" name="diastolic_bp" min="40" max="150" required placeholder="e.g., 80"
+                               value="{{ step3_data.get('diastolic_bp', '') }}">
+                        <div class="vital-range">{{ vital_ranges.diastolic_bp.display if vital_ranges else 'Normal: 60-80 mmHg' }}</div>
+                    </div>
+                </div>
+
+                <div class="vitals-grid">
+                    <div class="form-group vital-input">
+                        <label for="oxygen_saturation">Oxygen Saturation (SpO2) % *</label>
+                        <input type="number" id="oxygen_saturation" name="oxygen_saturation" min="70" max="100" required placeholder="e.g., 98"
+                               value="{{ step3_data.get('oxygen_saturation', '') }}">
+                        <div class="vital-range">{{ vital_ranges.oxygen_saturation.display if vital_ranges else 'Normal: >95%' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Navigation for Section 1 -->
+        <div class="section-navigation">
+            <button type="button" class="btn-navigation btn-prev" style="visibility: hidden;" disabled>
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn-navigation btn-next" onclick="nextSection()">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        </div>
+        <!-- End Section 1 -->
+
+        <!-- Section 2: Body Composition & Blood Glucose -->
+        <div class="form-section-page" id="section-2" style="display: none;">
+
+        <!-- Body Mass Composition Section -->
+        <div class="form-section composition-section">
+            <h3><i class="fas fa-weight text-blue"></i> Body Mass Composition</h3>
+            <p class="section-description">Comprehensive body composition analysis</p>
+            
+            <div class="vitals-subsection">
+                <h4><i class="fas fa-calculator"></i> Body Composition Metrics</h4>
+                <div class="vitals-grid">
+                    <div class="form-group vital-input">
+                        <label for="body_fat_percentage">Body Fat Percentage (%)</label>
+                        <input type="number" id="body_fat_percentage" name="body_fat_percentage" step="0.1" min="5" max="50" placeholder="e.g., 18.5">
+                        <div class="vital-range">Normal: Men 10-20%, Women 16-25%</div>
+                    </div>
+                    <div class="form-group vital-input">
+                        <label for="fat_mass">Fat Mass (kg)</label>
+                        <input type="number" id="fat_mass" name="fat_mass" step="0.1" min="1" max="100" placeholder="e.g., 12.5">
+                        <div class="vital-range">Total amount of body fat</div>
+                    </div>
+                </div>
+                
+                <div class="vitals-grid">
+                    <div class="form-group vital-input">
+                        <label for="lean_body_mass">Lean Body Mass (kg)</label>
+                        <input type="number" id="lean_body_mass" name="lean_body_mass" step="0.1" min="20" max="120" placeholder="e.g., 55.2">
+                        <div class="vital-range">Muscles, bones, water (non-fat)</div>
+                    </div>
+                    <div class="form-group vital-input">
+                        <label for="muscle_mass">Muscle Mass (kg)</label>
+                        <input type="number" id="muscle_mass" name="muscle_mass" step="0.1" min="15" max="80" placeholder="e.g., 32.1">
+                        <div class="vital-range">Total muscle tissue</div>
+                    </div>
+                </div>
+
+                <div class="vitals-grid">
+                    <div class="form-group vital-input">
+                        <label for="bone_density">Bone Density (T-score/Z-score)</label>
+                        <input type="number" id="bone_density" name="bone_density" step="0.1" min="-5" max="5" placeholder="e.g., -1.2">
+                        <div class="vital-range">Normal: T-score > -1.0</div>
+                    </div>
+                    <div class="form-group vital-input">
+                        <label for="total_body_water">Total Body Water (%)</label>
+                        <input type="number" id="total_body_water" name="total_body_water" step="0.1" min="40" max="80" placeholder="e.g., 60.5">
+                        <div class="vital-range">Normal: 50-70% of body weight</div>
+                    </div>
+                </div>
+
+                <div class="vitals-grid">
+                    <div class="form-group vital-input">
+                        <label for="bmi">Body Mass Index (BMI)</label>
+                        <input type="number" id="bmi" name="bmi" step="0.1" min="10" max="50" placeholder="e.g., 24.2">
+                        <div class="vital-range">
+                            {{ vital_ranges.bmi.display if vital_ranges else 'Normal: 18.5-24.9' }}
+                            {% if vital_ranges and vital_ranges.bmi.current %}
+                                <br><strong>Current BMI: {{ vital_ranges.bmi.current }} - {{ vital_ranges.bmi.status }}</strong>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group vital-input">
+                        <label for="segmental_analysis">Segmental Analysis Notes</label>
+                        <textarea id="segmental_analysis" name="segmental_analysis" rows="1" placeholder="e.g., Arms: 8.2kg, Legs: 22.1kg, Trunk: 28.5kg"></textarea>
+                        <div class="vital-range">Fat/lean mass in body segments</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blood Glucose Section -->
+        <div class="form-section glucose-section">
+            <h3><i class="fas fa-tint text-purple"></i> Blood Glucose</h3>
+            <p class="section-description">Blood sugar measurements</p>
+            
+            <div class="vitals-subsection">
+                <h4><i class="fas fa-vial"></i> Glucometer Reading</h4>
+                <div class="vitals-grid">
+                    <div class="form-group vital-input">
+                        <label for="blood_glucose">Random Blood Sugar (mg/dL)</label>
+                        <input type="number" id="blood_glucose" name="blood_glucose" min="50" max="600" placeholder="e.g., 110"
+                               value="{{ step3_data.get('blood_glucose', '') }}">
+                        <div class="vital-range">{{ vital_ranges.blood_glucose.display if vital_ranges else 'Normal: <140 mg/dL (random), 70-100 mg/dL (fasting)' }}</div>
+                    </div>
+                    <div class="form-group vital-input">
+                        <label for="glucose_timing">Measurement Timing</label>
+                        <div class="radio-group-inline">
+                            <label class="radio-inline">
+                                <input type="radio" name="glucose_timing" value="fasting"
+                                       {% if step3_data.get('glucose_timing') == 'fasting' %}checked{% endif %}>
+                                <span>Fasting</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="glucose_timing" value="random"
+                                       {% if step3_data.get('glucose_timing', 'random') == 'random' %}checked{% endif %}>
+                                <span>Random</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="glucose_timing" value="post_meal"
+                                       {% if step3_data.get('glucose_timing') == 'post_meal' %}checked{% endif %}>
+                                <span>Post-meal</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Navigation for Section 2 -->
+        <div class="section-navigation">
+            <button type="button" class="btn-navigation btn-prev" onclick="prevSection()">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn-navigation btn-next" onclick="nextSection()">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        </div>
+        <!-- End Section 2 -->
+
+        <!-- Section 3: Heart, Lung & Respiratory -->
+        <div class="form-section-page" id="section-3" style="display: none;">
+
+        <!-- Heart Monitor Section -->
+        <div class="form-section heart-section">
+            <h3><i class="fas fa-stethoscope text-green"></i> Heart & Lung Assessment</h3>
+            <p class="section-description">Stethoscope findings and sound analysis</p>
+            
+            <div class="vitals-subsection">
+                <h4><i class="fas fa-lungs"></i> Stethoscope Findings</h4>
+                <div class="vitals-grid">
+                    <div class="form-group vital-input">
+                        <label for="lung_congestion">Lung Congestion</label>
+                        <div class="radio-group-inline">
+                            <label class="radio-inline">
+                                <input type="radio" name="lung_congestion" value="none" 
+                                       {% if step3_data.get('lung_congestion', 'none') == 'none' %}checked{% endif %}>
+                                <span>None</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="lung_congestion" value="mild"
+                                       {% if step3_data.get('lung_congestion') == 'mild' %}checked{% endif %}>
+                                <span>Mild</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="lung_congestion" value="moderate"
+                                       {% if step3_data.get('lung_congestion') == 'moderate' %}checked{% endif %}>
+                                <span>Moderate</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="lung_congestion" value="severe"
+                                       {% if step3_data.get('lung_congestion') == 'severe' %}checked{% endif %}>
+                                <span>Severe</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group vital-input">
+                        <label for="water_in_lungs">Water in Lungs</label>
+                        <div class="radio-group-inline">
+                            <label class="radio-inline">
+                                <input type="radio" name="water_in_lungs" value="none" 
+                                       {% if step3_data.get('water_in_lungs', 'none') == 'none' %}checked{% endif %}>
+                                <span>None</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="water_in_lungs" value="suspected"
+                                       {% if step3_data.get('water_in_lungs') == 'suspected' %}checked{% endif %}>
+                                <span>Suspected</span>
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="water_in_lungs" value="present"
+                                       {% if step3_data.get('water_in_lungs') == 'present' %}checked{% endif %}>
+                                <span>Present</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group vital-input">
+                    <label for="heart_lung_notes">Additional Heart/Lung Findings</label>
+                    <textarea id="heart_lung_notes" name="heart_lung_notes" rows="2" placeholder="Describe any additional findings from stethoscope examination...">{{ step3_data.get('heart_lung_notes', '') }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- ECG Section -->
+        <div class="form-section ecg-section">
+            <h3><i class="fas fa-chart-line text-orange"></i> Electrocardiogram (ECG)</h3>
+            <p class="section-description">Heart rhythm and electrical activity</p>
+            
+            <div class="vitals-subsection">
+                <h4><i class="fas fa-heartbeat"></i> ECG Assessment</h4>
+                <div class="form-group vital-input">
+                    <label for="ecg_available">ECG Performed?</label>
+                    <div class="radio-group-inline">
+                        <label class="radio-inline">
+                            <input type="radio" name="ecg_available" value="no" 
+                                   {% if step3_data.get('ecg_available', 'no') == 'no' %}checked{% endif %}>
+                            <span>No</span>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="ecg_available" value="yes"
+                                   {% if step3_data.get('ecg_available') == 'yes' %}checked{% endif %}>
+                            <span>Yes</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group vital-input">
+                    <label for="ecg_findings">ECG Findings</label>
+                    <textarea id="ecg_findings" name="ecg_findings" rows="2" placeholder="Describe ECG findings (rhythm, rate, intervals, abnormalities)...">{{ step3_data.get('ecg_findings', '') }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Respiratory Function Section -->
+        <div class="form-section respiratory-section">
+            <h3><i class="fas fa-wind text-cyan"></i> Respiratory Function</h3>
+            <p class="section-description">Breathing capacity and function tests</p>
+            
+            <div class="vitals-subsection">
+                <h4><i class="fas fa-lungs"></i> Pulmonary Function</h4>
+                <div class="vitals-grid">
+                    <div class="form-group vital-input">
+                        <label for="fev1">FEV1 (L) - Forced Expiratory Volume</label>
+                        <input type="number" id="fev1" name="fev1" step="0.1" min="0.5" max="6" placeholder="e.g., 3.2">
+                        <div class="vital-range">Normal varies by age/gender</div>
+                    </div>
+                    <div class="form-group vital-input">
+                        <label for="pef">PEF (L/min) - Peak Expiratory Flow</label>
+                        <input type="number" id="pef" name="pef" min="100" max="800" placeholder="e.g., 450">
+                        <div class="vital-range">Normal varies by age/gender</div>
+                    </div>
+                </div>
+                <div class="form-group vital-input">
+                    <label for="respiratory_notes">Additional Respiratory Notes</label>
+                    <textarea id="respiratory_notes" name="respiratory_notes" rows="1" placeholder="Any additional respiratory observations..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Navigation for Section 3 -->
+        <div class="section-navigation">
+            <button type="button" class="btn-navigation btn-prev" onclick="prevSection()">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn-navigation btn-next" onclick="submitFormData()" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">
+                Save Vital Signs & Continue <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        </div>
+        <!-- End Section 3 -->
+
+    </form>
+</div>
+
+<style>
+/* Remove custom step-container to use global styles like step2 and step4 */
+
+.step-header {
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.step-header h2 {
+    color: #2c3e50;
+    margin-bottom: 3px;
+    font-size: 1.3em;
+}
+
+.step-header p {
+    margin-bottom: 4px;
+    font-size: 0.85em;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background-color: #ecf0f1;
+    border-radius: 3px;
+    margin: 12px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.medical-form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Compact styling for sections 2 and 3 */
+#section-2 .form-section, #section-3 .form-section {
+    padding: 6px;
+    margin-bottom: 3px;
+}
+
+#section-2 .vitals-subsection, #section-3 .vitals-subsection {
+    margin-bottom: 3px;
+}
+
+#section-2 .section-description, #section-3 .section-description {
+    margin-bottom: 2px;
+    font-size: 0.7em;
+    line-height: 1.2;
+}
+
+#section-2 .vitals-grid, #section-3 .vitals-grid {
+    gap: 6px;
+    margin-bottom: 3px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+#section-2 .radio-group-inline, #section-3 .radio-group-inline {
+    gap: 6px;
+    margin-top: 1px;
+}
+
+#section-2 .form-group, #section-3 .form-group {
+    margin-bottom: 4px;
+}
+
+#section-2 .section-navigation, #section-3 .section-navigation {
+    margin-top: 6px;
+    padding: 4px;
+}
+
+#section-2 .form-section h3, #section-3 .form-section h3 {
+    margin-bottom: 2px;
+    font-size: 1.0em;
+}
+
+#section-2 .vitals-subsection h4, #section-3 .vitals-subsection h4 {
+    margin-bottom: 3px;
+    font-size: 0.9em;
+    padding-bottom: 1px;
+}
+
+#section-2 .vital-input label, #section-3 .vital-input label {
+    margin-bottom: 1px;
+    font-size: 0.8em;
+}
+
+#section-2 .vital-input input, #section-3 .vital-input input,
+#section-2 .vital-input textarea, #section-3 .vital-input textarea {
+    padding: 4px;
+    font-size: 0.8em;
+}
+
+#section-2 .vital-range, #section-3 .vital-range {
+    margin-top: 1px;
+    font-size: 0.7em;
+}
+
+#section-2 .radio-inline, #section-3 .radio-inline {
+    gap: 2px;
+    font-size: 0.8em;
+}
+
+#section-2 .radio-inline span, #section-3 .radio-inline span {
+    line-height: 1.2;
+}
+
+/* Make sections 2 and 3 overall more compact */
+#section-2, #section-3 {
+    gap: 4px !important;
+}
+
+#section-2 .medical-form, #section-3 .medical-form {
+    gap: 4px;
+}
+
+/* Specific section type compacting */
+.composition-section, .glucose-section, .heart-section, .ecg-section, .respiratory-section {
+    margin-bottom: 4px !important;
+}
+
+#section-2 .composition-section, #section-2 .glucose-section,
+#section-3 .heart-section, #section-3 .ecg-section, #section-3 .respiratory-section {
+    padding: 6px !important;
+    margin-bottom: 3px !important;
+}
+
+.form-section {
+    background: white;
+    border-radius: 6px;
+    padding: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border: 1px solid #e8f4fd;
+    margin-bottom: 4px;
+}
+
+.form-section h3 {
+    color: #2c3e50;
+    margin-bottom: 4px;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-description {
+    color: #7f8c8d;
+    margin-bottom: 6px;
+    font-style: italic;
+    font-size: 0.8em;
+}
+
+.vitals-subsection {
+    margin-bottom: 8px;
+}
+
+.vitals-subsection h4 {
+    color: #34495e;
+    margin-bottom: 6px;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.vitals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 2px;
+    font-size: 0.85em;
+}
+
+.vital-input input, .vital-input textarea {
+    padding: 6px;
+    border: 1px solid #e8f4fd;
+    border-radius: 4px;
+    font-size: 0.85em;
+    transition: all 0.3s ease;
+    background-color: #fafbfc;
+}
+
+.vital-input input:focus, .vital-input textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    background-color: white;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+}
+
+.vital-range {
+    font-size: 0.75em;
+    color: #7f8c8d;
+    margin-top: 2px;
+    font-style: italic;
+}
+
+.file-input input[type="file"] {
+    padding: 4px;
+    border: 1px dashed #bdc3c7;
+    border-radius: 4px;
+    background-color: #fafbfc;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.file-input input[type="file"]:hover {
+    border-color: #3498db;
+    background-color: #f8f9fa;
+}
+
+.file-hint {
+    font-size: 0.75em;
+    color: #7f8c8d;
+    margin-top: 2px;
+}
+
+.radio-group-inline {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 3px;
+}
+
+.radio-inline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
+}
+
+.radio-inline input[type="radio"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #3498db, #2ecc71);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 0.9em;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+.btn-submit:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.submit-container {
+    text-align: center;
+}
+
+.submit-note {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+/* Color classes for icons */
+.text-red { color: #e74c3c; }
+.text-blue { color: #3498db; }
+.text-purple { color: #9b59b6; }
+.text-green { color: #27ae60; }
+.text-orange { color: #f39c12; }
+.text-cyan { color: #1abc9c; }
+.text-indigo { color: #6c5ce7; }
+
+/* Pagination Controls Styles */
+.pagination-controls {
+    margin-bottom: 6px;
+    padding: 4px;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.pagination-dots {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.pagination-dots::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 30px;
+    right: 30px;
+    height: 1px;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+.dot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+    padding: 3px;
+    border-radius: 4px;
+}
+
+.dot:hover {
+    background: rgba(52, 152, 219, 0.1);
+}
+
+.dot-number {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #e9ecef;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 10px;
+    margin-bottom: 2px;
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.dot-label {
+    font-size: 9px;
+    color: #6c757d;
+    font-weight: 500;
+    max-width: 80px;
+    line-height: 1.1;
+    transition: color 0.3s ease;
+}
+
+.dot.active .dot-number {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border-color: #3498db;
+    transform: scale(1.05);
+}
+
+.dot.active .dot-label {
+    color: #3498db;
+    font-weight: 600;
+}
+
+.dot.completed .dot-number {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+    border-color: #27ae60;
+}
+
+.dot.completed .dot-label {
+    color: #27ae60;
+    font-weight: 500;
+}
+
+/* Form Section Styles */
+.form-section-page {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Extra compact styling for form pages 2 and 3 */
+#section-2.form-section-page, #section-3.form-section-page {
+    padding: 6px 0;
+    line-height: 1.3;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Section Navigation Styles */
+.section-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.btn-navigation {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 100px;
+    justify-content: center;
+}
+
+.btn-navigation:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2980b9, #21618c);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.2);
+}
+
+.btn-navigation:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-navigation.btn-prev {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+}
+
+.btn-navigation.btn-prev:hover:not(:disabled) {
+    background: linear-gradient(135deg, #5a6268, #495057);
+}
+
+/* Responsive Design for Pagination */
+@media (max-width: 768px) {
+    .pagination-dots {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .pagination-dots::before {
+        display: none;
+    }
+    
+    .dot {
+        flex: 1;
+        min-width: 60px;
+    }
+    
+    .dot-label {
+        font-size: 8px;
+        max-width: 60px;
+    }
+    
+    .dot-number {
+        width: 18px;
+        height: 18px;
+        font-size: 9px;
+        margin-bottom: 2px;
+    }
+    
+    .section-navigation {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .btn-navigation {
+        width: 100%;
+        max-width: 150px;
+    }
+}
+
+/* AI Insights Styling */
+.ai-insights-container {
+    margin-top: 10px;
+    border: 1px solid #e8f4fd;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #f8fbff, #f0f8ff);
+    overflow: hidden;
+}
+
+.insights-header {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.insights-header h5 {
+    margin: 0;
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.insights-loader {
+    font-size: 0.75em;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.insights-content {
+    padding: 10px;
+    font-size: 0.8em;
+    line-height: 1.4;
+    color: #2c3e50;
+}
+
+.insight-section {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.insight-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.insight-label {
+    font-weight: 600;
+    color: #2980b9;
+    margin-bottom: 2px;
+}
+
+.insight-value {
+    color: #34495e;
+    margin-bottom: 4px;
+}
+
+.confidence-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.confidence-high {
+    background-color: #d5f4e6;
+    color: #27ae60;
+}
+
+.confidence-medium {
+    background-color: #fef9e7;
+    color: #f39c12;
+}
+
+.confidence-low {
+    background-color: #fadbd8;
+    color: #e74c3c;
+}
+
+.upload-status {
+    margin-top: 8px;
+    font-size: 0.85em;
+    padding: 6px 10px;
+    border-radius: 5px;
+    display: none;
+}
+
+.upload-success {
+    background-color: #d5f4e6;
+    color: #27ae60;
+    border: 1px solid #27ae60;
+}
+
+.upload-error {
+    background-color: #fadbd8;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+.upload-analyzing {
+    background-color: #e8f4fd;
+    color: #3498db;
+    border: 1px solid #3498db;
+}
+
+/* Enhanced Medical Documentation Upload Styling */
+.upload-form-container {
+    margin-bottom: 30px;
+}
+
+.upload-form-card {
+    border: 1px solid #e8f4fd;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ffffff, #f8fbff);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.upload-form-card:hover {
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.12);
+    transform: translateY(-2px);
+}
+
+.upload-form-header {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e8f4fd;
+}
+
+.upload-form-header h4 {
+    margin: 0;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.upload-form-content {
+    padding: 25px;
+}
+
+/* Category Selection Styling */
+.category-selection {
+    margin-bottom: 20px;
+}
+
+.dropdown-container {
+    position: relative;
+}
+
+.category-dropdown {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e8f4fd;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+}
+
+.category-dropdown:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.category-dropdown:hover {
+    border-color: #3498db;
+}
+
+.category-tooltip {
+    background: #2c3e50;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.category-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* File Upload Section */
+.file-upload-section {
+    margin-bottom: 20px;
+}
+
+.custom-file-input {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+}
+
+.custom-file-input input[type="file"] {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+}
+
+.file-input-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    border: 3px dashed #bdc3c7;
+    border-radius: 8px;
+    background: #fafbfc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 120px;
+}
+
+.file-input-label:hover {
+    border-color: #3498db;
+    background: #f0f8ff;
+    transform: translateY(-2px);
+}
+
+.file-input-label.has-file {
+    border-color: #27ae60;
+    background: #f0fdf4;
+    border-style: solid;
+}
+
+.file-input-label i {
+    font-size: 2em;
+    color: #7f8c8d;
+    transition: color 0.3s ease;
+}
+
+.file-input-label:hover i {
+    color: #3498db;
+}
+
+.file-input-label.has-file i {
+    color: #27ae60;
+}
+
+/* Caption Section */
+.caption-section {
+    margin-bottom: 20px;
+}
+
+.caption-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e8f4fd;
+    border-radius: 8px;
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+}
+
+.caption-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* Model Selection */
+.model-selection {
+    margin-bottom: 25px;
+}
+
+.model-dropdown {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e8f4fd;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.model-dropdown:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* Process Button */
+.process-section {
+    text-align: center;
+}
+
+.btn-process-upload {
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+    justify-content: center;
+}
+
+.btn-process-upload:hover:not(:disabled) {
+    background: linear-gradient(135deg, #7d3c98, #8e44ad);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(142, 68, 173, 0.3);
+}
+
+.btn-process-upload:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Upload History Section */
+.upload-history-section {
+    margin-top: 40px;
+    border-top: 2px solid #e8f4fd;
+    padding-top: 30px;
+}
+
+.history-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.history-header h4 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1.2em;
+}
+
+.history-description {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.history-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* History Item Styling */
+.history-item {
+    border: 1px solid #e8f4fd;
+    border-radius: 10px;
+    background: white;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.history-item:hover {
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.1);
+    transform: translateY(-1px);
+}
+
+.history-item-header {
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border-bottom: 1px solid #e8f4fd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.history-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.history-item-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.95em;
+}
+
+.category-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.category-badge.laboratory { background: #e8f5e8; color: #27ae60; }
+.category-badge.imaging { background: #e3f2fd; color: #2196f3; }
+.category-badge.signaling { background: #fff3e0; color: #ff9800; }
+.category-badge.multimedia { background: #f3e5f5; color: #9c27b0; }
+
+.history-item-details {
+    color: #7f8c8d;
+    font-size: 0.85em;
+}
+
+.history-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-toggle-insights {
+    background: none;
+    border: none;
+    color: #3498db;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+}
+
+.btn-toggle-insights:hover {
+    background: #e3f2fd;
+    color: #2196f3;
+}
+
+.btn-delete-item {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-delete-item:hover {
+    background: #c0392b;
+    transform: scale(1.1);
+}
+
+.history-item-insights {
+    padding: 20px;
+    background: #fafbfc;
+    border-top: 1px solid #e8f4fd;
+    display: none !important;
+}
+
+.history-item-insights.expanded {
+    display: block !important;
+    visibility: visible !important;
+}
+
+.insights-content {
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: #2c3e50 !important;
+    background: #ffffff !important;
+}
+
+.insight-section {
+    margin-bottom: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.insight-label {
+    font-weight: 600;
+    color: #34495e !important;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.insight-value {
+    color: #2c3e50 !important;
+    line-height: 1.6;
+    background: #ffffff !important;
+}
+
+.insight-value ul {
+    margin: 10px 0 !important;
+    padding-left: 20px !important;
+}
+
+.insight-value li {
+    margin-bottom: 8px !important;
+    color: #2c3e50 !important;
+}
+
+.confidence-badge {
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.confidence-high {
+    background: #27ae60 !important;
+    color: #ffffff !important;
+}
+
+.confidence-medium {
+    background: #f39c12 !important;
+    color: #ffffff !important;
+}
+
+.confidence-low {
+    background: #e74c3c !important;
+    color: #ffffff !important;
+}
+
+/* Form Labels */
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+.form-group label::after {
+    content: "*";
+    color: #e74c3c;
+    margin-left: 3px;
+}
+
+.caption-section label::after {
+    display: none; /* Caption is optional */
+}
+
+.model-selection label::after {
+    display: none; /* Model has default */
+}
+
+/* Loading States */
+.processing {
+    position: relative;
+    overflow: hidden;
+}
+
+.processing::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.2), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .upload-form-content {
+        padding: 20px 15px;
+    }
+    
+    .file-input-label {
+        min-height: 100px;
+        padding: 15px;
+    }
+    
+    .btn-process-upload {
+        width: 100%;
+        padding: 12px 20px;
+    }
+    
+    .history-item-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .history-item-actions {
+        align-self: flex-end;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .vitals-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .radio-group-inline {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .step-container {
+        padding: 15px;
+    }
+    
+    .form-section {
+        padding: 20px;
+    }
+}
+</style>
+
+<script>
+// Pagination variables
+let currentSection = 1;
+const totalSections = 3;
+
+// Debug function to show what data will be submitted
+function debugFormSubmission() {
+    console.log('=== FORM SUBMISSION DEBUG ===');
+    
+    const form = document.getElementById('vitalsForm');
+    if (!form) {
+        console.error('Form not found!');
+        return;
+    }
+    
+    const formData = new FormData(form);
+    
+    console.log('📋 Vital Signs form fields:');
+    for (let [key, value] of formData.entries()) {
+        if (typeof value === 'string') {
+            console.log(`  ${key}: ${value}`);
+        } else {
+            console.log(`  ${key}: [File: ${value.name}]`);
+        }
+    }
+    
+    console.log('=== END DEBUG ===');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('vitalsForm');
+    
+    // Initialize pagination
+    initializePagination();
+    
+    // Form submission with comprehensive validation
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitFormData();
+    });
+    
+    // Add validation for blood pressure (systolic should be higher than diastolic)
+    const systolicInput = document.getElementById('systolic_bp');
+    const diastolicInput = document.getElementById('diastolic_bp');
+    
+    function validateBloodPressure() {
+        const systolicInput = document.getElementById('systolic_bp');
+        const diastolicInput = document.getElementById('diastolic_bp');
+        
+        if (!systolicInput || !diastolicInput) {
+            console.warn('Blood pressure inputs not found');
+            return;
+        }
+        
+        const systolic = parseFloat(systolicInput.value);
+        const diastolic = parseFloat(diastolicInput.value);
+        
+        if (systolic && diastolic && systolic <= diastolic) {
+            diastolicInput.setCustomValidity('Diastolic pressure must be lower than systolic pressure');
+        } else {
+            diastolicInput.setCustomValidity('');
+        }
+    }
+    
+    systolicInput.addEventListener('input', validateBloodPressure);
+    diastolicInput.addEventListener('input', validateBloodPressure);
+    
+    // Add temperature validation based on selected unit
+    const temperatureInput = document.getElementById('temperature');
+    const temperatureUnitRadios = document.querySelectorAll('input[name="temperature_unit"]');
+    
+    function validateTemperature() {
+        const temperature = parseFloat(temperatureInput.value);
+        const selectedUnit = document.querySelector('input[name="temperature_unit"]:checked')?.value || 'celsius';
+        
+        console.log('Temperature validation:', temperature, 'Unit:', selectedUnit);
+        
+        if (temperature) {
+            let isValid = false;
+            let errorMessage = '';
+            
+            if (selectedUnit === 'celsius') {
+                if (temperature >= 25 && temperature <= 45) {
+                    isValid = true;
+                } else {
+                    errorMessage = 'Temperature in Celsius should be between 25°C and 45°C';
+                }
+                
+                temperatureInput.placeholder = 'e.g., 36.5';
+                const rangeHint = temperatureInput.parentElement.querySelector('.vital-range');
+                rangeHint.textContent = 'Normal: 36.1-37.5°C (97.0-99.5°F)';
+                
+            } else if (selectedUnit === 'fahrenheit') {
+                if (temperature >= 77 && temperature <= 113) {
+                    isValid = true;
+                } else {
+                    errorMessage = 'Temperature in Fahrenheit should be between 77°F and 113°F';
+                }
+                
+                temperatureInput.placeholder = 'e.g., 98.6';
+                const rangeHint = temperatureInput.parentElement.querySelector('.vital-range');
+                rangeHint.textContent = 'Normal: 97.0-99.5°F (36.1-37.5°C)';
+            }
+            
+            console.log('Validation result:', isValid, errorMessage);
+            
+            if (isValid) {
+                temperatureInput.setCustomValidity('');
+                temperatureInput.style.borderColor = '#e8f4fd';
+            } else {
+                temperatureInput.setCustomValidity(errorMessage);
+                temperatureInput.style.borderColor = '#e74c3c';
+            }
+        } else {
+            temperatureInput.setCustomValidity('');
+            temperatureInput.style.borderColor = '#e8f4fd';
+        }
+    }
+    
+    // Dedicated temperature validation function for form submission
+    function validateTemperatureForSubmit() {
+        const temperatureInput = document.getElementById('temperature');
+        if (!temperatureInput) {
+            return {
+                isValid: false,
+                error: 'Temperature input field not found'
+            };
+        }
+        
+        const temperature = parseFloat(temperatureInput.value);
+        const selectedUnit = document.querySelector('input[name="temperature_unit"]:checked')?.value || 'celsius';
+        
+        console.log('Form submit temperature validation:', temperature, 'Unit:', selectedUnit);
+        
+        if (!temperature || isNaN(temperature)) {
+            return {
+                isValid: false,
+                error: 'Body temperature is required'
+            };
+        }
+        
+        let isValid = false;
+        let errorMessage = '';
+        
+        if (selectedUnit === 'celsius') {
+            if (temperature >= 25 && temperature <= 45) {
+                isValid = true;
+            } else {
+                errorMessage = `Temperature ${temperature}°C is invalid. Celsius temperature should be between 25°C and 45°C`;
+            }
+        } else if (selectedUnit === 'fahrenheit') {
+            if (temperature >= 77 && temperature <= 113) {
+                isValid = true;
+            } else {
+                errorMessage = `Temperature ${temperature}°F is invalid. Fahrenheit temperature should be between 77°F and 113°F`;
+            }
+        } else {
+            errorMessage = 'Please select a temperature unit (Celsius or Fahrenheit)';
+        }
+        
+        console.log('Form submit validation result:', isValid, errorMessage);
+        
+        return {
+            isValid: isValid,
+            error: errorMessage
+        };
+    }
+    
+    // Add event listeners for temperature validation
+    temperatureInput.addEventListener('input', validateTemperature);
+    temperatureUnitRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            validateTemperature();
+        });
+    });
+    
+    // Initial temperature validation setup
+    validateTemperature();
+});
+
+// Enhanced Medical Documentation Upload System
+let availableModels = ['gpt-4o', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4.1-nano', 'gpt-5', 'gpt-5-mini', 'gpt-5-nano']; // Fallback
+let uploadHistory = [];
+let uploadCounter = 0;
+
+async function initializeMultiUpload() {
+    // Fetch available models from backend
+    try {
+        const response = await fetch('/get_available_models');
+        const result = await response.json();
+        if (result.success) {
+            availableModels = result.models;
+            console.log('Available models loaded:', availableModels);
+        } else {
+            console.warn('Failed to load models from backend, using fallback');
+        }
+    } catch (error) {
+        console.error('Error fetching available models:', error);
+    }
+    
+    // Initialize the upload form
+    initializeUploadForm();
+}
+
+function initializeUploadForm() {
+    // Populate model dropdown
+    const modelSelect = document.getElementById('ai-model');
+    if (modelSelect) {
+        modelSelect.innerHTML = '';
+        availableModels.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model;
+            option.textContent = model;
+            if (model === 'gpt-4.1-nano') option.selected = true;
+            modelSelect.appendChild(option);
+        });
+    }
+    
+    // Add event listeners
+    setupEventListeners();
+    
+    // Run initial validation to set proper button state
+    validateUploadForm();
+}
+
+function setupEventListeners() {
+    // Category dropdown change handler
+    const categorySelect = document.getElementById('upload-category');
+    if (categorySelect) {
+        categorySelect.addEventListener('change', function() {
+            const tooltip = document.getElementById('category-tooltip');
+            const selectedOption = this.options[this.selectedIndex];
+            
+            if (selectedOption.dataset.tooltip && this.value) {
+                tooltip.textContent = selectedOption.dataset.tooltip;
+                tooltip.classList.add('show');
+            } else {
+                tooltip.classList.remove('show');
+            }
+            
+            validateUploadForm();
+        });
+    }
+    
+    // File input change handler
+    const fileInput = document.getElementById('medical-file');
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            handleFileSelection(this);
+            validateUploadForm();
+        });
+    }
+    
+    // Caption input handler
+    const captionInput = document.getElementById('upload-caption');
+    if (captionInput) {
+        captionInput.addEventListener('input', validateUploadForm);
+    }
+    
+    // Process button handler
+    const processBtn = document.getElementById('process-upload-btn');
+    if (processBtn) {
+        processBtn.addEventListener('click', processUpload);
+    }
+}
+
+function handleFileSelection(fileInput) {
+    const fileLabel = document.getElementById('file-label');
+    
+    if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        
+        // Validate file size (10MB limit)
+        if (file.size > 10 * 1024 * 1024) {
+            alert('File size must be less than 10MB');
+            fileInput.value = '';
+            return;
+        }
+        
+        // Update file label
+        fileLabel.classList.add('has-file');
+        fileLabel.innerHTML = `
+            <i class="fas fa-check-circle"></i>
+            <span>${file.name}</span>
+            <small>File ready for upload (${(file.size / 1024 / 1024).toFixed(2)} MB)</small>
+        `;
+    } else {
+        // Reset file label
+        fileLabel.classList.remove('has-file');
+        fileLabel.innerHTML = `
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Click to upload file</span>
+            <small>Images, PDFs, or documents up to 10MB</small>
+        `;
+    }
+}
+
+function validateUploadForm() {
+    const categorySelect = document.getElementById('upload-category');
+    const fileInput = document.getElementById('medical-file');
+    const processBtn = document.getElementById('process-upload-btn');
+    
+    const hasCategory = categorySelect && categorySelect.value;
+    const hasFile = fileInput && fileInput.files && fileInput.files[0];
+    const isValid = hasCategory && hasFile;
+    
+    // Debug logging
+    console.log('Upload validation check:', {
+        categorySelect: !!categorySelect,
+        categoryValue: categorySelect ? categorySelect.value : 'null',
+        fileInput: !!fileInput,
+        fileCount: fileInput && fileInput.files ? fileInput.files.length : 0,
+        hasCategory,
+        hasFile,
+        isValid
+    });
+    
+    if (processBtn) {
+        processBtn.disabled = !isValid;
+        
+        // Update button text based on validation state
+        if (!hasCategory && !hasFile) {
+            processBtn.innerHTML = '<i class="fas fa-brain"></i> Select category and file first';
+        } else if (!hasCategory) {
+            processBtn.innerHTML = '<i class="fas fa-brain"></i> Select document category';
+        } else if (!hasFile) {
+            processBtn.innerHTML = '<i class="fas fa-brain"></i> Select file to upload';
+        } else {
+            processBtn.innerHTML = '<i class="fas fa-brain"></i> Process & Analyze';
+        }
+        
+        console.log('Button state:', {
+            disabled: processBtn.disabled,
+            text: processBtn.innerHTML
+        });
+    } else {
+        console.log('Process button not found!');
+    }
+    
+    return isValid;
+}
+
+// Test function for debugging - can be called from browser console
+function testValidation() {
+    console.log('=== Manual Upload Validation Test ===');
+    validateUploadForm();
+    console.log('=== End Test ===');
+}
+
+// Test function to manually enable button - for debugging
+function forceEnableButton() {
+    const processBtn = document.getElementById('process-upload-btn');
+    if (processBtn) {
+        processBtn.disabled = false;
+        processBtn.innerHTML = '<i class="fas fa-brain"></i> Process & Analyze';
+        processBtn.style.background = 'linear-gradient(135deg, #3498db, #2980b9)';
+        console.log('Button force-enabled');
+    } else {
+        console.log('Button not found!');
+    }
+}
+
+// Test function to check upload history
+function checkUploadHistory() {
+    console.log('Upload History:', {
+        historyLength: uploadHistory.length,
+        uploadCounter: uploadCounter,
+        history: uploadHistory
+    });
+    
+    const historySection = document.getElementById('upload-history-section');
+    const historyContainer = document.getElementById('history-container');
+    
+    console.log('History DOM elements:', {
+        historySection: !!historySection,
+        historyContainer: !!historyContainer,
+        historySectionStyle: historySection ? historySection.style.display : 'null',
+        historyContainerHTML: historyContainer ? historyContainer.innerHTML.length : 0
+    });
+}
+
+// Test function to create a sample history item for testing
+function createTestHistoryItem() {
+    const testUpload = {
+        id: 999,
+        category: 'laboratory',
+        categoryLabel: 'Laboratory Reports',
+        filename: 'test-blood.jpg',
+        caption: 'Test blood report',
+        model: 'gpt-4.1-nano',
+        timestamp: new Date().toISOString(),
+        fileSize: 150000,
+        insights: {
+            general_findings: 'This is a test blood report analysis.',
+            specific_observations: ['Test observation 1', 'Test observation 2'],
+            confidence_level: 'High',
+            recommendations: 'Test recommendations for follow-up.',
+            concerns: ['Test concern about values']
+        },
+        status: 'completed'
+    };
+    
+    uploadHistory.unshift(testUpload);
+    updateUploadHistory();
+    console.log('Test history item created');
+}
+
+// Test function to manually show history section
+function forceShowHistory() {
+    const historySection = document.getElementById('upload-history-section');
+    if (historySection) {
+        historySection.style.display = 'block';
+        historySection.style.visibility = 'visible';
+        historySection.style.backgroundColor = '#ffeb3b'; // Yellow highlight for testing
+        historySection.style.border = '3px solid red'; // Red border for testing
+        console.log('History section forced to show with highlighting');
+        console.log('Current style:', historySection.style.cssText);
+        
+        // Scroll to it
+        historySection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+    } else {
+        console.log('History section not found');
+    }
+}
+
+// Test function to highlight and scroll to history
+function findHistorySection() {
+    const historySection = document.getElementById('upload-history-section');
+    if (historySection) {
+        // Add bright highlighting
+        historySection.style.backgroundColor = '#ff5722';
+        historySection.style.color = 'white';
+        historySection.style.padding = '20px';
+        historySection.style.border = '5px solid yellow';
+        historySection.style.display = 'block';
+        
+        // Scroll to it
+        historySection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+        
+        console.log('History section highlighted and scrolled to');
+        
+        // Remove highlighting after 5 seconds
+        setTimeout(() => {
+            historySection.style.backgroundColor = '';
+            historySection.style.color = '';
+            historySection.style.border = '';
+            historySection.style.padding = '';
+        }, 5000);
+    }
+}
+
+// Test function to debug insights display
+function debugInsights(uploadId = 1) {
+    const insightsDiv = document.getElementById(`insights-${uploadId}`);
+    if (insightsDiv) {
+        console.log('Insights div found:', {
+            id: insightsDiv.id,
+            className: insightsDiv.className,
+            innerHTML: insightsDiv.innerHTML,
+            innerText: insightsDiv.innerText,
+            display: window.getComputedStyle(insightsDiv).display,
+            visibility: window.getComputedStyle(insightsDiv).visibility,
+            height: window.getComputedStyle(insightsDiv).height,
+            childElementCount: insightsDiv.childElementCount
+        });
+        
+        // Add temporary styling to make it visible
+        insightsDiv.style.backgroundColor = 'yellow';
+        insightsDiv.style.border = '2px solid red';
+        insightsDiv.style.minHeight = '100px';
+        insightsDiv.style.display = 'block';
+        
+        console.log('Insights div styled for debugging');
+    } else {
+        console.log('Insights div not found for upload:', uploadId);
+    }
+}
+
+// Force show insights with aggressive styling
+function forceShowInsights(uploadId = 1) {
+    const insightsDiv = document.getElementById(`insights-${uploadId}`);
+    if (insightsDiv) {
+        // First, try injecting simple test content
+        insightsDiv.innerHTML = `
+            <div style="background: red; color: white; padding: 20px; font-size: 18px; font-weight: bold;">
+                TEST CONTENT - If you can see this, the container works!
+            </div>
+            <div style="background: green; color: white; padding: 15px; margin-top: 10px;">
+                <h3>Medical Analysis Test</h3>
+                <p>This is test content to verify the insights container is working properly.</p>
+                <ul>
+                    <li>Test finding 1</li>
+                    <li>Test finding 2</li>
+                    <li>Test finding 3</li>
+                </ul>
+            </div>
+        `;
+        
+        // Aggressive inline styling to override any CSS
+        insightsDiv.style.cssText = `
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+            padding: 0 !important;
+            background: #ffffff !important;
+            border: 5px solid #ff0000 !important;
+            margin: 10px 0 !important;
+            position: relative !important;
+            z-index: 9999 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            min-height: 200px !important;
+        `;
+        
+        insightsDiv.classList.add('expanded');
+        
+        // Also update the button
+        const toggleBtn = document.getElementById(`toggle-btn-${uploadId}`);
+        if (toggleBtn) {
+            toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Hide Analysis';
+        }
+        
+        console.log('Test content injected into insights div');
+        
+        // Scroll to it
+        insightsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+        console.log('Insights div not found');
+    }
+}
+
+// Test function to inject original content back
+function restoreOriginalInsights(uploadId = 1) {
+    const upload = uploadHistory.find(u => u.id === uploadId);
+    if (upload && upload.insights) {
+        const insightsDiv = document.getElementById(`insights-${uploadId}`);
+        if (insightsDiv) {
+            insightsDiv.innerHTML = formatInsights(upload.insights);
+            console.log('Original insights content restored');
+        }
+    }
+}
+
+// Simple test to show insights with proper styling
+function showInsightsWithStyling(uploadId = 1) {
+    const insightsDiv = document.getElementById(`insights-${uploadId}`);
+    if (insightsDiv) {
+        // Apply proper styling for text visibility
+        insightsDiv.style.cssText = `
+            display: block !important;
+            visibility: visible !important;
+            background: #ffffff !important;
+            color: #000000 !important;
+            padding: 20px !important;
+            border: 2px solid #007bff !important;
+            font-family: Arial, sans-serif !important;
+            font-size: 14px !important;
+            line-height: 1.5 !important;
+            margin: 10px 0 !important;
+        `;
+        
+        // Ensure all child elements have proper text color
+        const allElements = insightsDiv.querySelectorAll('*');
+        allElements.forEach(el => {
+            el.style.color = '#000000';
+            el.style.backgroundColor = 'transparent';
+        });
+        
+        insightsDiv.classList.add('expanded');
+        
+        console.log('Insights styled for maximum visibility');
+        console.log('Text content preview:', insightsDiv.textContent.substring(0, 200));
+        
+        // Scroll to it
+        insightsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+        console.log('Insights div not found');
+    }
+}
+
+async function processUpload() {
+    const categorySelect = document.getElementById('upload-category');
+    const fileInput = document.getElementById('medical-file');
+    const captionInput = document.getElementById('upload-caption');
+    const modelSelect = document.getElementById('ai-model');
+    const processBtn = document.getElementById('process-upload-btn');
+    
+    if (!validateUploadForm()) {
+        alert('Please select a category and upload a file before processing.');
+        return;
+    }
+    
+    uploadCounter++;
+    
+    // Show processing state
+    processBtn.disabled = true;
+    processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    processBtn.classList.add('processing');
+    
+    // Create upload data object
+    const uploadData = {
+        id: uploadCounter,
+        category: categorySelect.value,
+        categoryLabel: categorySelect.options[categorySelect.selectedIndex].text,
+        filename: fileInput.files[0].name,
+        caption: captionInput.value || 'No caption provided',
+        model: modelSelect.value,
+        timestamp: new Date().toISOString(),
+        fileSize: fileInput.files[0].size,
+        insights: null,
+        status: 'processing'
+    };
+    
+    try {
+        // Call AI analysis
+        const formData = new FormData();
+        formData.append('image', fileInput.files[0]);
+        formData.append('photo_type', categorySelect.value);
+        formData.append('custom_prompt', generateCategoryPrompt(categorySelect.value, captionInput.value));
+        formData.append('selected_model', modelSelect.value);
+        
+        const response = await fetch('/analyze_medical_photo_custom', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            uploadData.insights = result.insights;
+            uploadData.status = 'completed';
+            
+            // Add to history
+            uploadHistory.unshift(uploadData); // Add to beginning of array
+            
+            // Update UI
+            updateUploadHistory();
+            resetUploadForm();
+            
+            // Show success message
+            showTemporaryMessage('Document processed successfully!', 'success');
+            
+        } else {
+            throw new Error(result.error || 'Analysis failed');
+        }
+        
+    } catch (error) {
+        console.error('Upload processing error:', error);
+        uploadData.status = 'error';
+        uploadData.error = error.message;
+        
+        // Still add to history to show error state
+        uploadHistory.unshift(uploadData);
+        updateUploadHistory();
+        
+        showTemporaryMessage('Processing failed: ' + error.message, 'error');
+    } finally {
+        // Reset process button
+        processBtn.disabled = false;
+        processBtn.innerHTML = '<i class="fas fa-brain"></i> Process & Analyze';
+        processBtn.classList.remove('processing');
+    }
+}
+
+function generateCategoryPrompt(category, caption) {
+    const prompts = {
+        laboratory: `Analyze this laboratory report. ${caption ? 'User notes: ' + caption : ''} Please provide detailed analysis of the test results, identify any abnormal values, and suggest clinical significance.`,
+        imaging: `Analyze this medical imaging report/image. ${caption ? 'User notes: ' + caption : ''} Please examine for any abnormalities, describe key findings, and provide clinical interpretations.`,
+        signaling: `Analyze this electrophysiological signal/report. ${caption ? 'User notes: ' + caption : ''} Please interpret the signal patterns, identify any abnormalities, and provide clinical significance.`,
+        multimedia: `Analyze this medical photograph/image. ${caption ? 'User notes: ' + caption : ''} Please examine for visual abnormalities, describe any concerning features, and provide medical observations.`
+    };
+    
+    return prompts[category] || `Analyze this medical document. ${caption ? 'User notes: ' + caption : ''} Please provide detailed medical analysis and observations.`;
+}
+
+function updateUploadHistory() {
+    const historySection = document.getElementById('upload-history-section');
+    const historyContainer = document.getElementById('history-container');
+    
+    console.log('updateUploadHistory called:', {
+        historyLength: uploadHistory.length,
+        historySection: !!historySection,
+        historyContainer: !!historyContainer
+    });
+    
+    if (uploadHistory.length > 0) {
+        console.log('Setting history section to display: block');
+        historySection.style.display = 'block';
+        
+        historyContainer.innerHTML = '';
+        
+        uploadHistory.forEach(upload => {
+            console.log('Creating history item for upload:', upload.id);
+            const historyItem = createHistoryItem(upload);
+            historyContainer.appendChild(historyItem);
+        });
+        
+        console.log('History section display after update:', historySection.style.display);
+        console.log('History container children count:', historyContainer.children.length);
+        
+        // Scroll to history section to make it visible
+        setTimeout(() => {
+            historySection.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }, 300);
+    } else {
+        console.log('No history items, hiding section');
+        historySection.style.display = 'none';
+    }
+}
+
+function createHistoryItem(upload) {
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    item.id = `history-item-${upload.id}`;
+    
+    const categoryIcon = getCategoryIcon(upload.category);
+    const statusIcon = getStatusIcon(upload.status);
+    
+    item.innerHTML = `
+        <div class="history-item-header" onclick="toggleInsights(${upload.id})">
+            <div class="history-item-info">
+                <div class="history-item-category">
+                    <i class="${categoryIcon}"></i>
+                    <span>${upload.categoryLabel}</span>
+                    <span class="category-badge ${upload.category}">${upload.category}</span>
+                    ${statusIcon}
+                </div>
+                <div class="history-item-details">
+                    <strong>${upload.filename}</strong> • ${upload.caption} • ${upload.model}
+                    <br><small>${formatTimestamp(upload.timestamp)} • ${(upload.fileSize / 1024 / 1024).toFixed(2)} MB</small>
+                </div>
+            </div>
+            <div class="history-item-actions">
+                <button type="button" class="btn-toggle-insights" id="toggle-btn-${upload.id}">
+                    <i class="fas fa-chevron-down"></i> View Analysis
+                </button>
+                <button type="button" class="btn-delete-item" onclick="deleteHistoryItem(${upload.id})" title="Delete this upload">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        <div class="history-item-insights" id="insights-${upload.id}">
+            ${upload.status === 'completed' ? formatInsights(upload.insights) : getStatusMessage(upload)}
+        </div>
+    `;
+    
+    return item;
+}
+
+function getCategoryIcon(category) {
+    const icons = {
+        laboratory: 'fas fa-flask',
+        imaging: 'fas fa-x-ray',
+        signaling: 'fas fa-chart-line',
+        multimedia: 'fas fa-camera'
+    };
+    return icons[category] || 'fas fa-file';
+}
+
+function getStatusIcon(status) {
+    const icons = {
+        completed: '<i class="fas fa-check-circle" style="color: #27ae60; margin-left: 8px;" title="Analysis Complete"></i>',
+        processing: '<i class="fas fa-spinner fa-spin" style="color: #3498db; margin-left: 8px;" title="Processing..."></i>',
+        error: '<i class="fas fa-exclamation-triangle" style="color: #e74c3c; margin-left: 8px;" title="Error occurred"></i>'
+    };
+    return icons[status] || '';
+}
+
+function getStatusMessage(upload) {
+    if (upload.status === 'error') {
+        return `
+            <div class="insights-content">
+                <div class="insight-section">
+                    <div class="insight-label" style="color: #e74c3c;">Processing Error</div>
+                    <div class="insight-value" style="color: #e74c3c;">
+                        ${upload.error || 'An error occurred during processing. Please try again.'}
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (upload.status === 'processing') {
+        return `
+            <div class="insights-content">
+                <div class="insight-section">
+                    <div class="insight-label">Status</div>
+                    <div class="insight-value">
+                        <i class="fas fa-spinner fa-spin"></i> Processing document with AI analysis...
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    return '<div class="insights-content">No analysis available.</div>';
+}
+
+function formatInsights(insights) {
+    console.log('formatInsights called with:', insights);
+    let html = '<div class="insights-content" style="color: #000000 !important; background: #ffffff !important; padding: 15px !important;">';
+    
+    if (insights.general_findings) {
+        html += `
+            <div class="insight-section" style="margin-bottom: 15px; color: #000000 !important;">
+                <div class="insight-label" style="font-weight: bold; color: #000000 !important; margin-bottom: 5px;">General Findings</div>
+                <div class="insight-value" style="color: #000000 !important; background: transparent !important;">${insights.general_findings}</div>
+            </div>
+        `;
+        console.log('Added general findings');
+    }
+    
+    if (insights.specific_observations && insights.specific_observations.length > 0) {
+        html += `
+            <div class="insight-section" style="margin-bottom: 15px; color: #000000 !important;">
+                <div class="insight-label" style="font-weight: bold; color: #000000 !important; margin-bottom: 5px;">Specific Observations</div>
+                <div class="insight-value" style="color: #000000 !important;">
+                    <ul style="margin: 0; padding-left: 20px; color: #000000 !important;">
+                        ${insights.specific_observations.map(obs => `<li style="color: #000000 !important;">${obs}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+        console.log('Added specific observations');
+    }
+    
+    if (insights.confidence_level) {
+        const confidenceClass = `confidence-${insights.confidence_level.toLowerCase()}`;
+        html += `
+            <div class="insight-section" style="margin-bottom: 15px; color: #000000 !important;">
+                <div class="insight-label" style="font-weight: bold; color: #000000 !important; margin-bottom: 5px;">Analysis Confidence</div>
+                <div class="insight-value" style="color: #000000 !important;">
+                    <span class="confidence-badge ${confidenceClass}" style="color: #000000 !important; background: #e8f4fd !important; padding: 3px 8px; border-radius: 3px;">${insights.confidence_level}</span>
+                </div>
+            </div>
+        `;
+        console.log('Added confidence level');
+    }
+    
+    if (insights.recommendations) {
+        html += `
+            <div class="insight-section" style="margin-bottom: 15px; color: #000000 !important;">
+                <div class="insight-label" style="font-weight: bold; color: #000000 !important; margin-bottom: 5px;">Medical Recommendations</div>
+                <div class="insight-value" style="color: #000000 !important; background: transparent !important;">${insights.recommendations}</div>
+            </div>
+        `;
+        console.log('Added recommendations');
+    }
+    
+    if (insights.concerns && insights.concerns.length > 0) {
+        html += `
+            <div class="insight-section" style="margin-bottom: 15px; color: #000000 !important;">
+                <div class="insight-label" style="color: #e74c3c !important; font-weight: bold; margin-bottom: 5px;">⚠️ Areas of Concern</div>
+                <div class="insight-value" style="color: #000000 !important;">
+                    <ul style="margin: 0; padding-left: 20px; color: #000000 !important;">
+                        ${insights.concerns.map(concern => `<li style="color: #e74c3c !important;">${concern}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+    
+    html += '</div>';
+    console.log('formatInsights final HTML length:', html.length);
+    console.log('formatInsights final HTML preview:', html.substring(0, 200) + '...');
+    return html;
+}
+
+function toggleInsights(uploadId) {
+    console.log('toggleInsights called with uploadId:', uploadId);
+    
+    const insightsDiv = document.getElementById(`insights-${uploadId}`);
+    const toggleBtn = document.getElementById(`toggle-btn-${uploadId}`);
+    
+    console.log('Elements found:', {
+        insightsDiv: !!insightsDiv,
+        toggleBtn: !!toggleBtn,
+        insightsDivId: `insights-${uploadId}`,
+        toggleBtnId: `toggle-btn-${uploadId}`
+    });
+    
+    if (insightsDiv && toggleBtn) {
+        if (insightsDiv.classList.contains('expanded')) {
+            // Hide insights
+            insightsDiv.classList.remove('expanded');
+            insightsDiv.style.display = 'none';
+            toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> View Analysis';
+            console.log('Insights hidden');
+        } else {
+            // Show insights with aggressive styling for guaranteed visibility
+            insightsDiv.classList.add('expanded');
+            
+            // Apply multiple layers of styling to ensure visibility
+            insightsDiv.style.cssText = `
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                background-color: #ffffff !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                padding: 20px !important;
+                margin: 10px 0 !important;
+                border: 2px solid #3498db !important;
+                border-radius: 8px !important;
+                font-size: 14px !important;
+                line-height: 1.5 !important;
+                position: relative !important;
+                z-index: 1000 !important;
+                min-height: 100px !important;
+            `;
+            
+            // Force visibility on all descendant elements
+            const allElements = insightsDiv.querySelectorAll('*');
+            allElements.forEach(el => {
+                el.style.cssText += `
+                    color: #000000 !important;
+                    background-color: transparent !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    display: inherit !important;
+                `;
+            });
+            
+            // Force text visibility on specific elements
+            const textElements = insightsDiv.querySelectorAll('.insight-label, .insight-value, div, span, li');
+            textElements.forEach(el => {
+                el.style.cssText += `
+                    color: #000000 !important;
+                    font-weight: normal !important;
+                    text-shadow: none !important;
+                `;
+            });
+            
+            // Debug: Add visible content if empty
+            if (insightsDiv.innerHTML.trim() === '' || insightsDiv.textContent.trim() === '') {
+                console.warn('Insights div appears empty, adding debug content');
+                insightsDiv.innerHTML = '<div style="color: #e74c3c !important; font-weight: bold;">Analysis content not found. Please try uploading and analyzing again.</div>';
+            }
+            
+            toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Hide Analysis';
+            console.log('Insights shown with aggressive styling');
+            
+            // Final verification
+            setTimeout(() => {
+                console.log('Post-styling verification:');
+                console.log('- Display:', window.getComputedStyle(insightsDiv).display);
+                console.log('- Visibility:', window.getComputedStyle(insightsDiv).visibility);
+                console.log('- Opacity:', window.getComputedStyle(insightsDiv).opacity);
+                console.log('- Color:', window.getComputedStyle(insightsDiv).color);
+                console.log('- Background:', window.getComputedStyle(insightsDiv).backgroundColor);
+                console.log('- Content preview:', insightsDiv.textContent.substring(0, 100));
+            }, 100);
+        }
+        
+        console.log('Final insights div classes:', insightsDiv.className);
+        console.log('Final insights div style:', insightsDiv.style.cssText);
+        console.log('Insights div content length:', insightsDiv.innerHTML.length);
+    } else {
+        console.error('Elements not found!', {
+            insightsDiv: insightsDiv,
+            toggleBtn: toggleBtn
+        });
+    }
+}
+
+function deleteHistoryItem(uploadId) {
+    if (confirm('Are you sure you want to delete this upload and its analysis?')) {
+        // Remove from history array
+        uploadHistory = uploadHistory.filter(upload => upload.id !== uploadId);
+        
+        // Update UI
+        updateUploadHistory();
+        
+        showTemporaryMessage('Upload deleted successfully', 'success');
+    }
+}
+
+function resetUploadForm() {
+    // Reset form fields
+    document.getElementById('upload-category').value = '';
+    document.getElementById('medical-file').value = '';
+    document.getElementById('upload-caption').value = '';
+    
+    // Reset file label
+    const fileLabel = document.getElementById('file-label');
+    fileLabel.classList.remove('has-file');
+    fileLabel.innerHTML = `
+        <i class="fas fa-cloud-upload-alt"></i>
+        <span>Click to upload file</span>
+        <small>Images, PDFs, or documents up to 10MB</small>
+    `;
+    
+    // Hide tooltip
+    document.getElementById('category-tooltip').classList.remove('show');
+    
+    // Run validation to update button state
+    validateUploadForm();
+}
+
+function showTemporaryMessage(message, type) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `temporary-message ${type}`;
+    messageDiv.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+        <span>${message}</span>
+    `;
+    
+    // Add to page
+    const container = document.querySelector('.upload-form-container');
+    container.insertBefore(messageDiv, container.firstChild);
+    
+    // Style the message
+    messageDiv.style.cssText = `
+        padding: 12px 16px;
+        margin-bottom: 15px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 500;
+        ${type === 'success' 
+            ? 'background: #d5f4e6; color: #27ae60; border: 1px solid #27ae60;'
+            : 'background: #fadbd8; color: #e74c3c; border: 1px solid #e74c3c;'
+        }
+        animation: slideIn 0.3s ease;
+    `;
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        messageDiv.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => messageDiv.remove(), 300);
+    }, 3000);
+}
+
+function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    return date.toLocaleString();
+}
+
+// Add CSS for temporary messages animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideOut {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(-10px); }
+    }
+`;
+document.head.appendChild(style);
+
+// Pagination Functions
+function initializePagination() {
+// Debug function to test insights visibility
+function forceShowInsights(uploadId) {
+    console.log('Force showing insights for:', uploadId);
+    const insightsDiv = document.getElementById(`insights-${uploadId}`);
+    
+    if (insightsDiv) {
+        // Create test content if empty
+        if (!insightsDiv.innerHTML || insightsDiv.innerHTML.trim() === '') {
+            insightsDiv.innerHTML = `
+                <div style="color: #000000 !important; background: #ffffff !important; padding: 20px; border: 2px solid #3498db;">
+                    <h4 style="color: #000000 !important;">Test Analysis Content</h4>
+                    <p style="color: #000000 !important;">This is a test to ensure content is visible.</p>
+                    <p style="color: #000000 !important;">If you can see this, the styling is working.</p>
+                </div>
+            `;
+        }
+        
+        // Apply extreme visibility styling
+        insightsDiv.style.cssText = `
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            background: #ffffff !important;
+            color: #000000 !important;
+            border: 3px solid #ff0000 !important;
+            padding: 20px !important;
+            margin: 20px 0 !important;
+            font-size: 16px !important;
+            min-height: 100px !important;
+            position: relative !important;
+            z-index: 9999 !important;
+        `;
+        
+        console.log('Forced visibility applied');
+        console.log('Content:', insightsDiv.innerHTML.substring(0, 200));
+    } else {
+        console.error('Insights div not found for ID:', uploadId);
+    }
+}
+
+    // Initialize pagination dots click handlers
+    const dots = document.querySelectorAll('.pagination-dots .dot');
+    dots.forEach(dot => {
+        dot.addEventListener('click', function() {
+            const targetSection = parseInt(this.getAttribute('data-section'));
+            showSection(targetSection);
+        });
+    });
+    
+    // Initialize section 1 as visible
+    showSection(1);
+}
+
+function nextSection() {
+    if (currentSection < totalSections) {
+        showSection(currentSection + 1);
+    } else {
+        submitForm();
+    }
+}
+
+function prevSection() {
+    if (currentSection > 1) {
+        showSection(currentSection - 1);
+    }
+}
+
+function showSection(sectionNumber) {
+    // Hide all sections
+    for (let i = 1; i <= totalSections; i++) {
+        const section = document.getElementById(`section-${i}`);
+        if (section) {
+            section.style.display = 'none';
+        }
+    }
+    
+    // Show target section
+    const targetSection = document.getElementById(`section-${sectionNumber}`);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+        currentSection = sectionNumber;
+        
+        // Update pagination dots
+        updatePaginationDots(sectionNumber);
+        
+        // Update progress bar
+        updateProgressBar(sectionNumber);
+        
+        // Scroll to top of form
+        const stepContainer = document.querySelector('.step-container');
+        if (stepContainer) {
+            stepContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+}
+
+function updatePaginationDots(activeSection) {
+    const dots = document.querySelectorAll('.pagination-dots .dot');
+    dots.forEach((dot, index) => {
+        const sectionNumber = index + 1;
+        if (sectionNumber === activeSection) {
+            dot.classList.add('active');
+        } else if (sectionNumber < activeSection) {
+            dot.classList.remove('active');
+            dot.classList.add('completed');
+        } else {
+            dot.classList.remove('active', 'completed');
+        }
+    });
+}
+
+function updateProgressBar(activeSection) {
+    const progressFill = document.querySelector('.progress-fill');
+    if (progressFill) {
+        const percentage = (activeSection / totalSections) * 33.33; // Keep same scale as original
+        progressFill.style.width = `${percentage}%`;
+    }
+}
+
+function submitForm() {
+    console.log('submitForm() called');
+    // Call the form submission function
+    submitFormData();
+}
+
+function submitFormData() {
+    console.log('=== submitFormData() called ===');
+    
+    const form = document.getElementById('vitalsForm');
+    
+    if (!form) {
+        console.error('Form not found!');
+        alert('Error: Form not found');
+        return;
+    }
+    
+    console.log('Form found, proceeding with submission...');
+    
+    // Show loading on the final button
+    const submitBtn = document.querySelector('.section-navigation .btn-next');
+    if (!submitBtn) {
+        console.error('Submit button not found!');
+        alert('Error: Submit button not found');
+        return;
+    }
+    
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    submitBtn.disabled = true;
+    
+    const formData = new FormData(form);
+    
+    console.log('Sending vital signs data to /save_vitals...');
+    
+    fetch('/save_vitals', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        console.log('Response received:', response.status, response.statusText);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response data:', data);
+        if (data.success) {
+            console.log('Vital signs saved successfully!');
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Saved Successfully!';
+            submitBtn.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+            
+            setTimeout(() => {
+                const redirectUrl = data.redirect_url || '/step4';
+                console.log('Navigating to', redirectUrl);
+                window.location.href = redirectUrl;
+            }, 1500);
+        } else {
+            console.error('Server error:', data.error);
+            alert('Error saving vital signs: ' + (data.error || 'Unknown error'));
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert('Network error: ' + error.message);
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    });
+}
+</script>
+{% endblock %}

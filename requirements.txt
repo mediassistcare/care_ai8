@@ -1,0 +1,39 @@
+# Core Web Framework
+Flask==2.3.3
+Werkzeug>=2.3.0
+
+# AI/OpenAI Integration
+openai>=1.0.0
+
+# Environment Configuration
+python-dotenv==1.0.0
+
+# PDF Processing
+PyPDF2>=3.0.0
+PyMuPDF>=1.23.0
+reportlab>=4.0.0
+
+# Database Support
+mysql-connector-python>=8.0.0
+
+# Utility Libraries
+packaging>=20.0
+
+# Standard Library Dependencies (included with Python)
+# json - built-in
+# base64 - built-in  
+# datetime - built-in
+# os - built-in
+# tempfile - built-in
+# uuid - built-in
+# shutil - built-in
+# io - built-in
+# sqlite3 - built-in
+# sys - built-in
+# glob - built-in
+# functools - built-in
+# traceback - built-in
+
+# Optional: Security and Production
+# Gunicorn>=20.1.0  # For production deployment
+# python-decouple>=3.6  # Alternative to python-dotenv

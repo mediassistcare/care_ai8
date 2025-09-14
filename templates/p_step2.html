@@ -1,0 +1,1079 @@
+{% extends "base.html" %}
+
+{% block title %}Case Details - {{ case.case_number }} - Care Diagnostics{% endblock %}
+
+{% block content %}
+<div class="step-container wide-layout">
+    <div class="step-header">
+        <div class="header-controls">
+            <a href="{{ url_for('panelist_dashboard') }}" class="btn btn-back">
+                <i class="fas fa-arrow-left"></i>
+                Back to Dashboard
+            </a>
+            <div class="case-title">
+                <h2><i class="fas fa-file-medical"></i> Case Details: {{ case.case_number }}</h2>
+                <p>Comprehensive medical case review</p>
+            </div>
+            <div class="case-status">
+                <span class="status-badge status-{{ case.status.replace('_', '-') }}">
+                    <i class="fas fa-flag"></i>
+                    {{ case.status.replace('_', ' ').title() }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    {% if error %}
+    <div class="form-container">
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>{{ error }}</span>
+        </div>
+        <div class="text-center">
+            <a href="{{ url_for('panelist_dashboard') }}" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i>
+                Return to Dashboard
+            </a>
+        </div>
+    </div>
+    {% else %}
+    
+    <!-- Collapse/Expand All Controls -->
+    <div class="form-container controls-section">
+        <div class="collapse-controls">
+            <button class="btn btn-secondary" onclick="expandAllSections()">
+                <i class="fas fa-expand-arrows-alt"></i> Expand All
+            </button>
+            <button class="btn btn-secondary" onclick="collapseAllSections()">
+                <i class="fas fa-compress-arrows-alt"></i> Collapse All
+            </button>
+        </div>
+    </div>
+    
+    <!-- Case Overview Card (Always Expanded) -->
+    <div class="form-container case-overview">
+        <div class="section-header non-collapsible">
+            <h3><i class="fas fa-info-circle"></i> Case Overview</h3>
+        </div>
+        <div class="overview-grid">
+            <div class="overview-item">
+                <label>Case Number</label>
+                <span class="case-number">{{ case.case_number }}</span>
+            </div>
+            <div class="overview-item">
+                <label>Status</label>
+                <span class="status-badge status-{{ case.status.replace('_', '-') }}">
+                    {{ case.status.replace('_', ' ').title() }}
+                </span>
+            </div>
+            <div class="overview-item">
+                <label>Created Date</label>
+                <span class="date-info">
+                    <i class="fas fa-calendar"></i>
+                    {{ case.created_date }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clinical Summary Section -->
+    <div class="form-container clinical-summary">
+        <div class="section-header collapsible" onclick="toggleSection('clinical-content')">
+            <h3><i class="fas fa-clipboard-check"></i> Clinical Summary</h3>
+            <div class="section-toggle">
+                <p>Comprehensive patient assessment and findings</p>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+        </div>
+        <div class="section-content" id="clinical-content">
+            <div class="summary-content">
+                <div class="clinical-text">
+                    {% set lines = case.clinical_summary.split('\n') %}
+                    {% for line in lines %}
+                        {% if line.strip() %}
+                            {% if line.startswith('- ') %}
+                                <div class="bullet-point">• {{ line[2:] }}</div>
+                            {% elif line.endswith(':') and not line.startswith('- ') %}
+                                <div class="section-title">{{ line }}</div>
+                            {% else %}
+                                <div class="text-line">{{ line }}</div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ICD Codes Section -->
+    {% if case.icd_codes %}
+    <div class="form-container icd-codes">
+        <div class="section-header collapsible" onclick="toggleSection('icd-content')">
+            <h3><i class="fas fa-code"></i> Final ICD Codes ({{ case.icd_codes|length }})</h3>
+            <div class="section-toggle">
+                <p>Recommended diagnostic codes with confidence levels</p>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+        </div>
+        <div class="section-content" id="icd-content">
+            <div class="icd-grid">
+                {% for icd in case.icd_codes %}
+                <div class="icd-card">
+                    <div class="icd-header">
+                        <span class="icd-code">{{ icd.code }}</span>
+                        <span class="confidence-badge confidence-{{ 'high' if icd.confidence >= 80 else 'medium' if icd.confidence >= 60 else 'low' }}">
+                            {{ icd.confidence }}% Confidence
+                        </span>
+                    </div>
+                    <h4 class="icd-title">{{ icd.title }}</h4>
+                    <p class="icd-description">{{ icd.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Diagnostic Reasoning & Elimination History -->
+    {% if case.elimination_history %}
+    <div class="form-container elimination-history">
+        <div class="section-header collapsible" onclick="toggleSection('elimination-content')">
+            <h3><i class="fas fa-question-circle"></i> Diagnostic Reasoning ({{ case.elimination_history|length }} eliminations)</h3>
+            <div class="section-toggle">
+                <p>Questions and answers that guided the diagnosis</p>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+        </div>
+        <div class="section-content collapsed" id="elimination-content">
+            <div class="elimination-timeline">
+                {% for item in case.elimination_history %}
+                <div class="elimination-item">
+                    <div class="elimination-header">
+                        <span class="eliminated-code">{{ item.eliminated_code }}</span>
+                        <span class="elimination-status">Eliminated</span>
+                    </div>
+                    <div class="question-answer">
+                        <div class="question">
+                            <strong>Q:</strong> {{ item.question }}
+                        </div>
+                        <div class="answer">
+                            <strong>A:</strong> {{ item.answer }}
+                        </div>
+                    </div>
+                    <div class="reasoning">
+                        <strong>Reasoning:</strong> {{ item.reasoning }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Differential Questions -->
+    {% if case.differential_questions %}
+    <div class="form-container differential-questions">
+        <div class="section-header collapsible" onclick="toggleSection('questions-content')">
+            <h3><i class="fas fa-comments"></i> Differential Questions ({{ case.differential_questions|length }})</h3>
+            <div class="section-toggle">
+                <p>Additional questions used for differential diagnosis</p>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+        </div>
+        <div class="section-content collapsed" id="questions-content">
+            <div class="questions-list">
+                {% for question in case.differential_questions %}
+                <div class="question-item">
+                    <div class="question-content">
+                        <div class="question-text">
+                            <i class="fas fa-question"></i>
+                            {{ question.question }}
+                        </div>
+                        <div class="question-answer">
+                            <i class="fas fa-reply"></i>
+                            <strong>{{ question.answer }}</strong>
+                        </div>
+                    </div>
+                    {% if question.reasoning %}
+                    <div class="question-reasoning">
+                        {{ question.reasoning }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recommended Lab Tests -->
+    {% if case.lab_tests %}
+    <div class="form-container lab-tests">
+        <div class="section-header collapsible" onclick="toggleSection('lab-content')">
+            <h3><i class="fas fa-flask"></i> Laboratory Tests ({{ case.lab_tests|length }})</h3>
+            <div class="section-toggle">
+                <p>Diagnostic tests to confirm or rule out conditions</p>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+        </div>
+        <div class="section-content collapsed" id="lab-content">
+            <div class="tests-grid">
+                {% for test in case.lab_tests %}
+                <div class="test-card">
+                    <div class="test-header">
+                        <h4 class="test-name">{{ test.test_name }}</h4>
+                        <div class="test-badges">
+                            <span class="urgency-badge urgency-{{ test.urgency.lower().replace(' ', '-') }}">
+                                {{ test.urgency }}
+                            </span>
+                            <span class="cost-badge cost-{{ (test.cost_tier | default(test.cost, true)).lower() }}">
+                                {{ test.cost_tier | default(test.cost, true) }} Cost
+                            </span>
+                        </div>
+                    </div>
+                    <div class="test-category">
+                        <i class="fas fa-tag"></i>
+                        {{ test.category }}
+                    </div>
+                    <div class="test-reasoning">
+                        <strong>Reasoning:</strong> {{ test.reasoning }}
+                    </div>
+                    <div class="expected-findings">
+                        <strong>Expected Findings:</strong> {{ test.expected_findings }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Patient Summary -->
+    <div class="form-container patient-summary">
+        <div class="section-header collapsible" onclick="toggleSection('patient-content')">
+            <h3><i class="fas fa-user"></i> Patient Summary</h3>
+            <div class="section-toggle">
+                <p>Basic patient information and demographics</p>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+        </div>
+        <div class="section-content" id="patient-content">
+            <div class="patient-content">
+                {{ case.patient_summary | replace('\n', '<br>') | safe }}
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+</div>
+
+<style>
+/* Wide layout for better space utilization */
+.wide-layout {
+    max-width: 1400px !important;
+    margin: 0 auto;
+    padding: 20px 40px;
+}
+
+/* Collapse/Expand Controls */
+.controls-section {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.collapse-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.collapse-controls .btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    background: white;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.collapse-controls .btn:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+/* Collapsible Section Headers */
+.section-header.collapsible {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-header.collapsible:hover {
+    background: #f8f9fa;
+    transform: translateY(-1px);
+}
+
+.section-toggle {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.section-toggle p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.toggle-icon {
+    font-size: 1.2rem;
+    color: #6c757d;
+    transition: transform 0.3s ease;
+}
+
+.toggle-icon.rotated {
+    transform: rotate(180deg);
+}
+
+/* Section Content */
+.section-content {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.section-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+}
+
+.section-content:not(.collapsed) {
+    max-height: none;
+    opacity: 1;
+    padding-top: 20px;
+}
+
+/* Non-collapsible sections */
+.section-header.non-collapsible {
+    border-bottom: 2px solid #007bff;
+}
+
+/* Case details specific styles */
+.header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.btn-back {
+    background: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    background: #5a6268;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+    text-decoration: none;
+}
+
+.case-title h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.4rem;
+}
+
+.case-title p {
+    margin: 5px 0 0 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.case-status .status-badge {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+}
+
+.case-overview {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-left: 4px solid #3498db;
+}
+
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.overview-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.overview-item label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.case-number {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.date-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #495057;
+}
+
+.clinical-summary .summary-content {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #27ae60;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.clinical-text {
+    font-size: 0.95rem;
+    color: #2c3e50;
+}
+
+.clinical-text .section-title {
+    font-weight: 600;
+    color: #27ae60;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+.clinical-text .section-title:first-child {
+    margin-top: 0;
+}
+
+.clinical-text .bullet-point {
+    margin-left: 15px;
+    margin-bottom: 3px;
+    line-height: 1.4;
+}
+
+.clinical-text .text-line {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* Special styling for the main title */
+.clinical-text .text-line:first-child {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #27ae60;
+    padding-bottom: 5px;
+}
+
+.icd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.icd-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.icd-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.icd-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.icd-code {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #2c3e50;
+    background: #e9ecef;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.confidence-badge {
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.confidence-high {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.confidence-medium {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.confidence-low {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.icd-title {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.icd-description {
+    color: #6c757d;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.elimination-timeline {
+    margin-top: 15px;
+}
+
+.elimination-item {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-left: 4px solid #e74c3c;
+}
+
+.elimination-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.eliminated-code {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #2c3e50;
+    background: #f8f9fa;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.elimination-status {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.question-answer {
+    margin-bottom: 15px;
+}
+
+.question, .answer {
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.question {
+    background: #e3f2fd;
+    border-left: 3px solid #2196f3;
+}
+
+.answer {
+    background: #f3e5f5;
+    border-left: 3px solid #9c27b0;
+}
+
+.reasoning {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 3px solid #6c757d;
+    color: #495057;
+    font-style: italic;
+}
+
+.questions-list {
+    margin-top: 15px;
+}
+
+.question-item {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-left: 4px solid #17a2b8;
+}
+
+.question-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.question-text, .question-answer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.question-text {
+    background: #e8f4f8;
+    color: #0c5460;
+}
+
+.question-answer {
+    background: #d1ecf1;
+    color: #0c5460;
+    font-weight: 600;
+}
+
+.question-reasoning {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    color: #495057;
+    font-style: italic;
+}
+
+.tests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.test-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.test-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.test-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+
+.test-name {
+    color: #2c3e50;
+    margin: 0;
+    font-size: 1.1rem;
+    flex: 1;
+}
+
+.test-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.urgency-badge, .cost-badge {
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.urgency-immediate {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.urgency-within-24h {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.urgency-routine {
+    background: #d4edda;
+    color: #155724;
+}
+
+.cost-low {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.cost-medium {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.cost-high {
+    background: #f5c6cb;
+    color: #721c24;
+}
+
+.test-category {
+    margin-bottom: 15px;
+    color: #6c757d;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.test-reasoning, .expected-findings {
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.test-reasoning {
+    background: #f8f9fa;
+    border-left: 3px solid #3498db;
+}
+
+.expected-findings {
+    background: #f0f8ff;
+    border-left: 3px solid #17a2b8;
+}
+
+.patient-summary .patient-content {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.status-pending-review {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+/* Contact Information Styles */
+.contact-info .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+}
+
+.contact-icon {
+    margin-right: 15px;
+    width: 40px;
+    height: 40px;
+    background: #3498db;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.contact-details {
+    flex: 1;
+}
+
+.contact-details label {
+    display: block;
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 3px;
+    font-weight: 500;
+}
+
+.contact-value {
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+/* Doctor Information Styles */
+.doctor-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 4px solid #e67e22;
+    margin-top: 15px;
+}
+
+.doctor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.doctor-name h4 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.doctor-id {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+.expertise-badge {
+    background: #e67e22;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.doctor-contact {
+    border-top: 1px solid #dee2e6;
+    padding-top: 15px;
+}
+
+.contact-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 12px;
+}
+
+.contact-row .contact-item {
+    background: white;
+    padding: 12px;
+    border-radius: 6px;
+    border-left: 3px solid #e67e22;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-row .contact-item i {
+    color: #e67e22;
+    width: 16px;
+}
+
+.doctor-qualification {
+    background: white;
+    padding: 12px;
+    border-radius: 6px;
+    border-left: 3px solid #27ae60;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.doctor-qualification i {
+    color: #27ae60;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header-controls {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .overview-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .icd-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tests-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .question-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .test-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .test-badges {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .contact-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .contact-row {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .doctor-header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+}
+</style>
+
+<script>
+// Collapsible sections functionality
+function toggleSection(contentId) {
+    const content = document.getElementById(contentId);
+    const header = content.previousElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    
+    if (content.classList.contains('collapsed')) {
+        // Expand
+        content.classList.remove('collapsed');
+        icon.classList.add('rotated');
+    } else {
+        // Collapse
+        content.classList.add('collapsed');
+        icon.classList.remove('rotated');
+    }
+}
+
+function expandAllSections() {
+    const allSections = document.querySelectorAll('.section-content');
+    const allIcons = document.querySelectorAll('.toggle-icon');
+    
+    allSections.forEach(section => {
+        section.classList.remove('collapsed');
+    });
+    
+    allIcons.forEach(icon => {
+        icon.classList.add('rotated');
+    });
+}
+
+function collapseAllSections() {
+    const allSections = document.querySelectorAll('.section-content');
+    const allIcons = document.querySelectorAll('.toggle-icon');
+    
+    allSections.forEach(section => {
+        section.classList.add('collapsed');
+    });
+    
+    allIcons.forEach(icon => {
+        icon.classList.remove('rotated');
+    });
+}
+
+// Initialize sections on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Start with Clinical Summary and Patient Summary expanded, others collapsed
+    const sectionsToExpand = ['clinical-content', 'patient-content'];
+    
+    document.querySelectorAll('.section-content').forEach(section => {
+        const icon = section.previousElementSibling.querySelector('.toggle-icon');
+        
+        if (sectionsToExpand.includes(section.id)) {
+            section.classList.remove('collapsed');
+            if (icon) icon.classList.add('rotated');
+        } else {
+            section.classList.add('collapsed');
+            if (icon) icon.classList.remove('rotated');
+        }
+    });
+});
+
+// Smooth scrolling for better UX
+document.querySelectorAll('.section-header.collapsible').forEach(header => {
+    header.addEventListener('click', function() {
+        setTimeout(() => {
+            this.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest'
+            });
+        }, 150);
+    });
+});
+</script>
+
+{% endblock %}

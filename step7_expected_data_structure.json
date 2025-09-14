@@ -1,0 +1,48 @@
+{
+  "step7": {
+    "step_name": "Clinical Summary & ICD Generation",
+    "form_data": {
+      "icd_generation_completed": true,
+      "codes_generated": 5,
+      "patient_email": "arshiya.mirza@example.com",
+      "patient_phone": "9876543210",
+      "referring_doctor_id": "3",
+      "referring_doctor_name": "Amit Kumar",
+      "referring_doctor_phone": "3333333333",
+      "referring_doctor_email": "amit.kumar@medical.com",
+      "referring_doctor_details": {
+        "id": 3,
+        "first_name": "Amit",
+        "last_name": "Kumar",
+        "phone_number": "3333333333",
+        "email_address": "amit.kumar@medical.com",
+        "area_of_expertise": "Orthopedics"
+      },
+      "contact_info_completed": true,
+      "contact_info_timestamp": "2025-09-14T12:30:45.123456"
+    },
+    "ai_generated_data": {
+      "icd_codes_generated": true,
+      "icd_codes": [
+        {
+          "code": "8A61.0",
+          "description": "Type 1 diabetes mellitus with ketoacidosis",
+          "confidence": "high"
+        },
+        {
+          "code": "MD12.0",
+          "description": "Acute respiratory failure",
+          "confidence": "high"
+        }
+      ],
+      "clinical_summary_used": "Patient presents with...",
+      "generation_timestamp": "2025-09-14T12:30:45.123456",
+      "total_codes_generated": 5,
+      "llm_analysis": "Based on the clinical presentation..."
+    },
+    "files_uploaded": {},
+    "timestamp": "2025-09-14T12:30:45.123456",
+    "data_source": "user_input_and_ai_generation",
+    "step_completed": true
+  }
+}

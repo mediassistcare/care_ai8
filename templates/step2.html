@@ -1,0 +1,4899 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Registration - Step 2 - Care Diagnostics{% endblock %}
+
+{% block content %}
+<div class="step-container">
+    <div class="step-header">
+        <h2><i class="fas fa-user-md"></i> Step 2: Patient Registration</h2>
+        <p>Smart registration with minimal typing - scan documents and select options visually</p>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 33.33%"></div>
+        </div>
+    </div>
+
+    <form id="registrationForm" class="modern-registration-form">
+        
+        <!-- Pagination Controls -->
+        <div class="pagination-controls">
+            <div class="pagination-dots">
+                <div class="dot active" data-section="1">
+                    <span class="dot-number">1</span>
+                    <span class="dot-label">Identity & Basic Info</span>
+                </div>
+                <div class="dot" data-section="2">
+                    <span class="dot-number">2</span>
+                    <span class="dot-label">Medical</span>
+                </div>
+                <div class="dot" data-section="3">
+                    <span class="dot-number">3</span>
+                    <span class="dot-label">Contact & Travel</span>
+                </div>
+                <div class="dot" data-section="4">
+                    <span class="dot-number">4</span>
+                    <span class="dot-label">Personal & Socio-Economic</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Identity & Basic Info -->
+        <div class="form-section" id="section-1" style="display: block;">
+        
+        <!-- Document Scanning Section -->
+        <div class="registration-section">
+            <h3><i class="fas fa-id-card"></i> Identity Documents <span class="mandatory-indicator">*</span></h3>
+            <div class="document-scan-grid">
+                <div class="scan-card mandatory-field" id="aadhar-scan-card">
+                    <div class="scan-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <h4>Aadhar Card <span class="mandatory-indicator">*</span></h4>
+                    <p>Scan front and back to auto-extract details</p>
+                    <div class="scan-actions">
+                        <input type="file" id="aadhar_front" name="aadhar_front" accept="image/*" class="file-input">
+                        <button type="button" class="btn-scan" onclick="document.getElementById('aadhar_front').click()">
+                            <i class="fas fa-camera"></i> Front Side
+                        </button>
+                        <input type="file" id="aadhar_back" name="aadhar_back" accept="image/*" class="file-input">
+                        <button type="button" class="btn-scan" onclick="document.getElementById('aadhar_back').click()">
+                            <i class="fas fa-camera"></i> Back Side
+                        </button>
+                        <div class="scan-divider">OR</div>
+                        <input type="file" id="aadhar_combined" name="aadhar_combined" accept="image/*" class="file-input">
+                        <button type="button" class="btn-scan btn-scan-combined" onclick="document.getElementById('aadhar_combined').click()">
+                            <i class="fas fa-images"></i> Both Sides in One Image
+                        </button>
+                    </div>
+                    <div class="scan-status" id="aadhar-status">Ready to scan</div>
+                    <div class="extraction-progress" id="extraction-progress" style="display: none;">
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill"></div>
+                        </div>
+                        <p class="progress-text">Extracting data from Aadhaar card...</p>
+                    </div>
+                    <div class="error-message"></div>
+                </div>
+                
+                <div class="scan-card">
+                    <div class="scan-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Insurance Card</h4>
+                    <p>Upload insurance document (Ayushman Bharat, etc.)</p>
+                    <div class="scan-actions">
+                        <input type="file" id="insurance_doc" name="insurance_doc" accept="image/*,application/pdf" class="file-input">
+                        <button type="button" class="btn-scan" onclick="document.getElementById('insurance_doc').click()">
+                            <i class="fas fa-upload"></i> Upload Document
+                        </button>
+                    </div>
+                    <div class="scan-status" id="insurance-status">Ready to upload</div>
+                    <div class="extraction-progress" id="insurance-progress" style="display: none;">
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill"></div>
+                        </div>
+                        <p class="progress-text">Analyzing insurance document...</p>
+                    </div>
+                    <div class="insurance-summary" id="insurance-summary" style="display: none;">
+                        <h5><i class="fas fa-file-text"></i> Extracted Text</h5>
+                        <div class="summary-content" id="insurance-summary-content">
+                            <!-- Extracted text will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scan-card">
+                    <div class="scan-icon">
+                        <i class="fas fa-syringe"></i>
+                    </div>
+                    <h4>Vaccination Records</h4>
+                    <p>Upload vaccination certificate/records</p>
+                    <div class="scan-actions">
+                        <input type="file" id="vaccine_doc" name="vaccine_doc" accept="image/*,application/pdf" class="file-input">
+                        <button type="button" class="btn-scan" onclick="document.getElementById('vaccine_doc').click()">
+                            <i class="fas fa-upload"></i> Upload Document
+                        </button>
+                    </div>
+                    <div class="scan-status" id="vaccine-status">Ready to upload</div>
+                </div>
+                
+                <div class="scan-card">
+                    <div class="scan-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4>Health Card</h4>
+                    <p>Upload health card/medical ID</p>
+                    <div class="scan-actions">
+                        <input type="file" id="health_card" name="health_card" accept="image/*,application/pdf" class="file-input">
+                        <button type="button" class="btn-scan" onclick="document.getElementById('health_card').click()">
+                            <i class="fas fa-upload"></i> Upload Document
+                        </button>
+                    </div>
+                    <div class="scan-status" id="health-status">Ready to upload</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auto-extracted Information -->
+        <div class="registration-section">
+            <h3><i class="fas fa-user"></i> Personal Information</h3>
+            <div class="extracted-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Full Name</label>
+                        <input type="text" id="full_name" name="full_name" placeholder="Will be extracted from Aadhar" readonly>
+                    </div>
+                    <div class="info-item">
+                        <label>Date of Birth</label>
+                        <input type="date" id="date_of_birth" name="date_of_birth" readonly>
+                    </div>
+                    <div class="info-item">
+                        <label>Address</label>
+                        <textarea id="address" name="address" rows="2" placeholder="Will be extracted from Aadhar" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gender Selection -->
+        <div class="registration-section">
+            <h3><i class="fas fa-venus-mars"></i> Gender</h3>
+            <div class="selection-cards" data-field="gender">
+                <div class="selection-card" data-value="male">
+                    <i class="fas fa-mars"></i>
+                    <span>Male</span>
+                </div>
+                <div class="selection-card" data-value="female">
+                    <i class="fas fa-venus"></i>
+                    <span>Female</span>
+                </div>
+                <div class="selection-card" data-value="other">
+                    <i class="fas fa-genderless"></i>
+                    <span>Other</span>
+                </div>
+            </div>
+            <input type="hidden" id="gender" name="gender" required>
+        </div>
+
+        <!-- Section Navigation for Section 1 -->
+        <div class="section-navigation">
+            <button type="button" class="btn-navigation btn-prev" style="visibility: hidden;" disabled>
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn-navigation btn-next" onclick="nextSection()">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        </div>
+        <!-- End Section 1 -->
+
+        <!-- Section 2: Medical -->
+        <div class="form-section" id="section-2" style="display: none;">
+
+        <!-- Medical History -->
+        <div class="registration-section">
+            <h3><i class="fas fa-heartbeat"></i> Medical History <span class="mandatory-indicator">*</span></h3>
+            <div class="medical-conditions compact">
+                <div class="condition-row mandatory-field">
+                    <span class="condition-label">Diabetes <span class="mandatory-indicator">*</span></span>
+                    <div class="yes-no-toggle" data-field="diabetes" id="diabetes-toggle">
+                        <div class="toggle-option" data-value="no">
+                            <i class="fas fa-times"></i>
+                            <span>No</span>
+                        </div>
+                        <div class="toggle-option" data-value="yes">
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="diabetes" name="diabetes">
+                    <div class="error-message"></div>
+                </div>
+                
+                <div class="condition-row mandatory-field">
+                    <span class="condition-label">Hypertension / High BP <span class="mandatory-indicator">*</span></span>
+                    <div class="yes-no-toggle" data-field="hypertension" id="hypertension-toggle">
+                        <div class="toggle-option" data-value="no">
+                            <i class="fas fa-times"></i>
+                            <span>No</span>
+                        </div>
+                        <div class="toggle-option" data-value="yes">
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="hypertension" name="hypertension">
+                    <div class="error-message"></div>
+                </div>
+                
+                <div class="condition-row mandatory-field">
+                    <span class="condition-label">Asthma <span class="mandatory-indicator">*</span></span>
+                    <div class="yes-no-toggle" data-field="asthma" id="asthma-toggle">
+                        <div class="toggle-option" data-value="no">
+                            <i class="fas fa-times"></i>
+                            <span>No</span>
+                        </div>
+                        <div class="toggle-option" data-value="yes">
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="asthma" name="asthma">
+                    <div class="error-message"></div>
+                </div>
+                
+                <div class="condition-row mandatory-field">
+                    <span class="condition-label">Heart Disease <span class="mandatory-indicator">*</span></span>
+                    <div class="yes-no-toggle" data-field="heart_disease" id="heart_disease-toggle">
+                        <div class="toggle-option" data-value="no">
+                            <i class="fas fa-times"></i>
+                            <span>No</span>
+                        </div>
+                        <div class="toggle-option" data-value="yes">
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="heart_disease" name="heart_disease">
+                    <div class="error-message"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Family History -->
+        <div class="registration-section">
+            <h3><i class="fas fa-users"></i> Family History <span class="mandatory-indicator">*</span></h3>
+            <div class="family-history-grid compact mandatory-field" id="family-history-grid">
+                <div class="family-condition" data-condition="diabetes">
+                    <i class="fas fa-tint"></i>
+                    <span>Diabetes</span>
+                </div>
+                <div class="family-condition" data-condition="bp">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>High BP</span>
+                </div>
+                <div class="family-condition" data-condition="asthma">
+                    <i class="fas fa-lungs"></i>
+                    <span>Asthma</span>
+                </div>
+                <div class="family-condition" data-condition="heart_disease">
+                    <i class="fas fa-heart"></i>
+                    <span>Heart Disease</span>
+                </div>
+                <div class="family-condition" data-condition="none">
+                    <i class="fas fa-check-circle"></i>
+                    <span>None</span>
+                </div>
+            </div>
+            <input type="hidden" id="family_history" name="family_history">
+            <div class="error-message"></div>
+        </div>
+
+        <!-- Medical Reports Section -->
+        <div class="registration-section">
+            <h3><i class="fas fa-file-medical"></i> Recent & Relevant Medical Reports <span class="mandatory-indicator">*</span></h3>
+            <div class="medical-documents-container">
+                <div class="medical-documents-card mandatory-field">
+                    <div class="card-header">
+                        <div class="report-icon">
+                            <i class="fas fa-file-medical-alt"></i>
+                        </div>
+                        <div class="card-title">
+                            <h4>Medical Documents Upload</h4>
+                            <p class="card-subtitle">Support your medical record with relevant documentation</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="question-section">
+                            <p class="question-text">Do you have any medical documents—such as laboratory reports, imaging results (like X-ray, MRI, CT), signal tracings (ECG, EEG, EMG), or clinical photographs (e.g., of skin, throat, or other impacted areas)—that you wish to upload to support your medical record? <span class="mandatory-indicator">*</span></p>
+                        </div>
+                        <div class="response-section">
+                            <div class="radio-group enhanced" id="other_medical_reports-radio-group">
+                                <label class="radio-option enhanced">
+                                    <input type="radio" name="other_medical_reports" value="yes">
+                                    <span class="radio-custom"></span>
+                                    <div class="radio-content">
+                                        <span class="radio-text">Yes, I have medical documents</span>
+                                        <span class="radio-description">I will upload relevant medical files</span>
+                                    </div>
+                                </label>
+                                <label class="radio-option enhanced">
+                                    <input type="radio" name="other_medical_reports" value="no">
+                                    <span class="radio-custom"></span>
+                                    <div class="radio-content">
+                                        <span class="radio-text">No, I don't have any</span>
+                                        <span class="radio-description">I will proceed without uploading documents</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-message"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Navigation for Section 2 -->
+        <div class="section-navigation">
+            <button type="button" class="btn-navigation btn-prev" onclick="prevSection()">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn-navigation btn-next" onclick="nextSection()">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        </div>
+        <!-- End Section 2 -->
+
+        <!-- Section 3: Contact & Travel -->
+        <div class="form-section" id="section-3" style="display: none;">
+
+        <!-- Contact Information -->
+        <div class="registration-section">
+            <h3><i class="fas fa-comments"></i> Communication</h3>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <label>Preferred Language</label>
+                    <div class="selection-cards compact" data-field="language">
+                        <div class="selection-card" data-value="english">
+                            <span>English</span>
+                        </div>
+                        <div class="selection-card" data-value="hindi">
+                            <span>Hindi</span>
+                        </div>
+                        <div class="selection-card" data-value="gujarati">
+                            <span>Gujarati</span>
+                        </div>
+                        <div class="selection-card" data-value="other">
+                            <span>Other</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="language" name="language">
+                </div>
+            </div>
+        </div>
+
+        <!-- Blood Group & Medical Details -->
+        <div class="registration-section">
+            <h3><i class="fas fa-tint"></i> Blood Group & Medical Records</h3>
+            <div class="medical-grid">
+                <div class="medical-item">
+                    <label>Blood Group</label>
+                    <div class="selection-cards compact" data-field="blood_group">
+                        <div class="selection-card" data-value="a+">
+                            <span>A+</span>
+                        </div>
+                        <div class="selection-card" data-value="a-">
+                            <span>A-</span>
+                        </div>
+                        <div class="selection-card" data-value="b+">
+                            <span>B+</span>
+                        </div>
+                        <div class="selection-card" data-value="b-">
+                            <span>B-</span>
+                        </div>
+                        <div class="selection-card" data-value="ab+">
+                            <span>AB+</span>
+                        </div>
+                        <div class="selection-card" data-value="ab-">
+                            <span>AB-</span>
+                        </div>
+                        <div class="selection-card" data-value="o+">
+                            <span>O+</span>
+                        </div>
+                        <div class="selection-card" data-value="o-">
+                            <span>O-</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="blood_group" name="blood_group">
+                </div>
+                
+                <div class="medical-item">
+                    <label>EMR (Electronic Medical Records)</label>
+                    
+                    <!-- Option 1: Having existing EMR? -->
+                    <div class="emr-option">
+                        <label style="font-size: 14px; margin-bottom: 8px; display: block; color: #495057;">
+                            <i class="fas fa-database"></i> Having existing EMR?
+                        </label>
+                        <div class="yes-no-toggle" data-field="emr_existing">
+                            <div class="toggle-option" data-value="yes">
+                                <i class="fas fa-check"></i>
+                                <span>Yes</span>
+                            </div>
+                            <div class="toggle-option" data-value="no">
+                                <i class="fas fa-times"></i>
+                                <span>No</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="emr_existing" name="emr_existing">
+                    </div>
+                    
+                    <!-- Option 2: Register for new EMR with us? -->
+                    <div class="emr-option" style="margin-top: 15px;">
+                        <label style="font-size: 14px; margin-bottom: 8px; display: block; color: #495057;">
+                            <i class="fas fa-plus-circle"></i> Register for new EMR with us?
+                        </label>
+                        <div class="yes-no-toggle" data-field="emr_register">
+                            <div class="toggle-option" data-value="yes">
+                                <i class="fas fa-check"></i>
+                                <span>Yes</span>
+                            </div>
+                            <div class="toggle-option" data-value="no">
+                                <i class="fas fa-times"></i>
+                                <span>No</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="emr_register" name="emr_register">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Travel History -->
+        <div class="registration-section">
+            <h3><i class="fas fa-plane"></i> Travel History</h3>
+            <div class="travel-grid">
+                <div class="travel-item">
+                    <span class="condition-label">Travel Outside India (Last 3 Months)</span>
+                    <div class="yes-no-toggle" data-field="travel_outside_india">
+                        <div class="toggle-option" data-value="no">
+                            <i class="fas fa-times"></i>
+                            <span>No</span>
+                        </div>
+                        <div class="toggle-option" data-value="yes">
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="travel_outside_india" name="travel_outside_india">
+                </div>
+                
+                <div class="travel-item">
+                    <span class="condition-label">Any Travel (Last 3 Months)</span>
+                    <div class="yes-no-toggle" data-field="travel_recent">
+                        <div class="toggle-option" data-value="no">
+                            <i class="fas fa-times"></i>
+                            <span>No</span>
+                        </div>
+                        <div class="toggle-option" data-value="yes">
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="travel_recent" name="travel_recent">
+                </div>
+            </div>
+        </div>
+
+        <!-- Female-Specific Questions (shown only when gender is female) -->
+        <div class="registration-section" id="female-questions" style="display: none;">
+            <h3><i class="fas fa-venus"></i> Gender Related</h3>
+            <div class="female-grid">
+                <div class="female-item">
+                    <span class="condition-label">Currently Pregnant</span>
+                    <div class="yes-no-toggle" data-field="currently_pregnant">
+                        <div class="toggle-option" data-value="no">
+                            <i class="fas fa-times"></i>
+                            <span>No</span>
+                        </div>
+                        <div class="toggle-option" data-value="yes">
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="currently_pregnant" name="currently_pregnant">
+                </div>
+                
+                <div class="female-item" id="pregnancy-month-section" style="display: none;">
+                    <label>Pregnancy Month</label>
+                    <div class="selection-cards compact" data-field="pregnancy_month">
+                        <div class="selection-card" data-value="0-3">
+                            <span>0-3 Months</span>
+                        </div>
+                        <div class="selection-card" data-value="3-6">
+                            <span>3-6 Months</span>
+                        </div>
+                        <div class="selection-card" data-value="7-9">
+                            <span>7-9 Months</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="pregnancy_month" name="pregnancy_month">
+                </div>
+                
+                <div class="female-item" id="childbirth-section">
+                    <span class="condition-label">Child Birth in Last 6 Months</span>
+                    <div class="yes-no-toggle" data-field="recent_childbirth">
+                        <div class="toggle-option" data-value="no">
+                            <i class="fas fa-times"></i>
+                            <span>No</span>
+                        </div>
+                        <div class="toggle-option" data-value="yes">
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="recent_childbirth" name="recent_childbirth">
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Navigation for Section 3 -->
+        <div class="section-navigation">
+            <button type="button" class="btn-navigation btn-prev" onclick="prevSection()">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn-navigation btn-next" onclick="nextSection()">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        </div>
+        <!-- End Section 3 -->
+
+        <!-- Section 4: Personal & Socio-Economic -->
+        <div class="form-section" id="section-4" style="display: none;">
+
+        <!-- Personal & Socio-Economic Information -->
+        <div class="registration-section">
+            <h3><i class="fas fa-user-circle"></i> Personal & Socio-Economic Details</h3>
+            <div class="section-description">
+                <p>Please provide your personal and economic background information</p>
+            </div>
+            
+            <!-- Personal Information Group -->
+            <div class="socio-enhanced-group">
+                <div class="group-header">
+                    <i class="fas fa-user"></i>
+                    <h4>Personal Information</h4>
+                </div>
+                
+                <div class="enhanced-grid">
+                    <div class="enhanced-field-group">
+                        <label class="enhanced-label">Occupation</label>
+                        <div class="enhanced-selection-grid" data-field="occupation">
+                            <div class="enhanced-card" data-value="farmer">
+                                <div class="card-icon">
+                                    <i class="fas fa-seedling"></i>
+                                </div>
+                                <span class="card-text">Farmer</span>
+                            </div>
+                            <div class="enhanced-card" data-value="labor">
+                                <div class="card-icon">
+                                    <i class="fas fa-hard-hat"></i>
+                                </div>
+                                <span class="card-text">Labor</span>
+                            </div>
+                            <div class="enhanced-card" data-value="hazards">
+                                <div class="card-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <span class="card-text">Hazardous</span>
+                            </div>
+                            <div class="enhanced-card" data-value="others">
+                                <div class="card-icon">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </div>
+                                <span class="card-text">Others</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="occupation" name="occupation">
+                        <div class="other-input" id="occupation-other" style="display: none;">
+                            <input type="text" id="occupation_detail" name="occupation_detail" placeholder="Please specify your occupation">
+                        </div>
+                    </div>
+                    
+                    <div class="enhanced-field-group">
+                        <label class="enhanced-label">Marital Status</label>
+                        <div class="enhanced-selection-grid marital-grid" data-field="marital_status">
+                            <div class="enhanced-card" data-value="single">
+                                <div class="card-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span class="card-text">Single</span>
+                            </div>
+                            <div class="enhanced-card" data-value="married">
+                                <div class="card-icon">
+                                    <i class="fas fa-ring"></i>
+                                </div>
+                                <span class="card-text">Married</span>
+                            </div>
+                            <div class="enhanced-card" data-value="divorced">
+                                <div class="card-icon">
+                                    <i class="fas fa-user-slash"></i>
+                                </div>
+                                <span class="card-text">Divorced</span>
+                            </div>
+                            <div class="enhanced-card" data-value="widowed">
+                                <div class="card-icon">
+                                    <i class="fas fa-heart-broken"></i>
+                                </div>
+                                <span class="card-text">Widowed</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="marital_status" name="marital_status">
+                    </div>
+                </div>
+                
+                <div class="enhanced-grid">
+                    <div class="enhanced-field-group">
+                        <label class="enhanced-label">Education Level</label>
+                        <div class="enhanced-selection-grid education-grid" data-field="education_level">
+                            <div class="enhanced-card" data-value="uneducated">
+                                <div class="card-icon">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <span class="card-text">Uneducated</span>
+                            </div>
+                            <div class="enhanced-card" data-value="primary">
+                                <div class="card-icon">
+                                    <i class="fas fa-school"></i>
+                                </div>
+                                <span class="card-text">Primary School</span>
+                            </div>
+                            <div class="enhanced-card" data-value="high_school">
+                                <div class="card-icon">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                                <span class="card-text">High School</span>
+                            </div>
+                            <div class="enhanced-card" data-value="graduate">
+                                <div class="card-icon">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <span class="card-text">Graduate</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="education_level" name="education_level">
+                    </div>
+                    
+                    <div class="enhanced-field-group">
+                        <label class="enhanced-label">Employment Status</label>
+                        <div class="enhanced-selection-grid employment-grid" data-field="employment_status">
+                            <div class="enhanced-card" data-value="employed">
+                                <div class="card-icon">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <span class="card-text">Employed</span>
+                            </div>
+                            <div class="enhanced-card" data-value="unemployed">
+                                <div class="card-icon">
+                                    <i class="fas fa-user-times"></i>
+                                </div>
+                                <span class="card-text">Unemployed</span>
+                            </div>
+                            <div class="enhanced-card" data-value="student">
+                                <div class="card-icon">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                                <span class="card-text">Student</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="employment_status" name="employment_status">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Economic Information Group -->
+            <div class="socio-enhanced-group">
+                <div class="group-header">
+                    <i class="fas fa-rupee-sign"></i>
+                    <h4>Economic Information</h4>
+                </div>
+                
+                <div class="enhanced-grid">
+                    <div class="enhanced-field-group">
+                        <label class="enhanced-label">Economic Status</label>
+                        <div class="enhanced-selection-grid economic-grid" data-field="economic_status">
+                            <div class="enhanced-card" data-value="bpl">
+                                <div class="card-icon">
+                                    <i class="fas fa-hand-holding-heart"></i>
+                                </div>
+                                <span class="card-text">BPL</span>
+                                <span class="card-subtitle">Below Poverty Line</span>
+                            </div>
+                            <div class="enhanced-card" data-value="lower">
+                                <div class="card-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <span class="card-text">Lower</span>
+                                <span class="card-subtitle">Up to ₹2.5L</span>
+                            </div>
+                            <div class="enhanced-card" data-value="middle">
+                                <div class="card-icon">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <span class="card-text">Middle</span>
+                                <span class="card-subtitle">₹2.5L - ₹25L</span>
+                            </div>
+                            <div class="enhanced-card" data-value="upper">
+                                <div class="card-icon">
+                                    <i class="fas fa-gem"></i>
+                                </div>
+                                <span class="card-text">Upper</span>
+                                <span class="card-subtitle">Above ₹25L</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="economic_status" name="economic_status">
+                    </div>
+                    
+                    <div class="enhanced-field-group">
+                        <label class="enhanced-label">Primary Income Source</label>
+                        <div class="enhanced-selection-grid income-grid" data-field="income_source">
+                            <div class="enhanced-card" data-value="employment">
+                                <div class="card-icon">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <span class="card-text">Employment</span>
+                                <span class="card-subtitle">Job/Salary</span>
+                            </div>
+                            <div class="enhanced-card" data-value="self_employment">
+                                <div class="card-icon">
+                                    <i class="fas fa-store"></i>
+                                </div>
+                                <span class="card-text">Self-Employment</span>
+                                <span class="card-subtitle">Own Business</span>
+                            </div>
+                            <div class="enhanced-card" data-value="benefits">
+                                <div class="card-icon">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
+                                <span class="card-text">Gov. Benefits</span>
+                                <span class="card-subtitle">Pension/Schemes</span>
+                            </div>
+                            <div class="enhanced-card" data-value="other">
+                                <div class="card-icon">
+                                    <i class="fas fa-question-circle"></i>
+                                </div>
+                                <span class="card-text">Other</span>
+                                <span class="card-subtitle">Specify Below</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="income_source" name="income_source">
+                    </div>
+                </div>
+            </div>
+        </div>        <!-- Medical History -->
+
+        <!-- Section Navigation for Section 4 -->
+        <div class="section-navigation">
+            <button type="button" class="btn-navigation btn-prev" onclick="prevSection()">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn-navigation btn-next" onclick="submitForm()" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">
+                Continue to Vital Signs <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        </div>
+        <!-- End Section 4 -->
+
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Medical section specific styling */
+.medical-conditions.compact {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.condition-row {
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.condition-row:hover {
+    border-color: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,123,255,0.1);
+}
+
+.condition-row.mandatory-field.error {
+    border-color: #e74c3c !important;
+    background: linear-gradient(135deg, #fdf2f2, #fff5f5) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+.condition-row.mandatory-field.success {
+    border-color: #27ae60 !important;
+    background: linear-gradient(135deg, #f8fff9, #f0fff4) !important;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.condition-label {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 12px;
+}
+
+.yes-no-toggle {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.toggle-option {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #ffffff;
+    font-weight: 500;
+}
+
+.toggle-option:hover {
+    border-color: #007bff;
+    background: #f8f9fa;
+}
+
+.toggle-option.active {
+    border-color: #007bff;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    transform: scale(1.02);
+}
+
+.toggle-option i {
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+/* Family History enhanced styling */
+.family-history-grid.compact {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+}
+
+.family-history-grid.compact.mandatory-field.error {
+    border-color: #e74c3c !important;
+    background: linear-gradient(135deg, #fdf2f2, #fff5f5) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+.family-history-grid.compact.mandatory-field.success {
+    border-color: #27ae60 !important;
+    background: linear-gradient(135deg, #f8fff9, #f0fff4) !important;
+}
+
+.family-condition {
+    background: #ffffff;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    padding: 15px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.family-condition:hover {
+    border-color: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,123,255,0.15);
+}
+
+.family-condition.active {
+    border-color: #007bff;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    transform: scale(1.05);
+}
+
+.family-condition i {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: inherit;
+}
+
+/* Section header improvements */
+.registration-section {
+    margin-bottom: 35px;
+}
+
+.registration-section h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.registration-section h3 i {
+    color: #007bff;
+    font-size: 18px;
+}
+
+/* Medical Reports enhanced styling */
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.report-card {
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.report-card:hover {
+    border-color: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,123,255,0.1);
+}
+
+.report-card.mandatory-field.error {
+    border-color: #e74c3c !important;
+    background: linear-gradient(135deg, #fdf2f2, #fff5f5) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+.report-card.mandatory-field.success {
+    border-color: #27ae60 !important;
+    background: linear-gradient(135deg, #f8fff9, #f0fff4) !important;
+}
+
+.report-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    color: white;
+    font-size: 20px;
+}
+
+.report-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.report-card p {
+    font-size: 13px;
+    color: #6c757d;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.radio-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.radio-option {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.radio-option:hover {
+    border-color: #007bff;
+    background: #f8f9fa;
+}
+
+.radio-option input[type="radio"] {
+    display: none;
+}
+
+.radio-option input[type="radio"]:checked + .radio-custom + .radio-text {
+    color: white;
+}
+
+.radio-option:has(input:checked) {
+    border-color: #007bff;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    transform: scale(1.02);
+}
+
+.radio-custom {
+    display: none;
+}
+
+.radio-text {
+    transition: color 0.3s ease;
+}
+
+/* Enhanced Medical Documents Section Styling */
+.medical-documents-container {
+    margin-bottom: 30px;
+}
+
+.medical-documents-card {
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border: 2px solid #e9ecef;
+    border-radius: 16px;
+    padding: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: none;
+}
+
+.medical-documents-card:hover {
+    border-color: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,123,255,0.15);
+}
+
+.medical-documents-card.mandatory-field.error {
+    border-color: #e74c3c !important;
+    background: linear-gradient(135deg, #fdf2f2, #fff5f5) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+.medical-documents-card.mandatory-field.success {
+    border-color: #27ae60 !important;
+    background: linear-gradient(135deg, #f8fff9, #f0fff4) !important;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f1f3f4;
+}
+
+.card-header .report-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.card-title {
+    flex: 1;
+}
+
+.card-title h4 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 5px 0;
+}
+
+.card-subtitle {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 0;
+    font-weight: 500;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.question-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #007bff;
+}
+
+.question-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #2c3e50;
+    margin: 0;
+    font-weight: 500;
+}
+
+.response-section {
+    padding: 0 10px;
+}
+
+.radio-group.enhanced {
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.radio-option.enhanced {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px;
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #ffffff;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.radio-option.enhanced:hover {
+    border-color: #007bff;
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,123,255,0.1);
+}
+
+.radio-option.enhanced input[type="radio"] {
+    display: none;
+}
+
+.radio-option.enhanced input[type="radio"]:checked + .radio-custom {
+    background: #007bff;
+    border-color: #007bff;
+}
+
+.radio-option.enhanced input[type="radio"]:checked + .radio-custom::after {
+    opacity: 1;
+}
+
+.radio-option.enhanced .radio-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #dee2e6;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.radio-option.enhanced .radio-custom::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.radio-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.radio-content .radio-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    transition: color 0.3s ease;
+}
+
+.radio-content .radio-description {
+    font-size: 13px;
+    color: #6c757d;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.radio-option.enhanced input[type="radio"]:checked ~ .radio-content .radio-text {
+    color: #007bff;
+}
+
+.radio-option.enhanced input[type="radio"]:checked {
+    background: linear-gradient(135deg, #e3f2fd, #f8f9fa);
+    border-color: #007bff;
+}
+
+/* Mandatory field styling */
+.mandatory-indicator {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-left: 3px;
+    font-size: 14px;
+}
+
+.registration-section h3 .mandatory-indicator {
+    font-size: 16px;
+}
+
+/* Enhanced error message styling for medical section */
+.error-message {
+    color: #e74c3c;
+    font-size: 13px;
+    line-height: 1.4;
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #fdf2f2, #fff5f5);
+    border: 1px solid #f5c6cb;
+    border-left: 4px solid #e74c3c;
+    border-radius: 8px;
+    display: none;
+    max-width: 100%;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.1);
+    animation: errorPulse 2s infinite;
+}
+
+@keyframes errorPulse {
+    0%, 100% { 
+        border-left-color: #e74c3c;
+        box-shadow: 0 2px 8px rgba(231, 76, 60, 0.1);
+    }
+    50% { 
+        border-left-color: #c0392b;
+        box-shadow: 0 2px 12px rgba(231, 76, 60, 0.2);
+    }
+}
+
+/* Generic error message styling */
+.generic-error-message {
+    margin: 0 0 20px 0;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #fff5f5, #fef2f2);
+    border: 2px solid #e74c3c;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(231, 76, 60, 0.15);
+    animation: slideDownBounce 0.5s ease-out;
+    z-index: 1000;
+    position: relative;
+}
+
+.generic-error-message .error-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #721c24;
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+.generic-error-message .error-content i {
+    color: #e74c3c;
+    font-size: 1.2em;
+    animation: pulse 2s infinite;
+}
+
+@keyframes slideDownBounce {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.error-message.show {
+    display: block;
+    animation: slideDown 0.4s ease-out, errorPulse 2s infinite 0.4s;
+}
+
+@keyframes slideDown {
+    from { 
+        opacity: 0; 
+        transform: translateY(-10px);
+        max-height: 0;
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0);
+        max-height: 200px;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Scan card error styling */
+.scan-card.error {
+    border: 2px solid #e74c3c !important;
+    background-color: #fdf2f2 !important;
+}
+
+.scan-card.error .scan-status {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* Toggle error styling */
+.yes-no-toggle.error .toggle-option {
+    border-color: #e74c3c !important;
+}
+
+/* Radio group error styling */
+.radio-group.error {
+    border: 2px solid #e74c3c;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fdf2f2;
+}
+
+/* Family history grid error styling */
+.family-history-grid.error {
+    border: 2px solid #e74c3c;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fdf2f2;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Global mapping for Action (A) and Outcome (O) categories
+const FIELD_CATEGORIES = {
+    // Action fields (for documentation and doctor identification)
+    'full_name': 'A',
+    'address': 'A',
+    'language': 'A',
+    'marital_status': 'A',
+    'education_level': 'A',
+    'employment_status': 'A',
+    'economic_status': 'A',
+    'income_source': 'A',
+    'family_history': 'A',
+    'insurance_doc': 'A',
+    'vaccine_doc': 'A',
+    'blood_group': 'A',
+    'emr_status': 'A',
+    'emr_register': 'A',
+    'emr_link': 'A',
+    'travel_outside_india': 'A',
+    'travel_recent': 'A',
+    'currently_pregnant': 'A',
+    'pregnancy_month': 'A',
+    'recent_childbirth': 'A',
+    
+    // Outcome fields (required for diagnosis)
+    'date_of_birth': 'O', // Age calculation
+    'gender': 'O',
+    'occupation': 'O',
+    'diabetes': 'O',
+    'hypertension': 'O',
+    'asthma': 'O',
+    'heart_disease': 'O'
+};
+
+// Pagination variables
+let currentSection = 1;
+const totalSections = 4;
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeSelectionCards();
+    initializeToggleButtons();
+    initializeFamilyHistory();
+    initializeFileUploads();
+    initializeFormSubmission();
+    initializeConditionalFields();
+    initializePagination();
+    initializeSmartGuidance(); // Add smart guidance for better UX
+    
+    // Auto-calculate age from date of birth
+    const dobInput = document.getElementById('date_of_birth');
+    if (dobInput) {
+        dobInput.addEventListener('change', function() {
+            const dob = new Date(this.value);
+            const today = new Date();
+            const age = Math.floor((today - dob) / (365.25 * 24 * 60 * 60 * 1000));
+            if (age >= 0 && age <= 150) {
+                // Store calculated age for diagnosis (outcome)
+                window.calculatedAge = age;
+            }
+        });
+    }
+});
+
+// Pagination Functions
+function initializePagination() {
+    // Initialize pagination dots click handlers
+    const dots = document.querySelectorAll('.pagination-dots .dot');
+    dots.forEach(dot => {
+        dot.addEventListener('click', function() {
+            const targetSection = parseInt(this.getAttribute('data-section'));
+            showSection(targetSection);
+        });
+    });
+    
+    // Detect which section is currently visible (important for browser back button)
+    let visibleSection = 1; // default
+    for (let i = 1; i <= totalSections; i++) {
+        const section = document.getElementById(`section-${i}`);
+        if (section && (section.style.display === 'block' || section.style.display === '')) {
+            visibleSection = i;
+            break;
+        }
+    }
+    
+    // Set current section to the actually visible one and update pagination
+    currentSection = visibleSection;
+    updatePaginationDots(currentSection);
+    
+    // If no section is visible, show section 1
+    if (visibleSection === 1) {
+        showSection(1);
+    }
+}
+
+// Validation functions
+function validateCurrentSection() {
+    clearAllErrors(); // Clear previous errors
+    
+    console.log('Validating section:', currentSection); // Debug log
+    
+    if (currentSection === 1) {
+        return validateSection1();
+    } else if (currentSection === 2) {
+        return validateSection2();
+    }
+    return true; // Other sections don't have mandatory validation for now
+}
+
+function validateSection1() {
+    let isValid = true;
+    
+    console.log('Validating Section 1 - Aadhaar upload'); // Debug log
+    
+    // Check if Aadhaar card is uploaded
+    const aadhaarFront = document.getElementById('aadhar_front');
+    const aadhaarBack = document.getElementById('aadhar_back');
+    const aadhaarCombined = document.getElementById('aadhar_combined');
+    
+    const hasAadhaarFront = aadhaarFront && aadhaarFront.files.length > 0;
+    const hasAadhaarBack = aadhaarBack && aadhaarBack.files.length > 0;
+    const hasAadhaarCombined = aadhaarCombined && aadhaarCombined.files.length > 0;
+    
+    console.log('Aadhaar files:', { hasAadhaarFront, hasAadhaarBack, hasAadhaarCombined }); // Debug log
+    
+    if (!hasAadhaarCombined && (!hasAadhaarFront || !hasAadhaarBack)) {
+        let message = '';
+        if (!hasAadhaarFront && !hasAadhaarBack && !hasAadhaarCombined) {
+            message = '';
+        } else if (!hasAadhaarFront && hasAadhaarBack) {
+            message = '📷 Missing Aadhaar front side. Please upload the front side or use the combined image option instead.';
+        } else if (hasAadhaarFront && !hasAadhaarBack) {
+            message = '📷 Missing Aadhaar back side. Please upload the back side or use the combined image option instead.';
+        }
+        console.log('Aadhaar validation failed, showing message:', message); // Debug log
+        showError('aadhar-scan-card', message);
+        isValid = false;
+    }
+    
+    return isValid;
+}
+
+function validateSection2() {
+    let isValid = true;
+    let missingFields = [];
+    
+    // Check Medical History fields without showing specific messages
+    const medicalFields = ['diabetes', 'hypertension', 'asthma', 'heart_disease'];
+    
+    medicalFields.forEach(field => {
+        const input = document.getElementById(field);
+        if (!input || !input.value) {
+            const toggle = document.getElementById(`${field}-toggle`);
+            if (toggle) {
+                toggle.classList.add('error');
+            }
+            missingFields.push(field);
+            isValid = false;
+        }
+    });
+    
+    // Check Family History without specific message
+    const familyHistory = document.getElementById('family_history');
+    if (!familyHistory || !familyHistory.value) {
+        const familyGrid = document.querySelector('.family-history-grid');
+        if (familyGrid) {
+            familyGrid.classList.add('error');
+        }
+        missingFields.push('family_history');
+        isValid = false;
+    }
+    
+    // Check Medical Reports - only check the field that actually exists
+    const reportFields = ['other_medical_reports']; // Removed non-existent fields
+    
+    reportFields.forEach(field => {
+        const radios = document.querySelectorAll(`input[name="${field}"]`);
+        const isSelected = Array.from(radios).some(radio => radio.checked);
+        if (!isSelected) {
+            const radioGroup = document.querySelector(`input[name="${field}"]`)?.closest('.radio-group');
+            if (radioGroup) {
+                radioGroup.classList.add('error');
+            }
+            missingFields.push(field);
+            isValid = false;
+        }
+    });
+    
+    // Show only a single generic message if there are missing fields
+    if (!isValid) {
+        showGenericError('Please complete all required medical information fields before proceeding.');
+    }
+    
+    return isValid;
+}
+
+function showError(elementId, message) {
+    // Find the element or its container
+    let element = document.getElementById(elementId);
+    if (!element) {
+        // Try to find by class or data attribute
+        if (elementId.includes('toggle')) {
+            const fieldName = elementId.replace('-toggle', '');
+            element = document.querySelector(`[data-field="${fieldName}"]`);
+        } else if (elementId.includes('radio-group')) {
+            const fieldName = elementId.replace('-radio-group', '');
+            element = document.querySelector(`input[name="${fieldName}"]`)?.closest('.radio-group');
+        } else if (elementId === 'family-history-grid') {
+            element = document.querySelector('.family-history-grid');
+        } else if (elementId === 'aadhar-scan-card') {
+            element = document.querySelector('.scan-card');
+        }
+    }
+    
+    if (element) {
+        // Add error styling
+        element.classList.add('error');
+        
+        // Create or update error message
+        let errorMsg = element.querySelector('.error-message');
+        if (!errorMsg) {
+            errorMsg = document.createElement('div');
+            errorMsg.className = 'error-message';
+            element.appendChild(errorMsg);
+        }
+        errorMsg.textContent = message;
+        errorMsg.classList.add('show');
+        
+        // Scroll to first error
+        if (document.querySelectorAll('.error').length === 1) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+}
+
+function clearAllErrors() {
+    // Remove error classes
+    document.querySelectorAll('.error').forEach(element => {
+        element.classList.remove('error');
+    });
+    
+    // Hide error messages with smooth animation
+    document.querySelectorAll('.error-message.show').forEach(msg => {
+        msg.classList.remove('show');
+        setTimeout(() => {
+            if (!msg.classList.contains('show')) {
+                msg.style.display = 'none';
+            }
+        }, 300);
+    });
+    
+    // Remove generic error messages
+    document.querySelectorAll('.generic-error-message').forEach(msg => {
+        msg.style.opacity = '0';
+        setTimeout(() => {
+            if (msg.parentNode) {
+                msg.remove();
+            }
+        }, 300);
+    });
+}
+
+// Add success feedback when fields are filled correctly
+function showSuccessFeedback(elementId) {
+    let element = document.getElementById(elementId);
+    if (!element) {
+        // Try to find by class or data attribute similar to showError function
+        if (elementId.includes('toggle')) {
+            const fieldName = elementId.replace('-toggle', '');
+            element = document.querySelector(`[data-field="${fieldName}"]`);
+        } else if (elementId.includes('radio-group')) {
+            const fieldName = elementId.replace('-radio-group', '');
+            element = document.querySelector(`input[name="${fieldName}"]`)?.closest('.radio-group');
+        } else if (elementId === 'family-history-grid') {
+            element = document.querySelector('.family-history-grid');
+        } else if (elementId === 'aadhar-scan-card') {
+            element = document.querySelector('.scan-card');
+        }
+    }
+    
+    if (element) {
+        // Remove error state
+        element.classList.remove('error');
+        
+        // Add success state briefly
+        element.classList.add('success');
+        setTimeout(() => {
+            element.classList.remove('success');
+        }, 2000);
+        
+        // Hide any error messages
+        const errorMsg = element.querySelector('.error-message');
+        if (errorMsg) {
+            errorMsg.classList.remove('show');
+        }
+    }
+}
+
+// Show a generic error message at the top of the section
+function showGenericError(message) {
+    // Clear existing error messages first
+    clearAllErrors();
+    
+    // Find the section 2 container
+    const section2 = document.getElementById('section-2');
+    if (!section2) return;
+    
+    // Remove any existing generic error message
+    const existingError = section2.querySelector('.generic-error-message');
+    if (existingError) {
+        existingError.remove();
+    }
+    
+    // Create new generic error message
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'generic-error-message';
+    errorDiv.innerHTML = `
+        <div class="error-content">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    // Insert at the beginning of section 2
+    section2.insertBefore(errorDiv, section2.firstChild);
+    
+    // Scroll to the error message
+    errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        if (errorDiv.parentNode) {
+            errorDiv.style.opacity = '0';
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.remove();
+                }
+            }, 300);
+        }
+    }, 5000);
+}
+
+// Initialize smart guidance system
+function initializeSmartGuidance() {
+    // Add helpful hints for Aadhaar upload
+    const aadhaarButtons = document.querySelectorAll('.btn-scan');
+    aadhaarButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Clear any existing errors when user tries to upload
+            const scanCard = document.querySelector('#aadhar-scan-card');
+            if (scanCard) {
+                scanCard.classList.remove('error');
+                const errorMsg = scanCard.querySelector('.error-message');
+                if (errorMsg) {
+                    errorMsg.classList.remove('show');
+                }
+            }
+        });
+    });
+    
+    // Add real-time validation for file inputs
+    const fileInputs = ['aadhar_front', 'aadhar_back', 'aadhar_combined'];
+    fileInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    showSuccessFeedback('aadhar-scan-card');
+                    // Update status
+                    const statusElement = document.getElementById('aadhar-status');
+                    if (statusElement) {
+                        statusElement.textContent = `✅ ${this.files[0].name} uploaded successfully`;
+                        statusElement.style.color = '#27ae60';
+                    }
+                }
+            });
+        }
+    });
+    
+    // Add guidance for toggle buttons
+    const toggleButtons = document.querySelectorAll('.yes-no-toggle');
+    toggleButtons.forEach(toggle => {
+        const toggleOptions = toggle.querySelectorAll('.toggle-option');
+        toggleOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const fieldName = toggle.getAttribute('data-field');
+                if (fieldName) {
+                    showSuccessFeedback(`${fieldName}-toggle`);
+                }
+            });
+        });
+    });
+    
+    // Add guidance for radio buttons
+    const radioGroups = document.querySelectorAll('.radio-group');
+    radioGroups.forEach(group => {
+        const radios = group.querySelectorAll('input[type="radio"]');
+        radios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    const fieldName = this.name;
+                    showSuccessFeedback(`${fieldName}-radio-group`);
+                }
+            });
+        });
+    });
+    
+    // Add guidance for family history
+    const familyConditions = document.querySelectorAll('.family-condition');
+    familyConditions.forEach(condition => {
+        condition.addEventListener('click', function() {
+            // This will be handled by the existing family history logic
+            setTimeout(() => {
+                const familyHistoryInput = document.getElementById('family_history');
+                if (familyHistoryInput && familyHistoryInput.value) {
+                    showSuccessFeedback('family-history-grid');
+                }
+            }, 100);
+        });
+    });
+}
+
+function nextSection() {
+    // Validate current section before proceeding
+    if (!validateCurrentSection()) {
+        // Show encouraging message to help user
+        showEncouragingMessage();
+        return; // Don't proceed if validation fails
+    }
+    
+    // Show success message
+    showSectionCompletionMessage(currentSection);
+    
+    if (currentSection < totalSections) {
+        showSection(currentSection + 1);
+    } else {
+        submitForm();
+    }
+}
+
+function showEncouragingMessage() {
+    // Create a temporary encouraging message
+    const encourageDiv = document.createElement('div');
+    encourageDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        z-index: 10000;
+        font-size: 14px;
+        max-width: 320px;
+        animation: slideInRight 0.4s ease-out;
+        border-left: 4px solid #2980b9;
+    `;
+    
+    const currentSectionMessages = {
+        1: [
+            '� Please upload your Aadhaar card to continue. It\'s required for identity verification.',
+            '🆔 Identity verification needed! Upload your Aadhaar card documents.',
+        ],
+        2: [
+            '🩺 Medical information is required. Please answer all the health questions above.',
+            '❤️ Complete your medical history to help doctors provide better care.',
+            '🏥 Almost done! Just fill in your medical details and family history.',
+            '📋 Your health information helps us serve you better. Please complete all fields.'
+        ]
+    };
+    
+    const messages = currentSectionMessages[currentSection] || [
+        '💪 Almost there! Just fill in the required fields marked with * to continue.',
+        '🎯 You\'re doing great! Please complete the mandatory fields to proceed.'
+    ];
+    
+    encourageDiv.textContent = messages[Math.floor(Math.random() * messages.length)];
+    document.body.appendChild(encourageDiv);
+    
+    // Remove after 5 seconds
+    setTimeout(() => {
+        encourageDiv.style.animation = 'slideOutRight 0.4s ease-in';
+        setTimeout(() => {
+            if (encourageDiv.parentNode) {
+                encourageDiv.parentNode.removeChild(encourageDiv);
+            }
+        }, 400);
+    }, 5000);
+}
+
+function showSectionCompletionMessage(sectionNum) {
+    const sectionNames = {
+        1: 'Identity verification',
+        2: 'Medical history',
+        3: 'Contact information',
+        4: 'Personal details'
+    };
+    
+    const successDiv = document.createElement('div');
+    successDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        font-size: 14px;
+        animation: slideInRight 0.3s ease-out;
+    `;
+    
+    successDiv.textContent = `✅ ${sectionNames[sectionNum]} completed successfully!`;
+    document.body.appendChild(successDiv);
+    
+    // Remove after 2 seconds
+    setTimeout(() => {
+        successDiv.style.animation = 'slideOutRight 0.3s ease-in';
+        setTimeout(() => {
+            if (successDiv.parentNode) {
+                successDiv.parentNode.removeChild(successDiv);
+            }
+        }, 300);
+    }, 2000);
+}
+
+function prevSection() {
+    if (currentSection > 1) {
+        showSection(currentSection - 1);
+    }
+}
+
+function showSection(sectionNumber) {
+    // Clear all error messages when switching sections
+    clearAllErrors();
+    
+    // Hide all sections
+    for (let i = 1; i <= totalSections; i++) {
+        const section = document.getElementById(`section-${i}`);
+        if (section) {
+            section.style.display = 'none';
+        }
+    }
+    
+    // Show target section
+    const targetSection = document.getElementById(`section-${sectionNumber}`);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+        currentSection = sectionNumber;
+        
+        // Update pagination dots
+        updatePaginationDots(sectionNumber);
+        
+        // Update progress bar
+        updateProgressBar(sectionNumber);
+        
+        // Scroll to top of form
+        const stepContainer = document.querySelector('.step-container');
+        if (stepContainer) {
+            stepContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+}
+
+function updatePaginationDots(activeSection) {
+    const dots = document.querySelectorAll('.pagination-dots .dot');
+    dots.forEach((dot, index) => {
+        const sectionNumber = index + 1;
+        if (sectionNumber === activeSection) {
+            dot.classList.add('active');
+        } else if (sectionNumber < activeSection) {
+            dot.classList.remove('active');
+            dot.classList.add('completed');
+        } else {
+            dot.classList.remove('active', 'completed');
+        }
+    });
+}
+
+function updateProgressBar(activeSection) {
+    const progressFill = document.querySelector('.progress-fill');
+    if (progressFill) {
+        const percentage = (activeSection / totalSections) * 16.67; // Keep same scale as original
+        progressFill.style.width = `${percentage}%`;
+    }
+}
+
+function submitForm() {
+    // Directly call the form submission logic instead of dispatching event
+    const form = document.getElementById('registrationForm');
+    if (form) {
+        // Collect all form data including both Action and Outcome categories
+        const formData = new FormData();
+        
+        // Add all form fields
+        const inputs = form.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            if (input.type === 'file') {
+                if (input.files && input.files[0]) {
+                    formData.append(input.name, input.files[0]);
+                }
+            } else {
+                formData.append(input.name, input.value);
+            }
+        });
+        
+        // Add calculated age for diagnosis
+        if (window.calculatedAge) {
+            formData.append('calculated_age', window.calculatedAge);
+        }
+        
+        // Add occupation detail if "others" is selected
+        const occupationDetail = document.getElementById('occupation_detail');
+        if (occupationDetail && occupationDetail.value) {
+            formData.append('occupation_detail', occupationDetail.value);
+        }
+        
+        // Show loading on the final button
+        const submitBtn = document.querySelector('.section-navigation .btn-next');
+        if (submitBtn) {
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Registration...';
+            submitBtn.disabled = true;
+            
+            fetch('/save_registration', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return response.text().then(text => {
+                    console.log('Raw response:', text);
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        console.error('Failed to parse JSON:', e);
+                        throw new Error('Server returned invalid JSON: ' + text.substring(0, 100));
+                    }
+                });
+            })
+            .then(data => {
+                console.log('Parsed data:', data);
+                if (data.success) {
+                    showNotification('Registration completed successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/step3';
+                    }, 1000);
+                } else {
+                    throw new Error(data.error || 'Unknown error occurred');
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                showNotification('Error: ' + error.message, 'error');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+        }
+    }
+}
+
+function initializeConditionalFields() {
+    // Handle EMR status changes
+    const emrCards = document.querySelectorAll('.selection-cards[data-field="emr_status"] .selection-card');
+    emrCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+            const emrUpload = document.getElementById('emr-upload');
+            const emrRegister = document.getElementById('emr-register');
+            
+            if (value === 'existing') {
+                emrUpload.style.display = 'block';
+                emrRegister.style.display = 'none';
+            } else if (value === 'none') {
+                emrUpload.style.display = 'none';
+                emrRegister.style.display = 'block';
+            } else {
+                emrUpload.style.display = 'none';
+                emrRegister.style.display = 'none';
+            }
+        });
+    });
+    
+    // Handle gender selection for female-specific questions
+    const genderCards = document.querySelectorAll('.selection-cards[data-field="gender"] .selection-card');
+    genderCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+            console.log(`Manual gender selection: ${value}`);
+            
+            if (value === 'female') {
+                console.log('Female selected manually - showing female questions');
+                showFemaleQuestions();
+            } else {
+                console.log('Non-female selected manually - hiding female questions');
+                hideFemaleQuestions();
+            }
+        });
+    });
+    
+    // Handle pregnancy status for pregnancy month visibility
+    const pregnancyToggle = document.querySelectorAll('.yes-no-toggle[data-field="currently_pregnant"] .toggle-option');
+    pregnancyToggle.forEach(option => {
+        option.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+            const pregnancyMonthSection = document.getElementById('pregnancy-month-section');
+            const childbirthSection = document.getElementById('childbirth-section');
+            
+            if (value === 'yes') {
+                pregnancyMonthSection.style.display = 'block';
+                // Hide childbirth section when currently pregnant
+                childbirthSection.style.display = 'none';
+                // Clear childbirth field value
+                document.getElementById('recent_childbirth').value = '';
+                // Reset childbirth toggle buttons
+                const childbirthToggle = document.querySelectorAll('.yes-no-toggle[data-field="recent_childbirth"] .toggle-option');
+                childbirthToggle.forEach(btn => btn.classList.remove('active'));
+            } else {
+                pregnancyMonthSection.style.display = 'none';
+                document.getElementById('pregnancy_month').value = '';
+                // Show childbirth section when not currently pregnant
+                childbirthSection.style.display = 'block';
+            }
+        });
+    });
+    
+    // Handle EMR link input
+    const emrLinkInput = document.getElementById('emr_link');
+    if (emrLinkInput) {
+        emrLinkInput.addEventListener('input', function() {
+            // Add visual feedback for valid URL
+            const value = this.value.trim();
+            if (value && (value.startsWith('http://') || value.startsWith('https://'))) {
+                this.style.borderColor = '#27ae60';
+                this.style.boxShadow = '0 0 0 2px rgba(39, 174, 96, 0.1)';
+            } else if (value) {
+                this.style.borderColor = '#e74c3c';
+                this.style.boxShadow = '0 0 0 2px rgba(231, 76, 60, 0.1)';
+            } else {
+                this.style.borderColor = '#e9ecef';
+                this.style.boxShadow = 'none';
+            }
+        });
+        
+        emrLinkInput.addEventListener('blur', function() {
+            this.style.boxShadow = 'none';
+        });
+    }
+}
+
+function initializeSelectionCards() {
+    // Handle traditional selection cards
+    const selectionGroups = document.querySelectorAll('.selection-cards');
+    
+    selectionGroups.forEach(group => {
+        const fieldName = group.getAttribute('data-field');
+        const cards = group.querySelectorAll('.selection-card');
+        const hiddenInput = document.getElementById(fieldName);
+        
+        cards.forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove active class from all cards in this group
+                cards.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked card
+                this.classList.add('active');
+                
+                // Update hidden input value
+                const value = this.getAttribute('data-value');
+                hiddenInput.value = value;
+                
+                // Handle "others" option for occupation
+                if (fieldName === 'occupation' && value === 'others') {
+                    document.getElementById('occupation-other').style.display = 'block';
+                } else if (fieldName === 'occupation') {
+                    document.getElementById('occupation-other').style.display = 'none';
+                }
+                
+                // Trigger change event for any additional processing
+                hiddenInput.dispatchEvent(new Event('change'));
+            });
+        });
+    });
+    
+    // Handle enhanced selection cards (new design)
+    const enhancedGroups = document.querySelectorAll('.enhanced-selection-grid');
+    
+    enhancedGroups.forEach(group => {
+        const fieldName = group.getAttribute('data-field');
+        const cards = group.querySelectorAll('.enhanced-card');
+        const hiddenInput = document.getElementById(fieldName);
+        
+        cards.forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove active class from all cards in this group
+                cards.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked card
+                this.classList.add('active');
+                
+                // Update hidden input value
+                const value = this.getAttribute('data-value');
+                hiddenInput.value = value;
+                
+                // Handle "others" option for occupation
+                if (fieldName === 'occupation' && value === 'others') {
+                    const otherInput = document.getElementById('occupation-other');
+                    if (otherInput) {
+                        otherInput.style.display = 'block';
+                        // Focus on the text input for better UX
+                        setTimeout(() => {
+                            const textInput = otherInput.querySelector('input');
+                            if (textInput) textInput.focus();
+                        }, 100);
+                    }
+                } else if (fieldName === 'occupation') {
+                    const otherInput = document.getElementById('occupation-other');
+                    if (otherInput) {
+                        otherInput.style.display = 'none';
+                        // Clear the other input value
+                        const textInput = otherInput.querySelector('input');
+                        if (textInput) textInput.value = '';
+                    }
+                }
+                
+                // Trigger change event for any additional processing
+                hiddenInput.dispatchEvent(new Event('change'));
+                
+                // Add visual feedback
+                this.style.transform = 'translateY(-2px) scale(1.02)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+            
+            // Add hover effects
+            card.addEventListener('mouseenter', function() {
+                if (!this.classList.contains('active')) {
+                    this.style.transform = 'translateY(-1px)';
+                }
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('active')) {
+                    this.style.transform = '';
+                }
+            });
+        });
+    });
+}
+
+function initializeToggleButtons() {
+    const toggleGroups = document.querySelectorAll('.yes-no-toggle');
+    
+    toggleGroups.forEach(group => {
+        const fieldName = group.getAttribute('data-field');
+        const options = group.querySelectorAll('.toggle-option');
+        const hiddenInput = document.getElementById(fieldName);
+        
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from all options in this group
+                options.forEach(o => o.classList.remove('active'));
+                
+                // Add active class to clicked option
+                this.classList.add('active');
+                
+                // Update hidden input value
+                const value = this.getAttribute('data-value');
+                hiddenInput.value = value;
+                
+                // Trigger change event
+                hiddenInput.dispatchEvent(new Event('change'));
+            });
+        });
+    });
+}
+
+function initializeFamilyHistory() {
+    const familyConditions = document.querySelectorAll('.family-condition');
+    const hiddenInput = document.getElementById('family_history');
+    let selectedConditions = [];
+    
+    familyConditions.forEach(condition => {
+        condition.addEventListener('click', function() {
+            const conditionValue = this.getAttribute('data-condition');
+            
+            if (conditionValue === 'none') {
+                // If "None" is selected, clear all other selections
+                familyConditions.forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedConditions = ['none'];
+            } else {
+                // Remove "None" if other conditions are selected
+                const noneOption = document.querySelector('.family-condition[data-condition="none"]');
+                noneOption.classList.remove('selected');
+                selectedConditions = selectedConditions.filter(c => c !== 'none');
+                
+                // Toggle current condition
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    selectedConditions = selectedConditions.filter(c => c !== conditionValue);
+                } else {
+                    this.classList.add('selected');
+                    selectedConditions.push(conditionValue);
+                }
+            }
+            
+            // Update hidden input
+            hiddenInput.value = selectedConditions.join(',');
+        });
+    });
+}
+
+function initializeFileUploads() {
+    const fileInputs = document.querySelectorAll('.file-input');
+    
+    fileInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            console.log(`File input changed: ${this.id}`);
+            const statusElement = document.getElementById(this.id.replace('_', '-') + '-status');
+            if (this.files && this.files[0]) {
+                console.log(`File selected: ${this.files[0].name}`);
+                statusElement.textContent = `Uploaded: ${this.files[0].name}`;
+                statusElement.style.color = '#27ae60';
+                
+                // Process Aadhaar images for data extraction (check for aadhar or aadhaar)
+                if (this.id.includes('aadhar') || this.id.includes('aadhaar')) {
+                    console.log(`Processing Aadhaar image from input: ${this.id}`);
+                    processAadharImage(this.files[0], this.id);
+                }
+                
+                // Process insurance documents for summary generation
+                if (this.id === 'insurance_doc') {
+                    console.log(`Processing insurance document from input: ${this.id}`);
+                    processInsuranceDocument(this.files[0], this.id);
+                }
+            } else {
+                statusElement.textContent = 'Ready to scan';
+                statusElement.style.color = '#6c757d';
+            }
+        });
+    });
+    
+    // Add specific listeners for Aadhaar inputs to ensure they work
+    const aadharInputs = ['aadhar_front', 'aadhar_back', 'aadhar_combined'];
+    aadharInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.addEventListener('change', function() {
+                console.log(`Specific Aadhaar listener triggered: ${inputId}`);
+                if (this.files && this.files[0]) {
+                    processAadharImage(this.files[0], inputId);
+                }
+            });
+        }
+    });
+    
+    // Add specific listener for insurance document
+    const insuranceInput = document.getElementById('insurance_doc');
+    if (insuranceInput) {
+        insuranceInput.addEventListener('change', function() {
+            console.log(`Specific insurance listener triggered: insurance_doc`);
+            if (this.files && this.files[0]) {
+                processInsuranceDocument(this.files[0], 'insurance_doc');
+            }
+        });
+    }
+}
+
+function processAadharImage(file, inputId) {
+    console.log(`Starting Aadhaar processing for file: ${file.name}, input: ${inputId}`);
+    
+    const statusElement = document.getElementById('aadhar-status');
+    const progressElement = document.getElementById('extraction-progress');
+    
+    if (!statusElement) {
+        console.error('Status element not found');
+        return;
+    }
+    
+    if (!progressElement) {
+        console.error('Progress element not found');
+        return;
+    }
+    
+    // Show progress indicator
+    progressElement.style.display = 'block';
+    statusElement.textContent = 'Processing Aadhaar card...';
+    statusElement.style.color = '#3498db';
+    
+    // Create FormData to send the image
+    const formData = new FormData();
+    formData.append('aadhaar_image', file);
+    
+    console.log('Sending request to /process_aadhaar...');
+    
+    // Send image to backend for processing
+    fetch('/process_aadhaar', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        console.log('Response received:', response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Aadhaar processing response:', data);
+        
+        if (data.success && data.extracted_data) {
+            console.log('Extraction successful, populating fields...');
+            // Populate form fields with extracted data
+            populateFormFields(data.extracted_data);
+            
+            // Update status
+            statusElement.textContent = `✓ Data extracted successfully (${data.extracted_data.extraction_confidence || 'medium'} confidence)`;
+            statusElement.style.color = '#27ae60';
+            
+            // Show success notification
+            showNotification(`Aadhaar data extracted successfully! Confidence: ${data.extracted_data.extraction_confidence || 'medium'}`, 'success');
+        } else {
+            console.error('Extraction failed:', data.error);
+            throw new Error(data.error || 'Failed to extract data from Aadhaar');
+        }
+    })
+    .catch(error => {
+        console.error('Aadhaar processing error:', error);
+        statusElement.textContent = '✗ Failed to extract data - please try again';
+        statusElement.style.color = '#e74c3c';
+        showNotification(`Error: ${error.message}`, 'error');
+    })
+    .finally(() => {
+        // Hide progress indicator
+        progressElement.style.display = 'none';
+    });
+}
+
+function processInsuranceDocument(file, inputId) {
+    console.log(`Starting insurance processing for file: ${file.name}, input: ${inputId}`);
+    
+    const statusElement = document.getElementById('insurance-status');
+    const progressElement = document.getElementById('insurance-progress');
+    const summaryElement = document.getElementById('insurance-summary');
+    const summaryContentElement = document.getElementById('insurance-summary-content');
+    
+    if (!statusElement) {
+        console.error('Insurance status element not found');
+        return;
+    }
+    
+    if (!progressElement) {
+        console.error('Insurance progress element not found');
+        return;
+    }
+    
+    // Show progress indicator
+    progressElement.style.display = 'block';
+    summaryElement.style.display = 'none';
+    statusElement.textContent = 'Processing insurance document...';
+    statusElement.style.color = '#3498db';
+    
+    // Create FormData to send the document
+    const formData = new FormData();
+    formData.append('insurance_document', file);
+    
+    console.log('Sending request to /process_insurance_pdf...');
+    
+    // Send document to backend for processing
+    fetch('/process_insurance_pdf', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        console.log('Response received:', response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Insurance processing response:', data);
+        
+        if (data.success && data.extracted_text) {
+            console.log('Text extraction successful, displaying content...');
+            
+            // Update status
+            statusElement.textContent = `✓ Text extracted successfully (${data.extraction_method || 'standard'})`;
+            statusElement.style.color = '#27ae60';
+            
+            // Display extracted text
+            displayExtractedText(data.extracted_text, data.file_type);
+            
+            // Show success notification
+            showNotification(`Insurance document processed successfully! Method: ${data.extraction_method || 'standard'}`, 'success');
+        } else {
+            console.error('Extraction failed:', data.error);
+            throw new Error(data.error || 'Failed to extract text from insurance document');
+        }
+    })
+    .catch(error => {
+        console.error('Insurance processing error:', error);
+        statusElement.textContent = '✗ Failed to analyze document - please try again';
+        statusElement.style.color = '#e74c3c';
+        showNotification(`Error: ${error.message}`, 'error');
+    })
+    .finally(() => {
+        // Hide progress indicator
+        progressElement.style.display = 'none';
+    });
+}
+
+function displayExtractedText(extractedText, fileType) {
+    const summaryElement = document.getElementById('insurance-summary');
+    const summaryContentElement = document.getElementById('insurance-summary-content');
+    
+    if (!summaryElement || !summaryContentElement) {
+        console.error('Insurance summary elements not found');
+        return;
+    }
+    
+    // Create extracted text HTML
+    let textHTML = `
+        <div class="extracted-text-card">
+            <div class="text-header">
+                <h6><i class="fas fa-file-text"></i> Extracted Text from ${fileType || 'Document'}</h6>
+                <div class="text-actions">
+                    <button class="btn-copy" onclick="copyExtractedText()">
+                        <i class="fas fa-copy"></i> Copy Text
+                    </button>
+                    <button class="btn-expand" onclick="toggleTextExpansion()">
+                        <i class="fas fa-expand"></i> Expand
+                    </button>
+                </div>
+            </div>
+            <div class="text-content" id="extracted-text-content">
+                <pre class="extracted-text-pre">${extractedText}</pre>
+            </div>
+            <div class="text-info">
+                <p><i class="fas fa-info-circle"></i> This is the complete text extracted from your insurance document in chronological order.</p>
+            </div>
+        </div>
+    `;
+    
+    summaryContentElement.innerHTML = textHTML;
+    summaryElement.style.display = 'block';
+    
+    // Store extracted text globally for copy function
+    window.currentExtractedText = extractedText;
+    
+    console.log('Extracted text displayed successfully');
+}
+
+function copyExtractedText() {
+    if (window.currentExtractedText) {
+        navigator.clipboard.writeText(window.currentExtractedText).then(() => {
+            showNotification('Text copied to clipboard!', 'success');
+        }).catch(() => {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = window.currentExtractedText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            showNotification('Text copied to clipboard!', 'success');
+        });
+    }
+}
+
+function toggleTextExpansion() {
+    const textContent = document.getElementById('extracted-text-content');
+    const expandBtn = document.querySelector('.btn-expand');
+    
+    if (textContent && expandBtn) {
+        if (textContent.classList.contains('expanded')) {
+            textContent.classList.remove('expanded');
+            expandBtn.innerHTML = '<i class="fas fa-expand"></i> Expand';
+        } else {
+            textContent.classList.add('expanded');
+            expandBtn.innerHTML = '<i class="fas fa-compress"></i> Collapse';
+        }
+    }
+}
+
+function populateFormFields(extractedData) {
+    console.log('Populating form fields with data:', extractedData);
+    
+    try {
+        // Populate name (backend sends 'full_name')
+        if (extractedData.full_name && extractedData.full_name !== null && extractedData.full_name !== 'null') {
+            console.log('Populating full_name:', extractedData.full_name);
+            const nameField = document.getElementById('full_name');
+            if (nameField) {
+                nameField.value = extractedData.full_name;
+                nameField.style.backgroundColor = '#e8f5e8'; // Light green to indicate auto-filled
+                console.log('Name field populated successfully');
+            } else {
+                console.error('Name field not found');
+            }
+        } else {
+            console.log('No valid full_name data to populate');
+        }
+        
+        // Populate date of birth
+        if (extractedData.date_of_birth && extractedData.date_of_birth !== null && extractedData.date_of_birth !== 'null') {
+            console.log('Populating DOB:', extractedData.date_of_birth);
+            const dobField = document.getElementById('date_of_birth');
+            if (dobField) {
+                // Convert DD/MM/YYYY to YYYY-MM-DD for HTML date input
+                let dobValue = extractedData.date_of_birth;
+                if (dobValue.includes('/')) {
+                    const parts = dobValue.split('/');
+                    if (parts.length === 3) {
+                        // DD/MM/YYYY to YYYY-MM-DD
+                        dobValue = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                    }
+                }
+                
+                dobField.value = dobValue;
+                dobField.style.backgroundColor = '#e8f5e8';
+                
+                // Trigger age calculation
+                dobField.dispatchEvent(new Event('change'));
+                console.log('DOB field populated successfully with value:', dobValue);
+            } else {
+                console.error('DOB field not found');
+            }
+        } else {
+            console.log('No valid DOB data to populate');
+        }
+        
+        // Populate gender
+        if (extractedData.gender && extractedData.gender !== null && extractedData.gender !== 'null') {
+            console.log('Populating gender:', extractedData.gender);
+            const genderValue = extractedData.gender.toLowerCase();
+            const genderCards = document.querySelectorAll('.selection-cards[data-field="gender"] .selection-card');
+            
+            console.log(`Found ${genderCards.length} gender cards`);
+            
+            let genderSet = false;
+            genderCards.forEach(card => {
+                const cardValue = card.getAttribute('data-value');
+                console.log(`Checking card: ${cardValue} against ${genderValue}`);
+                if (cardValue === genderValue) {
+                    console.log(`Matching gender card found: ${cardValue}`);
+                    // Remove active class from all cards
+                    genderCards.forEach(c => {
+                        c.classList.remove('active');
+                        c.style.backgroundColor = '';
+                    });
+                    // Add active class to matching card
+                    card.classList.add('active');
+                    card.style.backgroundColor = '#e8f5e8';
+                    
+                    // Update hidden input
+                    const hiddenInput = document.getElementById('gender');
+                    if (hiddenInput) {
+                        hiddenInput.value = cardValue;
+                        console.log('Gender hidden input updated');
+                        
+                        // Trigger the conditional display for female questions
+                        if (cardValue === 'female') {
+                            console.log('Female gender detected - showing female questions');
+                            showFemaleQuestions();
+                        } else {
+                            console.log('Non-female gender detected - hiding female questions');
+                            hideFemaleQuestions();
+                        }
+                    } else {
+                        console.error('Gender hidden input not found');
+                    }
+                    genderSet = true;
+                }
+            });
+            
+            if (!genderSet) {
+                console.warn(`No matching gender card found for: ${genderValue}`);
+            }
+        } else {
+            console.log('No valid gender data to populate');
+        }
+        
+        // Populate address
+        if (extractedData.address && extractedData.address !== null && extractedData.address !== 'null') {
+            console.log('Populating address:', extractedData.address);
+            const addressField = document.getElementById('address');
+            if (addressField) {
+                addressField.value = extractedData.address;
+                addressField.style.backgroundColor = '#e8f5e8';
+                console.log('Address field populated successfully');
+            } else {
+                console.error('Address field not found');
+            }
+        } else {
+            console.log('No valid address data to populate');
+        }
+        
+        // Populate Aadhaar number if available (for reference/verification)
+        if (extractedData.aadhaar_number && extractedData.aadhaar_number !== null && extractedData.aadhaar_number !== 'null') {
+            console.log('Aadhaar number extracted:', extractedData.aadhaar_number);
+            // Note: We don't populate this in a form field for privacy, just log it for verification
+        }
+        
+        // Log extraction details for debugging
+        console.log('Form population completed successfully');
+        
+        // Show extraction summary
+        if (extractedData.extracted_from) {
+            showNotification(`Data extracted from: ${extractedData.extracted_from}`, 'info');
+        }
+        
+        // Show extraction confidence
+        if (extractedData.extraction_confidence) {
+            showNotification(`Extraction confidence: ${extractedData.extraction_confidence}`, 'info');
+        }
+        
+    } catch (error) {
+        console.error('Error populating form fields:', error);
+        showNotification('Error populating form fields', 'error');
+    }
+}
+
+function showFemaleQuestions() {
+    const femaleQuestions = document.getElementById('female-questions');
+    if (femaleQuestions) {
+        femaleQuestions.style.display = 'block';
+        console.log('Female questions section shown');
+    } else {
+        console.error('Female questions section not found');
+    }
+}
+
+function hideFemaleQuestions() {
+    const femaleQuestions = document.getElementById('female-questions');
+    if (femaleQuestions) {
+        femaleQuestions.style.display = 'none';
+        // Reset female-specific fields
+        const currentlyPregnant = document.getElementById('currently_pregnant');
+        const pregnancyMonth = document.getElementById('pregnancy_month');
+        const recentChildbirth = document.getElementById('recent_childbirth');
+        
+        if (currentlyPregnant) currentlyPregnant.value = '';
+        if (pregnancyMonth) pregnancyMonth.value = '';
+        if (recentChildbirth) recentChildbirth.value = '';
+        
+        // Hide pregnancy month section
+        const pregnancyMonthSection = document.getElementById('pregnancy-month-section');
+        if (pregnancyMonthSection) {
+            pregnancyMonthSection.style.display = 'none';
+        }
+        
+        // Show childbirth section (reset to default visible state)
+        const childbirthSection = document.getElementById('childbirth-section');
+        if (childbirthSection) {
+            childbirthSection.style.display = 'block';
+        }
+        
+        // Reset visual state of female toggles and cards
+        const femaleToggles = femaleQuestions.querySelectorAll('.toggle-option');
+        femaleToggles.forEach(toggle => toggle.classList.remove('active'));
+        
+        const femaleCards = femaleQuestions.querySelectorAll('.selection-card');
+        femaleCards.forEach(card => card.classList.remove('active'));
+        
+        console.log('Female questions section hidden and reset');
+    }
+}
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    if (type === 'success') {
+        notification.style.background = '#27ae60';
+    } else if (type === 'error') {
+        notification.style.background = '#e74c3c';
+    } else if (type === 'info') {
+        notification.style.background = '#3498db';
+    }
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+function initializeFormSubmission() {
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Collect all form data including both Action and Outcome categories
+        const formData = new FormData();
+        
+        // Add all form fields
+        const inputs = this.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            if (input.type === 'file') {
+                if (input.files && input.files[0]) {
+                    formData.append(input.name, input.files[0]);
+                }
+            } else {
+                formData.append(input.name, input.value);
+            }
+        });
+        
+        // Add calculated age for diagnosis
+        if (window.calculatedAge) {
+            formData.append('calculated_age', window.calculatedAge);
+        }
+        
+        // Add occupation detail if "others" is selected
+        const occupationDetail = document.getElementById('occupation_detail');
+        if (occupationDetail && occupationDetail.value) {
+            formData.append('occupation_detail', occupationDetail.value);
+        }
+        
+        // Show loading
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Registration...';
+        submitBtn.disabled = true;
+        
+        fetch('/save_registration', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return response.text().then(text => {
+                console.log('Raw response:', text);
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.error('Failed to parse JSON:', e);
+                    throw new Error('Server returned invalid JSON: ' + text.substring(0, 100));
+                }
+            });
+        })
+        .then(data => {
+            console.log('Parsed data:', data);
+            if (data.success) {
+                showNotification('Registration completed successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = '/step2';
+                }, 1000);
+            } else {
+                throw new Error(data.error || 'Unknown error occurred');
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            showNotification('Error: ' + error.message, 'error');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+}
+
+// CSS animations
+const style = document.createElement('style');
+style.textContent = `
+    /* Pagination Controls Styles */
+    .pagination-controls {
+        margin-bottom: 10px;
+        padding: 6px;
+        background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        border-radius: 6px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    
+    .pagination-dots {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .pagination-dots::before {
+        content: '';
+        position: absolute;
+        top: 10px;
+        left: 30px;
+        right: 30px;
+        height: 1px;
+        background: #e9ecef;
+        z-index: 1;
+    }
+    
+    .dot {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+        transition: all 0.3s ease;
+        padding: 3px;
+        border-radius: 4px;
+    }
+    
+    .dot:hover {
+        background: rgba(52, 152, 219, 0.1);
+    }
+    
+    .dot-number {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #e9ecef;
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 10px;
+        margin-bottom: 2px;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+    
+    .dot-label {
+        font-size: 9px;
+        color: #6c757d;
+        font-weight: 500;
+        max-width: 80px;
+        line-height: 1.1;
+        transition: color 0.3s ease;
+    }
+    
+    .dot.active .dot-number {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border-color: #3498db;
+        transform: scale(1.1);
+    }
+    
+    .dot.active .dot-label {
+        color: #3498db;
+        font-weight: 600;
+    }
+    
+    .dot.completed .dot-number {
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+        border-color: #27ae60;
+    }
+    
+    .dot.completed .dot-label {
+        color: #27ae60;
+        font-weight: 500;
+    }
+    
+    /* Form Section Styles */
+    .form-section {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Section Navigation Styles */
+    .section-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        padding: 8px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .btn-navigation {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        min-width: 80px;
+        justify-content: center;
+    }
+    
+    .btn-navigation:hover:not(:disabled) {
+        background: linear-gradient(135deg, #2980b9, #21618c);
+        transform: translateY(-1px);
+        box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+    }
+    
+    .btn-navigation:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .btn-navigation.btn-prev {
+        background: linear-gradient(135deg, #6c757d, #5a6268);
+    }
+    
+    .btn-navigation.btn-prev:hover:not(:disabled) {
+        background: linear-gradient(135deg, #5a6268, #495057);
+    }
+    
+    /* Responsive Design for Pagination */
+    @media (max-width: 768px) {
+        .pagination-dots {
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .pagination-dots::before {
+            display: none;
+        }
+        
+        .dot {
+            flex: 1;
+            min-width: 80px;
+        }
+        
+        .dot-label {
+            font-size: 10px;
+            max-width: 80px;
+        }
+        
+        .dot-number {
+            width: 30px;
+            height: 30px;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .section-navigation {
+            flex-direction: column;
+            gap: 8px;
+            padding: 6px;
+        }
+        
+        .btn-navigation {
+            width: 100%;
+            max-width: 150px;
+            padding: 5px 10px;
+            font-size: 11px;
+        }
+        
+        /* Responsive Medical Documents Section */
+        .medical-documents-card {
+            padding: 20px;
+        }
+        
+        .card-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+        
+        .card-header .report-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            margin: 0 auto;
+        }
+        
+        .card-title h4 {
+            font-size: 18px;
+        }
+        
+        .question-section {
+            padding: 15px;
+        }
+        
+        .question-text {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .radio-group.enhanced {
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .radio-option.enhanced {
+            min-width: auto;
+            width: 100%;
+            padding: 15px;
+        }
+        
+        .radio-content .radio-text {
+            font-size: 14px;
+        }
+        
+        .radio-content .radio-description {
+            font-size: 12px;
+        }
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .scan-divider {
+        text-align: center;
+        margin: 6px 0;
+        font-size: 11px;
+        color: #7f8c8d;
+        font-weight: bold;
+    }
+    
+    .btn-scan-combined {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        border: none;
+        margin-top: 3px;
+    }
+    
+    .btn-scan-combined:hover {
+        background: linear-gradient(135deg, #2980b9, #21618c);
+        transform: translateY(-1px);
+    }
+    
+    .extraction-progress {
+        margin-top: 10px;
+        padding: 8px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #3498db;
+    }
+    
+    .progress-bar-container {
+        width: 100%;
+        height: 6px;
+        background: #e9ecef;
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 8px;
+    }
+    
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #3498db, #2980b9);
+        border-radius: 3px;
+        animation: progressAnimation 2s infinite;
+    }
+    
+    
+    /* Document Scan Grid - 4 cards in single line */
+    .document-scan-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-top: 15px;
+    }
+    
+    .document-scan-grid .scan-card {
+        background: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .document-scan-grid .scan-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+    
+    /* Compact Layout Styles */
+    .compact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .compact-field {
+        margin-bottom: 15px;
+    }
+    
+    .compact-field label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: #34495e;
+        font-size: 14px;
+    }
+    
+    /* Main form layout - two column for larger screens */
+    .form-main-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    
+    .form-column {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    /* Compact registration sections */
+    .registration-section {
+        background: white;
+        border-radius: 6px;
+        padding: 8px;
+        margin-bottom: 6px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .registration-section h3 {
+        font-size: 14px;
+        margin-bottom: 8px;
+        color: #2c3e50;
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 4px;
+    }
+    
+    /* Compact grids for different sections */
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+    }
+    
+    .medical-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    
+    .socio-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+    
+    /* New socio-economic layout styles - ENHANCED VERSION */
+    .socio-enhanced-group {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 18px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        transition: all 0.3s ease;
+    }
+    
+    .socio-enhanced-group:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .group-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .group-header i {
+        color: #3498db;
+        font-size: 1.1rem;
+        background: linear-gradient(135deg, #e3f2fd, #ffffff);
+        padding: 6px;
+        border-radius: 50%;
+        border: 1px solid #e3f2fd;
+    }
+    
+    .group-header h4 {
+        color: #2c3e50;
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .section-description {
+        background: #e8f5e8;
+        border-left: 4px solid #27ae60;
+        padding: 12px 20px;
+        margin-bottom: 25px;
+        border-radius: 0 8px 8px 0;
+    }
+    
+    .section-description p {
+        margin: 0;
+        color: #2d5e2d;
+        font-style: italic;
+        font-size: 0.95rem;
+    }
+    
+    .enhanced-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .enhanced-grid:last-child {
+        margin-bottom: 0;
+    }
+    
+    .enhanced-field-group {
+        position: relative;
+    }
+    
+    .enhanced-label {
+        display: block;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #34495e;
+        margin-bottom: 12px;
+        position: relative;
+    }
+    
+    .enhanced-label::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 30px;
+        height: 2px;
+        background: linear-gradient(90deg, #3498db, #2980b9);
+        border-radius: 1px;
+    }
+    
+    .enhanced-selection-grid {
+        display: grid;
+        gap: 8px;
+        margin-top: 10px;
+    }
+    
+    /* Occupation grid - 4 columns, 2 rows */
+    .enhanced-selection-grid:not(.marital-grid):not(.education-grid):not(.employment-grid):not(.economic-grid):not(.income-grid) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Marital status - 4 columns, 1 row */
+    .marital-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Education level - 4 columns, 1 row */
+    .education-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Employment status - 3 columns, 1 row */
+    .employment-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    /* Economic status - 2 columns, 2 rows */
+    .economic-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Income source - 2 columns, 2 rows */
+    .income-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .enhanced-card {
+        background: linear-gradient(135deg, #ffffff, #f8f9fa);
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        padding: 6px 4px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        min-height: 35px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+    }
+    
+    .enhanced-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #3498db, transparent);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .enhanced-card:hover::before {
+        transform: translateX(100%);
+    }
+    
+    .enhanced-card:hover {
+        background: linear-gradient(135deg, #e3f2fd, #f0f8ff);
+        border-color: #3498db;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.2);
+    }
+    
+    .enhanced-card.active {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        border-color: #2980b9;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+    }
+    
+    .enhanced-card.active .card-icon i {
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .enhanced-card.active .card-text,
+    .enhanced-card.active .card-subtitle {
+        color: white;
+    }
+    
+    .card-icon {
+        margin-bottom: 1px;
+    }
+    
+    .card-icon i {
+        font-size: 0.9rem;
+        color: #3498db;
+        transition: all 0.3s ease;
+    }
+    
+    .card-text {
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+        transition: all 0.3s ease;
+        line-height: 1;
+    }
+    
+    .card-subtitle {
+        font-size: 0.55rem;
+        color: #7f8c8d;
+        margin: 0;
+        font-weight: 400;
+        line-height: 1;
+        transition: all 0.3s ease;
+    }
+    
+    .other-input {
+        margin-top: 8px;
+        animation: slideDown 0.3s ease;
+    }
+    
+    .other-input input {
+        width: 100%;
+        padding: 6px 8px;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+    
+    .other-input input:focus {
+        outline: none;
+        border-color: #3498db;
+        background: white;
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Responsive design for enhanced layout */
+    @media (max-width: 1200px) {
+        .enhanced-grid {
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        .enhanced-selection-grid:not(.marital-grid):not(.education-grid):not(.employment-grid):not(.economic-grid):not(.income-grid) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .marital-grid,
+        .education-grid,
+        .employment-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .socio-enhanced-group {
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .enhanced-selection-grid:not(.marital-grid):not(.education-grid):not(.employment-grid):not(.economic-grid):not(.income-grid) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .marital-grid,
+        .education-grid,
+        .employment-grid,
+        .economic-grid,
+        .income-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .enhanced-card {
+            padding: 8px 6px;
+            min-height: 45px;
+        }
+        
+        .card-icon i {
+            font-size: 1rem;
+        }
+        
+        .card-text {
+            font-size: 0.7rem;
+        }
+        
+        .card-subtitle {
+            font-size: 0.6rem;
+        }
+    }
+
+    /* Keep old socio styles for backward compatibility but hide them */
+    .socio-sub-group {
+        display: none;
+    }
+    
+    .socio-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 12px;
+    }
+    
+    .socio-row:last-child {
+        margin-bottom: 0;
+    }
+    
+    .socio-item {
+        margin-bottom: 0;
+    }
+    
+    .socio-item label {
+        font-size: 13px;
+        font-weight: 500;
+        color: #34495e;
+        margin-bottom: 6px;
+        display: block;
+    }
+    
+    .medical-conditions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+    }
+    
+    .condition-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .condition-label {
+        font-size: 11px;
+        font-weight: 500;
+        color: #34495e;
+        flex: 1;
+    }
+    
+    .family-history-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 2px;
+    }
+    
+    .family-condition {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 3px;
+        padding: 2px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 10px;
+    }
+    
+    .family-condition:hover {
+        background: #e3f2fd;
+        border-color: #3498db;
+    }
+    
+    .family-condition.selected {
+        background: #3498db;
+        color: white;
+        border-color: #3498db;
+    }
+    
+    /* Full width sections */
+    .full-width-section {
+        grid-column: 1 / -1;
+    }
+    
+    .selection-cards.compact {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        gap: 6px;
+        margin-top: 5px;
+    }
+    
+    .selection-cards.compact .selection-card {
+        padding: 6px 4px;
+        font-size: 11px;
+        text-align: center;
+    }
+    
+    /* Language cards in single line */
+    .selection-cards[data-field="language"] {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        margin-top: 5px;
+    }
+    
+    .selection-cards[data-field="language"] .selection-card {
+        padding: 6px 4px;
+        font-size: 11px;
+        text-align: center;
+        min-width: 0; /* Allow text to shrink */
+    }
+    
+    /* Gender cards larger */
+    .selection-cards[data-field="gender"] {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+    }
+    
+    .selection-cards[data-field="gender"] .selection-card {
+        padding: 5px;
+        text-align: center;
+        font-size: 11px;
+        min-height: 40px;
+    }
+    
+    .selection-cards[data-field="gender"] .selection-card i {
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+    
+    .selection-cards[data-field="gender"] .selection-card span {
+        font-size: 10px;
+        line-height: 1;
+    }
+    
+    /* Yes/No toggles more compact */
+    .yes-no-toggle {
+        display: flex;
+        gap: 3px;
+        margin-top: 3px;
+    }
+    
+    .toggle-option {
+        flex: 1;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 3px;
+        padding: 4px 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 10px;
+    }
+    
+    .conditional-section {
+        display: none;
+        margin-top: 8px;
+    }
+    
+    .emr-upload-section {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        padding: 8px;
+        margin-top: 6px;
+    }
+    
+    .emr-register-section {
+        background: #e8f5e8;
+        border: 2px solid #27ae60;
+        border-radius: 6px;
+        padding: 15px;
+        margin-top: 10px;
+        text-align: center;
+    }
+    
+    .file-status {
+        font-size: 12px;
+        margin-top: 5px;
+        color: #6c757d;
+    }
+    
+    .compact-grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    
+    .compact-grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+    
+    .blood-group-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 5px;
+    }
+    
+    .blood-group-grid .selection-card {
+        padding: 6px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .pregnancy-month-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 5px;
+    }
+    
+    .female-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .female-item {
+        margin-bottom: 10px;
+    }
+    
+    .female-item label,
+    .female-item .condition-label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 500;
+        color: #34495e;
+        font-size: 13px;
+    }
+    
+    .travel-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .travel-item {
+        margin-bottom: 10px;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 1200px) {
+        .form-main-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .compact-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .compact-grid-4 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .compact-grid-3 {
+            grid-template-columns: 1fr;
+        }
+        
+        .blood-group-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .pregnancy-month-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    .progress-text {
+        margin: 0;
+        font-size: 12px;
+        color: #3498db;
+        font-weight: 500;
+    }
+    
+    @keyframes progressAnimation {
+        0% { width: 0%; }
+        50% { width: 70%; }
+        100% { width: 100%; }
+    }
+    
+    /* Highlight auto-filled fields */
+    input[style*="background-color: rgb(232, 245, 232)"],
+    textarea[style*="background-color: rgb(232, 245, 232)"],
+    .selection-card[style*="background-color: rgb(232, 245, 232)"] {
+        border: 2px solid #27ae60 !important;
+        box-shadow: 0 0 5px rgba(39, 174, 96, 0.3) !important;
+    }
+    
+    /* Readonly field styles */
+    input[readonly],
+    textarea[readonly] {
+        background-color: #f8f9fa !important;
+        border: 1px solid #dee2e6 !important;
+        color: #6c757d !important;
+        cursor: not-allowed !important;
+    }
+    
+    input[readonly]:focus,
+    textarea[readonly]:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    
+    .notification.info {
+        background: #3498db !important;
+    }
+
+    /* Medical Reports Section Styles */
+    .reports-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3px;
+        margin-top: 4px;
+    }
+
+    .report-card {
+        background: #f8f9fa;
+        border-radius: 2px;
+        padding: 2px;
+        text-align: center;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .report-card:hover {
+        border-color: #3498db;
+        box-shadow: 0 1px 4px rgba(52, 152, 219, 0.15);
+    }
+
+    .report-icon {
+        width: 24px;
+        height: 24px;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 3px;
+    }
+
+    .report-icon i {
+        font-size: 10px;
+        color: white;
+    }
+
+    .report-card h4 {
+        font-size: 10px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 2px;
+    }
+
+    .report-card p {
+        font-size: 8px;
+        color: #7f8c8d;
+        margin-bottom: 3px;
+    }
+
+    /* EMR Section Styles */
+    .emr-selection {
+        margin-bottom: 6px;
+    }
+
+    .emr-selection h4 {
+        font-size: 11px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+
+    .radio-group.vertical {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .emr-section {
+        margin-top: 6px;
+        padding: 6px;
+        background: #f8f9fa;
+        border-radius: 4px;
+        border-left: 3px solid #3498db;
+    }
+
+    .emr-upload-card {
+        background: white;
+        border-radius: 6px;
+        padding: 15px;
+        border: 1px dashed #bdc3c7;
+        transition: all 0.3s ease;
+    }
+
+    .emr-upload-card:hover {
+        border-color: #3498db;
+        background: #f8f9fa;
+    }
+
+    .upload-area {
+        text-align: center;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .upload-area:hover {
+        background: #ecf0f1;
+    }
+
+    .upload-area i {
+        font-size: 20px;
+        color: #3498db;
+        margin-bottom: 5px;
+    }
+
+    .upload-area p {
+        font-size: 11px;
+        font-weight: 500;
+        color: #2c3e50;
+        margin-bottom: 2px;
+    }
+
+    .upload-area small {
+        color: #7f8c8d;
+        font-size: 9px;
+    }
+
+    .upload-status {
+        text-align: center;
+        margin-top: 5px;
+        font-size: 10px;
+        font-weight: 500;
+        color: #7f8c8d;
+    }
+
+    .upload-status.uploading {
+        color: #f39c12;
+    }
+
+    .upload-status.success {
+        color: #27ae60;
+    }
+
+    .upload-status.error {
+        color: #e74c3c;
+    }
+
+    /* EMR Insights Styles */
+    .emr-insights {
+        margin-top: 15px;
+        background: #fff;
+        border-radius: 6px;
+        padding: 15px;
+        border: 1px solid #e9ecef;
+    }
+
+    .emr-insights h5 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .emr-insights h5 i {
+        color: #f39c12;
+    }
+
+    .insights-content {
+        background: #f8f9fa;
+        border-radius: 4px;
+        padding: 12px;
+        margin-bottom: 8px;
+        min-height: 50px;
+        font-size: 12px;
+        line-height: 1.4;
+        color: #34495e;
+        transition: all 0.3s ease;
+        max-height: 60px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .insights-content:hover {
+        max-height: none;
+        background: #ecf0f1;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .insights-content.expanded {
+        max-height: none;
+    }
+
+    .insights-hover-note {
+        text-align: center;
+        font-size: 11px;
+        color: #7f8c8d;
+        font-style: italic;
+    }
+
+    .insights-hover-note i {
+        margin-right: 4px;
+    }
+
+    .loading-spinner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: #3498db;
+    }
+
+    .loading-spinner i {
+        font-size: 16px;
+    }
+
+    /* New EMR Registration Card */
+    .new-emr-card {
+        background: white;
+        border-radius: 8px;
+        padding: 18px;
+        text-align: center;
+        border: 1px solid #e9ecef;
+    }
+
+    .emr-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+    }
+
+    .emr-icon i {
+        font-size: 24px;
+        color: white;
+    }
+
+    .new-emr-card h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+    }
+
+    .new-emr-card p {
+        font-size: 12px;
+        color: #7f8c8d;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+
+    /* Radio button enhancements for new sections */
+    .radio-group {
+        display: flex;
+        gap: 6px;
+        margin-top: 6px;
+        justify-content: center;
+    }
+
+    .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        padding: 3px 6px;
+        border-radius: 3px;
+        transition: background-color 0.3s ease;
+    }
+
+    .radio-option:hover {
+        background: #ecf0f1;
+    }
+
+    .radio-custom {
+        width: 12px;
+        height: 12px;
+        border: 1px solid #bdc3c7;
+        border-radius: 50%;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .radio-option input[type="radio"] {
+        display: none;
+    }
+
+    .radio-option input[type="radio"]:checked + .radio-custom {
+        border-color: #3498db;
+        background: #3498db;
+    }
+
+    .radio-option input[type="radio"]:checked + .radio-custom::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .radio-text {
+        font-size: 10px;
+        font-weight: 500;
+        color: #2c3e50;
+    }
+
+    /* Responsive design for new sections */
+    @media (max-width: 768px) {
+        .reports-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+        
+        .report-card {
+            padding: 2px;
+        }
+        
+        .report-icon {
+            width: 20px;
+            height: 20px;
+            margin-bottom: 2px;
+        }
+        
+        .report-icon i {
+            font-size: 8px;
+        }
+        
+        .report-card h4 {
+            font-size: 8px;
+            margin-bottom: 1px;
+        }
+        
+        .report-card p {
+            font-size: 7px;
+            margin-bottom: 2px;
+        }
+        
+        .radio-group {
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .upload-area {
+            padding: 8px;
+        }
+        
+        .upload-area i {
+            font-size: 16px;
+        }
+    }
+    
+    /* EMR Link Input Styles */
+    .emr-link-input {
+        transition: all 0.3s ease !important;
+    }
+    
+    .emr-link-input:focus {
+        outline: none;
+        border-color: #3498db !important;
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1) !important;
+        transform: translateY(-1px);
+    }
+    
+    .emr-link-input:hover {
+        border-color: #74b9ff !important;
+    }
+    
+    .emr-link-note {
+        transition: color 0.3s ease;
+    }
+    
+    .emr-upload {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+        border: 1px solid #e9ecef;
+    }
+    
+    /* Insurance Summary Styles - Updated for Text Extraction */
+    .insurance-summary {
+        margin-top: 15px;
+        background: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        border: 1px solid #e9ecef;
+        animation: slideDown 0.3s ease;
+    }
+    
+    .insurance-summary h5 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .insurance-summary h5 i {
+        color: #3498db;
+    }
+    
+    .extracted-text-card {
+        background: #f8f9fa;
+        border-radius: 6px;
+        padding: 15px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .text-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .text-header h6 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .text-actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .btn-copy, .btn-expand {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    .btn-copy:hover, .btn-expand:hover {
+        background: #2980b9;
+        transform: translateY(-1px);
+    }
+    
+    .text-content {
+        max-height: 200px;
+        overflow-y: auto;
+        background: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        transition: max-height 0.3s ease;
+    }
+    
+    .text-content.expanded {
+        max-height: 500px;
+    }
+    
+    .extracted-text-pre {
+        margin: 0;
+        padding: 12px;
+        font-family: 'Courier New', monospace;
+        font-size: 11px;
+        line-height: 1.4;
+        color: #2c3e50;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        background: transparent;
+    }
+    
+    .text-info {
+        background: #e8f4fd;
+        border: 1px solid #bee5eb;
+        border-radius: 4px;
+        padding: 8px 12px;
+    }
+    
+    .text-info p {
+        margin: 0;
+        font-size: 12px;
+        color: #0c5460;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .text-info i {
+        color: #17a2b8;
+    }
+    
+    /* Scrollbar styling for text content */
+    .text-content::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .text-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+    
+    .text-content::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+    
+    .text-content::-webkit-scrollbar-thumb:hover {
+        background: #a1a1a1;
+    }
+    
+    /* Legacy summary styles (kept for compatibility) */
+    .summary-card {
+        background: #f8f9fa;
+        border-radius: 6px;
+        padding: 15px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .summary-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .confidence-badge {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+    
+    .confidence-badge.high {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .confidence-badge.medium {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .confidence-badge.low {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .summary-details p {
+        margin-bottom: 8px;
+        font-size: 13px;
+        color: #34495e;
+        line-height: 1.4;
+    }
+    
+    .summary-details strong {
+        color: #2c3e50;
+    }
+    
+    .benefits-section {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .benefits-section ul {
+        margin-left: 20px;
+        margin-top: 5px;
+    }
+    
+    .benefits-section li {
+        font-size: 12px;
+        color: #34495e;
+        margin-bottom: 3px;
+        line-height: 1.3;
+    }
+    
+    .patient-summary {
+        margin-top: 12px;
+        padding: 12px;
+        background: #e8f5e8;
+        border-radius: 6px;
+        border-left: 3px solid #27ae60;
+    }
+    
+    .patient-summary p {
+        font-size: 13px;
+        color: #2d5e2d;
+        margin-bottom: 0;
+        font-style: italic;
+        line-height: 1.4;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
+
+<!-- Weight and Height Input Dialog -->
+<div id="weightHeightDialog" class="modal-overlay" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3><i class="fas fa-weight"></i> Pre-Vital Assessment</h3>
+            <p>Please provide weight and height for personalized vital sign ranges</p>
+        </div>
+        <div class="modal-content">
+            <form id="weightHeightForm">
+                <div class="form-group">
+                    <label for="patient_weight">Weight <span class="mandatory-indicator">*</span></label>
+                    <div class="input-with-unit">
+                        <input type="number" id="patient_weight" name="weight" step="0.1" min="1" max="500" required placeholder="e.g., 65.5">
+                        <select name="weight_unit" id="weight_unit">
+                            <option value="kg">kg</option>
+                            <option value="lbs">lbs</option>
+                        </select>
+                    </div>
+                    <div class="field-note">Required for calculating personalized vital ranges</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="patient_height">Height <span class="optional-indicator">(Optional)</span></label>
+                    <div class="input-with-unit">
+                        <input type="number" id="patient_height" name="height" step="0.1" min="30" max="300" placeholder="e.g., 170">
+                        <select name="height_unit" id="height_unit">
+                            <option value="cm">cm</option>
+                            <option value="ft_in">ft/in</option>
+                            <option value="inches">inches</option>
+                        </select>
+                    </div>
+                    <div class="field-note">Height helps calculate BMI and more accurate ranges</div>
+                </div>
+                
+                <div id="height_ft_in_inputs" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="height_feet">Feet</label>
+                            <input type="number" id="height_feet" min="1" max="8" placeholder="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="height_inches">Inches</label>
+                            <input type="number" id="height_inches" min="0" max="11" placeholder="8">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-secondary" onclick="cancelWeightHeight()">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button type="button" class="btn-primary" onclick="saveWeightHeight()">
+                <i class="fas fa-save"></i> Save & Continue to Vital Signs
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Modal styles for weight/height dialog */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-dialog {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-header {
+    padding: 20px 25px 15px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.modal-header h3 {
+    margin: 0 0 8px;
+    color: #2c3e50;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.modal-header p {
+    margin: 0;
+    color: white;
+    font-size: 14px;
+}
+
+.modal-content {
+    padding: 25px;
+}
+
+.input-with-unit {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.input-with-unit input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.input-with-unit input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.input-with-unit select {
+    padding: 12px 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+    min-width: 80px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.field-note {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.optional-indicator {
+    color: white;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.modal-footer {
+    padding: 20px 25px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-secondary {
+    padding: 10px 20px;
+    border: 2px solid #bdc3c7;
+    background: white;
+    color: #7f8c8d;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #ecf0f1;
+    border-color: #95a5a6;
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    border: none;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9, #1f619c);
+    transform: translateY(-1px);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+</style>
+
+<script>
+// Weight/Height dialog functions
+function showWeightHeightDialog() {
+    document.getElementById('weightHeightDialog').style.display = 'flex';
+    
+    // Handle height unit change
+    document.getElementById('height_unit').addEventListener('change', function() {
+        const ftInInputs = document.getElementById('height_ft_in_inputs');
+        const heightInput = document.getElementById('patient_height');
+        
+        if (this.value === 'ft_in') {
+            ftInInputs.style.display = 'block';
+            heightInput.disabled = true;
+            heightInput.placeholder = 'Use feet/inches below';
+        } else {
+            ftInInputs.style.display = 'none';
+            heightInput.disabled = false;
+            heightInput.placeholder = this.value === 'cm' ? 'e.g., 170' : 'e.g., 68';
+        }
+    });
+}
+
+function cancelWeightHeight() {
+    document.getElementById('weightHeightDialog').style.display = 'none';
+    // Reset form
+    document.getElementById('weightHeightForm').reset();
+}
+
+function saveWeightHeight() {
+    const weight = document.getElementById('patient_weight').value;
+    const weightUnit = document.getElementById('weight_unit').value;
+    
+    if (!weight) {
+        alert('Please enter the patient weight (required).');
+        return;
+    }
+    
+    // Collect height data
+    let height = '';
+    let heightUnit = document.getElementById('height_unit').value;
+    
+    if (heightUnit === 'ft_in') {
+        const feet = document.getElementById('height_feet').value;
+        const inches = document.getElementById('height_inches').value;
+        if (feet || inches) {
+            height = `${feet || 0}'${inches || 0}"`;
+        }
+    } else {
+        height = document.getElementById('patient_height').value;
+    }
+    
+    // Prepare data to save
+    const weightHeightData = {
+        weight: parseFloat(weight),
+        weight_unit: weightUnit,
+        height: height,
+        height_unit: heightUnit
+    };
+    
+    // Save to backend
+    fetch('/save_weight_height', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(weightHeightData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('weightHeightDialog').style.display = 'none';
+            // Proceed to step 3
+            window.location.href = '/step3';
+        } else {
+            alert('Error saving weight/height: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving weight/height. Please try again.');
+    });
+}
+
+// Override the existing submitForm function to show dialog first
+function submitForm() {
+    console.log('Form submission initiated');
+    
+    // Perform existing validation
+    if (!validateCurrentSection()) {
+        console.log('Validation failed');
+        return;
+    }
+    
+    const formData = new FormData(document.getElementById('registrationForm'));
+    
+    // Show loading state
+    const submitBtn = document.querySelector('.btn-next');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Registration...';
+    
+    fetch('/save_registration', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show weight/height dialog instead of directly going to step3
+            showWeightHeightDialog();
+        } else {
+            alert('Error: ' + (data.error || 'Failed to save registration data'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving registration. Please try again.');
+    })
+    .finally(() => {
+        // Reset button state
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+    });
+}
+</script>
+
+{% endblock %}
